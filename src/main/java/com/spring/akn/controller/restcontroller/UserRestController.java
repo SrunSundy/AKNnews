@@ -37,14 +37,12 @@ public class UserRestController {
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ResponseEntity<Map<String, Object>> login(@RequestBody String data) throws ParseException {
 		Map<String, Object> map = new HashMap<String, Object>();
-
 		// for get data from json string
 		JSONParser jsonParser = new JSONParser();
 		JSONObject jsonObject = (JSONObject) jsonParser.parse(data);
 		// get a String from the JSON object
 		String email = (String) jsonObject.get("email");
-		String password = (String) jsonObject.get("pass");
-		
+		String password = (String) jsonObject.get("password");
 		if (userServices.userLogin(email, password) != null) {
 			map.put("STATUS", HttpStatus.FOUND.value());
 			map.put("MESSAGE", "LOGIN SUCCESS");
@@ -88,7 +86,7 @@ public class UserRestController {
 	}
     
 	//change password process
-	@RequestMapping(value="/changepass",method=RequestMethod.POST)
+	@RequestMapping(value="/changepwd",method=RequestMethod.PUT)
 	public ResponseEntity<Map<String,Object>> changePassword(@RequestBody String data) throws ParseException {
 		Map<String,Object> map=new HashMap<String, Object>();
 
@@ -114,7 +112,7 @@ public class UserRestController {
 	}
 	
 	//Update user infor process
-	@RequestMapping(value="/update",method=RequestMethod.POST)
+	@RequestMapping(value="/update",method=RequestMethod.PUT)
 	public ResponseEntity<Map<String,Object>> updateUser(@RequestBody User user) {
 		Map<String,Object> map=new HashMap<String, Object>();
 		if(userServices.updateUser(user)==0){
@@ -129,7 +127,7 @@ public class UserRestController {
 	}
 	
 	//upload image
-	@RequestMapping(value="/uploadimage", method= RequestMethod.POST )
+	@RequestMapping(value="/upload", method= RequestMethod.POST )
 	public ResponseEntity<Map<String,Object>> uploadImage( @RequestParam("file") MultipartFile file, HttpServletRequest request){
 		Map<String, Object> map  = new HashMap<String, Object>();
 		if(!file.isEmpty()){
