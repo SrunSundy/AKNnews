@@ -39,12 +39,7 @@ public class UserServicesImpl implements UserServices{
 
 	
 	public int changePassword(String oldpass, String newpass, int id) {
-		if(userRespositories.getCurrentPass(id).getPassword()!=null){
-			if(oldpass.equals(userRespositories.getCurrentPass(id).getPassword())){
-				return userRespositories.changePassword(newpass, id);
-			}
-		}
-		return 0;
+		return userRespositories.changePassword(newpass, oldpass, id);
 	}
 	
 }
