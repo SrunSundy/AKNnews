@@ -1,6 +1,6 @@
-package com.spring.akn.repositories;
+package com.spring.akn.services;
 
-public interface SiteDetailDAO {
+public interface SiteDetailServices {
 	public boolean isInsertSiteDetail(int s_id,int c_id, String url);
 	public boolean isUpdateSiteDetail(int s_id,int c_id, String url);
 }
