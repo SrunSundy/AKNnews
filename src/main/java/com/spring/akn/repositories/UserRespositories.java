@@ -8,6 +8,6 @@ public interface UserRespositories {
 	public int enableUser(int id);
 	public int updateUser(User user);
 	public User getUser(int id);
-	public int changePassword(String newpass,int id);
-    public User getCurrentPass(int id);
+	public int changePassword(String newpass,String oldpass,int id);
+
 }
