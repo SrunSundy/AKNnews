@@ -21,14 +21,14 @@ public class UserRespositoriesImpl implements UserRespositories {
 	}
 
 	public int userRegister(User user) {
-		String sql="INSERT INTO tbuser(user_name, user_email, user_password, user_image) VALUES(?,?,?,?)";
+		String sql="INSERT INTO tbuser(user_name, user_email, user_password, user_image) VALUES(?,?,md5(?),?)";
 		user.setImage("default.jpg");
 		Object[] obj={user.getUsername(),user.getEmail(),user.getPassword(),user.getImage()};
 		return jdbcTemplate.update(sql,obj);
 	}
 
 	public User userLogin(String email, String password) {
-		String sql = "SELECT user_id, user_name, user_email, user_password, user_image, enabled FROM tbuser WHERE enabled = 't' AND ( UPPER(user_email) = UPPER(?) AND UPPER(user_password) = UPPER(?) ) ";
+		String sql = "SELECT user_id, user_name, user_email, user_password, user_image, enabled FROM tbuser WHERE enabled = 't' AND ( UPPER(user_email) = UPPER(?) AND user_password = md5(?) ) ";
 		try {
 			return jdbcTemplate.queryForObject(sql, new Object[] { email, password }, new RowMapper<User>() {
 				public User mapRow(ResultSet rs, int rowNumber) throws SQLException {
@@ -78,27 +78,10 @@ public class UserRespositoriesImpl implements UserRespositories {
 	}
 
 
-	public int changePassword(String newpass, int id) {
-		String sql="UPDATE tbuser SET user_password=? WHERE user_id=?";
-		return jdbcTemplate.update(sql,newpass,id);
+	public int changePassword(String newpass,String oldpass, int id) {
+		String sql="UPDATE tbuser SET user_password=md5(?) WHERE user_id=? AND user_password=md5(?)";
+		return jdbcTemplate.update(sql,newpass,id,oldpass);
 	}
-
-	
-	public User getCurrentPass(int id) {	
-		try{
-			return jdbcTemplate.queryForObject("SELECT user_password FROM tbuser WHERE user_id=?",new Object[]{id}, new RowMapper<User>(
-					) {
-						public User mapRow(ResultSet rs, int rowNumber) throws SQLException {		
-							User user=new User();
-							user.setPassword(rs.getString("user_password"));
-							return user;
-						}
-			} );
-		} catch (IncorrectResultSizeDataAccessException ex) {
-            return null;
-        }
-	}
-
 	/*
 	 * // User Mapper Class private static final class UserMapper implements
 	 * RowMapper<User> { public User mapRow(ResultSet rs, int rowNumber) throws
