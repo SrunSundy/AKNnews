@@ -17,7 +17,7 @@ public class NewsServiceImpl implements NewsService{
 	@Override
 	public List<NewsDTO> listNewsDatas(int page, int categoryid, int siteid, int userid) {
 		// TODO Auto-generated method stub
-		return null;
+		return newsrepository.listNewsDatas(page, categoryid, siteid, userid);
 	}
 
 	@Override
