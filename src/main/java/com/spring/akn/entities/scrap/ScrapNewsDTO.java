@@ -6,6 +6,13 @@ public class ScrapNewsDTO {
 	private String title;
 	private String description;
 	
+	public ScrapNewsDTO(String link, String image, String title, String description) {
+		this.link = link;
+		this.image = image;
+		this.title = title;
+		this.description = description;
+	}
+	
 	public String getLink() {
 		return link;
 	}
