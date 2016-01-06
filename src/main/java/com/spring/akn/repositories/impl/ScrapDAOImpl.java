@@ -37,21 +37,24 @@ public class ScrapDAOImpl implements ScrapDAO {
 		ArrayList<StructureDTO> selectors = (ArrayList<StructureDTO>) this.getAllSelectors();
 		
 		for(StructureDTO selector:selectors){
-			
 			System.out.println(selector.getUrl());
 			news.addAll(scrapNews(selector));
-			
 		}
 		
-		int[] affected = scrapNewsToDatabase(news);
+		int[] size = scrapNewsToDatabase(news);
+		int affected = 0;
 		
-		return affected.length;
+		for(int i=0; i<size.length; i++)
+			if(size[i]==1)
+				affected++;
+		
+		return affected;
 	}
 
 	private int[] scrapNewsToDatabase(final ArrayList<NewsDTO> news){
 		
 		String sql = "INSERT INTO tbnews(news_title, news_description, news_img, news_url, category_id, source_id) "+
-			  "SELECT ?, ?, ?, ?, ?, ? "+
+			  "SELECT ?, ?, ?, ?, ?, ? " +
 			  "WHERE NOT EXISTS(SELECT news_url FROM tbnews WHERE news_url=?)";
 		
 		return jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
