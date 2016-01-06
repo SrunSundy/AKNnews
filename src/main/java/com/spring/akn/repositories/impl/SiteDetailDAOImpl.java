@@ -34,5 +34,13 @@ public class SiteDetailDAOImpl implements SiteDetailDAO{
 			return true;
 		return false;
 	}
+	@Override
+	public boolean isDeleteSiteDetail(int s_id, int c_id) {
+		String sql = "DELETE FROM tbsite_detail WHERE (site_id = ? and category_id = ?) ";
+		int result = getJdbcTemplate().update(sql , new Object[]{s_id,c_id});
+		if ( result > 0 )
+			return true;
+		return false;
+	}
 
 }

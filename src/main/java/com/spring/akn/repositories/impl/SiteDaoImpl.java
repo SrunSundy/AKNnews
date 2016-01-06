@@ -36,13 +36,13 @@ public class SiteDaoImpl implements SiteDAO {
 
 	@Override
 	public SiteDTO findSiteById(int id) {
-		String sql = "SELECT s_id, s_name, s_url FROM tbsite WHERE c_id = ?;";
+		String sql = "SELECT s_id, s_name, s_url FROM tbsite WHERE s_id = ?;";
 		return getJdbcTemplate().query(sql , new Object[]{id} , new SiteResultSetExtractor());
 	}
 
 	@Override
 	public boolean isDeleteSiteById(int id) {
-		String sql = "DELETE FROM tbsite WHERE c_id = ? ;";
+		String sql = "DELETE FROM tbsite WHERE s_id = ? ;";
 		int result = getJdbcTemplate().update(sql , new Object[]{id});
 		if (result > 0)
 			return true;
@@ -51,7 +51,7 @@ public class SiteDaoImpl implements SiteDAO {
 
 	@Override
 	public boolean isInsertSite(SiteDTO siteDTO) {
-		String sql = "INSERT INTO tbsite(c_name, c_url) VALUES(?,?)";
+		String sql = "INSERT INTO tbsite(s_name, s_url) VALUES(?,?)";
 		int result = getJdbcTemplate().update(sql , new Object[]{siteDTO.getName(), siteDTO.getUrl()});
 		if (result > 0)
 			return true;
@@ -60,7 +60,7 @@ public class SiteDaoImpl implements SiteDAO {
 
 	@Override
 	public boolean isUpdateSite(SiteDTO siteDTO) {
-		String sql = "UPDATE tbsite SET c_name=?, c_url=? WHERE c_id = ? ;";
+		String sql = "UPDATE tbsite SET s_name=?, s_url=? WHERE s_id = ? ;";
 		int result = getJdbcTemplate().update(sql , new Object[]{siteDTO.getName(), siteDTO.getUrl(), siteDTO.getId()});
 		if (result > 0)
 			return true;

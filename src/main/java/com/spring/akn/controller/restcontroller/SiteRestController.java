@@ -1,6 +1,5 @@
 package com.spring.akn.controller.restcontroller;
 
-
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -14,142 +13,132 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.spring.akn.entities.CategoryDTO;
-import com.spring.akn.services.CategoryServices;
+import com.spring.akn.entities.SiteDTO;
+import com.spring.akn.services.SiteServices;
 
 @RestController
-@RequestMapping(value="/api/article/category")
-public class CategoryRestController {
-	
+@RequestMapping(value="/api/article/site")
+public class SiteRestController {
 	@Autowired
-	private CategoryServices categoryServices;
+	private SiteServices siteServices;
 	
 	/**
-	 * Get all category data
+	 * List all tbsite
 	 * @return
 	 */
 	@RequestMapping(value="/", method = RequestMethod.GET)
-	public ResponseEntity<Map<String, Object>> listCategory(){
+	public ResponseEntity<Map<String, Object>> listSite(){
 		Map<String, Object> map = new Hashtable<String, Object>();
-		List<CategoryDTO> lst = categoryServices.listCategory();
+		List<SiteDTO> lst = siteServices.listSite();
 		if ( lst != null ) {
 			map.put("STATUS", HttpStatus.FOUND.value());
-			map.put("MESSAGE", "CATEGORY LIST FOUND!" );
+			map.put("MESSAGE", "SITE LIST FOUND!" );
 			map.put("DATA", lst);
 			return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
 		}
 		map.put("STATUS", HttpStatus.NOT_FOUND.value());
-		map.put("MESSAGE", "CATEGORY LIST NOT FOUND!" );
+		map.put("MESSAGE", "SITE LIST NOT FOUND!" );
 		map.put("DATA", lst);
 		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 	}
 	
 	/**
-	 * Find category object by id
+	 * Find tbsite unique with id
 	 * @param id
 	 * @return
 	 */
 	@RequestMapping(value="/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Map<String, Object>> findCategoryById(@PathVariable("id") int id){
-		CategoryDTO categoryDTO = categoryServices.findCategoryById(id);
+	public ResponseEntity<Map<String, Object>> findSiteById(@PathVariable("id") int id){
+		SiteDTO siteDTO = siteServices.findSiteById(id);
 		Map<String, Object> map = new Hashtable<String,Object>();
-		if ( categoryDTO != null) {
+		if ( siteDTO != null) {
 			map.put("STATUS", HttpStatus.FOUND.value());
-			map.put("MESSAGE", "CATEGORY ID "+id+" FOOUND!");
-			map.put("DATA", categoryDTO);
+			map.put("MESSAGE", "SITE ID "+id+" FOOUND!");
+			map.put("DATA", siteDTO);
 			return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
 		}
 		map.put("STATUS", HttpStatus.NOT_FOUND.value());
-		map.put("MESSAGE", "CATEGORY ID "+id+" NOT FOOUND!");
-		map.put("DATA", categoryDTO);
+		map.put("MESSAGE", "SITE ID "+id+" NOT FOOUND!");
+		map.put("DATA", siteDTO);
 		return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
 	}
 	
 	/**
-	 * Delete category by id
+	 * Delete tbsite by id
 	 * @param id
 	 * @return
 	 */
 	@RequestMapping(value="/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Map<String, Object>> deleteCategoryById(@PathVariable("id") int id){
+	public ResponseEntity<Map<String, Object>> deleteSiteById(@PathVariable("id") int id){
 		Map<String, Object> map = new Hashtable<String,Object>();
-		if ( categoryServices.isDeleteCategoryById(id) ){
+		if ( siteServices.isDeleteSiteById(id) ){
 			map.put("STATUS", HttpStatus.OK.value());
-			map.put("MESSAGE", "CATEGORY ID "+id+" DELETE SUCCESS!");
+			map.put("MESSAGE", "SITE ID "+id+" DELETE SUCCESS!");
 			return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
 		}
 		map.put("STATUS", HttpStatus.NOT_FOUND.value());
-		map.put("MESSAGE", "CATEGORY ID "+id+" DELETE FAIL!");
+		map.put("MESSAGE", "SITE ID "+id+" DELETE FAIL!");
 		return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
 	}
 	
 	/**
-	 * Insert Category data
-	 * @param categoryDTO
+	 * Insert data into tbsite by object
+	 * @param siteDTO
 	 * @return
 	 */
 	@RequestMapping(value="/", method = RequestMethod.POST)
-	public ResponseEntity<Map<String, Object>> insertCategory(@RequestBody CategoryDTO categoryDTO){
+	public ResponseEntity<Map<String, Object>> insertSite(@RequestBody SiteDTO siteDTO){
 		Map<String, Object> map = new Hashtable<String,Object>();
-		if ( categoryServices.isInsertCategory(categoryDTO) ){
+		if ( siteServices.isInsertSite(siteDTO) ){
 			map.put("STATUS", HttpStatus.OK.value());
-			map.put("MESSAGE", "CATEGORY INSERT SUCCESS!");
+			map.put("MESSAGE", "SITE INSERT SUCCESS!");
 			return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
 		}
 		map.put("STATUS", HttpStatus.NOT_FOUND.value());
-		map.put("MESSAGE", "CATEGORY INSERT FAIL!");
+		map.put("MESSAGE", "SITE INSERT FAIL!");
 		return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
 	}
 	
 	/**
-	 * Update category data
-	 * @param categoryDTO
+	 * Update tbsite data by using object
+	 * @param siteDTO
 	 * @return
 	 */
 	@RequestMapping(value="/", method = RequestMethod.PUT)
-	public ResponseEntity<Map<String, Object>> updateCategory(@RequestBody CategoryDTO categoryDTO){
+	public ResponseEntity<Map<String, Object>> updateSite(@RequestBody SiteDTO siteDTO){
 		Map<String, Object> map = new Hashtable<String,Object>();
-		if ( categoryServices.isUpdateCategory(categoryDTO) ){
+		if ( siteServices.isUpdateSite(siteDTO) ){
 			map.put("STATUS", HttpStatus.OK.value());
-			map.put("MESSAGE", "CATEGORY UPDATE SUCCESS!");
+			map.put("MESSAGE", "SITE UPDATE SUCCESS!");
 			return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
 		}
 		map.put("STATUS", HttpStatus.NOT_FOUND.value());
-		map.put("MESSAGE", "CATEGORY UPDATE FAIL!");
+		map.put("MESSAGE", "SITE UPDATE FAIL!");
 		return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
 	}
 	
 	/**
-	 * Count category record
+	 * Count total record in tbsite
 	 * @return
 	 */
 	@RequestMapping(value="/record", method = RequestMethod.GET)
-	public ResponseEntity<Map<String, Object>> countCategoryRecord(){
+	public ResponseEntity<Map<String, Object>> countSiteRecord(){
 		Map<String, Object> map = new Hashtable<String,Object>();
 		map.put("STATUS", HttpStatus.FOUND.value());
-		map.put("MESSAGE", "CATEGORY COUNT SUCCESS!");
-		map.put("DATA", categoryServices.countCategoryRecord());
-		return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
-	}
-	
-	/**
-	 * Change isMenu by toogle (if true to false if false to true)
-	 * @param id
-	 * @return
-	 */
-	@RequestMapping(value="/toggle/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<Map<String, Object>> toggleCategory(@PathVariable("id") int id){
-		Map<String, Object> map = new Hashtable<String,Object>();
-		if ( categoryServices.isMenuToggle(id) ){
-			map.put("STATUS", HttpStatus.OK.value());
-			map.put("MESSAGE", "CATEGORY CHANGE SET MENU SUCCESS!");
-			return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
-		}
-		map.put("STATUS", HttpStatus.NOT_FOUND.value());
-		map.put("MESSAGE", "CATEGORY CHANGE SET MENU FAIL!");
+		map.put("MESSAGE", "SITE COUNT SUCCESS!");
+		map.put("DATA", siteServices.countSiteRecord());
 		return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
 	}
 	
 	
-		
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

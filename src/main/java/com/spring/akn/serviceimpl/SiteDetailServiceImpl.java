@@ -20,6 +20,11 @@ public class SiteDetailServiceImpl implements SiteDetailServices{
 	public boolean isUpdateSiteDetail(int s_id, int c_id, String url) {
 		return siteDetailDAO.isUpdateSiteDetail(s_id, c_id, url);
 	}
+
+	@Override
+	public boolean isDeleteSiteDetail(int s_id, int c_id) {
+		return siteDetailDAO.isDeleteSiteDetail(s_id, c_id);
+	}
 	
 	
 }
