@@ -3,6 +3,8 @@ package com.spring.akn.entities.scrap;
 public class StructureDTO {
 	private int id;
 	private String url;
+	private int siteId;
+	private int categoryId;
 	private String rowsSelector;
 	private String imageSelector;
 	private String linkSelector;
@@ -55,6 +57,18 @@ public class StructureDTO {
 	}
 	public void setUrl(String url) {
 		this.url = url;
+	}
+	public int getSiteId() {
+		return siteId;
+	}
+	public void setSiteId(int siteId) {
+		this.siteId = siteId;
+	}
+	public int getCategoryId() {
+		return categoryId;
+	}
+	public void setCategoryId(int categoryId) {
+		this.categoryId = categoryId;
 	}
 	
 }
