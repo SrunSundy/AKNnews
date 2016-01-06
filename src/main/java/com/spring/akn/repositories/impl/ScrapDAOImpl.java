@@ -30,7 +30,7 @@ public class ScrapDAOImpl implements ScrapDAO {
 	private JdbcTemplate jdbcTemplate;
 	
 	@Override
-	public int[] scrapAllSites() {
+	public int scrapAllSites() {
 		
 		ArrayList<NewsDTO> news = new ArrayList<NewsDTO>();
 		
@@ -43,8 +43,9 @@ public class ScrapDAOImpl implements ScrapDAO {
 			
 		}
 		
-		return scrapNewsToDatabase(news);
+		int[] affected = scrapNewsToDatabase(news);
 		
+		return affected.length;
 	}
 
 	private int[] scrapNewsToDatabase(final ArrayList<NewsDTO> news){

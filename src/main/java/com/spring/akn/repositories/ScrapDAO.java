@@ -7,7 +7,7 @@ public interface ScrapDAO {
 		/***
 		 * return affected row
 		 */
-		public int[] scrapAllSites();
+		public int scrapAllSites();
 		
 		public NewsDTO scrapNews(String url);
 		
