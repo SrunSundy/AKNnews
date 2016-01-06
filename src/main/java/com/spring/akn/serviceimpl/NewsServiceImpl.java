@@ -23,7 +23,7 @@ public class NewsServiceImpl implements NewsService{
 	@Override
 	public NewsDTO listNewsData(int newsid, int userid) {
 		// TODO Auto-generated method stub
-		return null;
+		return newsrepository.listNewsData(newsid, userid);
 	}
 
 	@Override
@@ -47,7 +47,7 @@ public class NewsServiceImpl implements NewsService{
 	@Override
 	public List<NewsDTO> searchNews(String key, int page, int categoryid, int siteid, int userid) {
 		// TODO Auto-generated method stub
-		return null;
+		return newsrepository.searchNews(key, page, categoryid, siteid, userid);
 	}
 
 }
