@@ -30,7 +30,7 @@ public class ScrapDAOImpl implements ScrapDAO {
 	private JdbcTemplate jdbcTemplate;
 	
 	@Override
-	public ArrayList<NewsDTO> scrapAllSites() {
+	public int[] scrapAllSites() {
 		
 		ArrayList<NewsDTO> news = new ArrayList<NewsDTO>();
 		
@@ -43,18 +43,17 @@ public class ScrapDAOImpl implements ScrapDAO {
 			
 		}
 		
-		scrapNewsToDatabase(news);
+		return scrapNewsToDatabase(news);
 		
-		return news;
 	}
 
-	private boolean scrapNewsToDatabase(final ArrayList<NewsDTO> news){
+	private int[] scrapNewsToDatabase(final ArrayList<NewsDTO> news){
 		
 		String sql = "INSERT INTO tbnews(news_title, news_description, news_img, news_url, category_id, source_id) "+
 			  "SELECT ?, ?, ?, ?, ?, ? "+
 			  "WHERE NOT EXISTS(SELECT news_url FROM tbnews WHERE news_url=?)";
 		
-		jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+		return jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
 			
 			@Override
 			public void setValues(PreparedStatement ps, int i) throws SQLException {
@@ -75,14 +74,13 @@ public class ScrapDAOImpl implements ScrapDAO {
 			}
 		});
 		
-		return false;
 	}
 	
 	private List<StructureDTO> getAllSelectors(){
 		
-		String sql = "SELECT sd.url, link_selector, rows_selector,image_selector,title_selector,desc_selector, site_id, category_id "  
-					 + "FROM tbsite_detail sd INNER JOIN tbsite s ON sd.site_id=s.s_id " 
-					 + "INNER JOIN tbstructure st ON st.id=s.s_id";
+		String sql = "SELECT sd.url, link_selector, rows_selector,image_selector,title_selector,desc_selector, site_id, category_id " +  
+					 "FROM tbsite_detail sd INNER JOIN tbsite s ON sd.site_id=s.s_id " + 
+					 "INNER JOIN tbstructure st ON st.id=s.s_id";
 		
 		return jdbcTemplate.query(sql, new RowMapper<StructureDTO>() {
 
@@ -144,6 +142,12 @@ public class ScrapDAOImpl implements ScrapDAO {
 		}
 		
 		return news;
+	}
+
+	@Override
+	public NewsDTO scrapNews(String url) {
+
+		return null;
 	}
 	
 }
