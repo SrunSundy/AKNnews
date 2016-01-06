@@ -1,6 +1,7 @@
 package com.spring.akn.repositories.impl;
 
 import java.io.IOException;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -11,11 +12,14 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import com.spring.akn.entities.scrap.ScrapNewsDTO;
+import com.spring.akn.entities.CategoryDTO;
+import com.spring.akn.entities.NewsDTO;
+import com.spring.akn.entities.SiteDTO;
 import com.spring.akn.entities.scrap.StructureDTO;
 import com.spring.akn.repositories.ScrapDAO;
 
@@ -26,23 +30,57 @@ public class ScrapDAOImpl implements ScrapDAO {
 	private JdbcTemplate jdbcTemplate;
 	
 	@Override
-	public ArrayList<ScrapNewsDTO> scrapAllSites() {
+	public ArrayList<NewsDTO> scrapAllSites() {
 		
-		ArrayList<ScrapNewsDTO> news = new ArrayList<ScrapNewsDTO>();
+		ArrayList<NewsDTO> news = new ArrayList<NewsDTO>();
 		
 		ArrayList<StructureDTO> selectors = (ArrayList<StructureDTO>) this.getAllSelectors();
 		
 		for(StructureDTO selector:selectors){
+			
+			System.out.println(selector.getUrl());
 			news.addAll(scrapNews(selector));
+			
 		}
+		
+		scrapNewsToDatabase(news);
 		
 		return news;
 	}
 
+	private boolean scrapNewsToDatabase(final ArrayList<NewsDTO> news){
+		
+		String sql = "INSERT INTO tbnews(news_title, news_description, news_img, news_url, category_id, source_id) "+
+			  "SELECT ?, ?, ?, ?, ?, ? "+
+			  "WHERE NOT EXISTS(SELECT news_url FROM tbnews WHERE news_url=?)";
+		
+		jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+			
+			@Override
+			public void setValues(PreparedStatement ps, int i) throws SQLException {
+						NewsDTO n = news.get(i);
+						ps.setString(1, n.getTitle());
+						ps.setString(2, n.getDescription());
+						ps.setString(3, n.getImage());
+						ps.setString(4, n.getUrl());
+						ps.setInt(5,n.getCategory().getId());
+						ps.setInt(6, n.getSite().getId());
+						ps.setString(7, n.getUrl());
+						System.out.println(i);
+			}
+			
+			@Override
+			public int getBatchSize() {
+				return news.size();
+			}
+		});
+		
+		return false;
+	}
 	
 	private List<StructureDTO> getAllSelectors(){
 		
-		String sql = "SELECT sd.url, rows_selector,image_selector,title_selector,desc_selector "  
+		String sql = "SELECT sd.url, link_selector, rows_selector,image_selector,title_selector,desc_selector, site_id, category_id "  
 					 + "FROM tbsite_detail sd INNER JOIN tbsite s ON sd.site_id=s.s_id " 
 					 + "INNER JOIN tbstructure st ON st.id=s.s_id";
 		
@@ -53,6 +91,8 @@ public class ScrapDAOImpl implements ScrapDAO {
 				StructureDTO selectors = new StructureDTO();
 				
 				selectors.setUrl(rs.getString("url"));
+				selectors.setCategoryId(rs.getInt("category_id"));
+				selectors.setSiteId(rs.getInt("site_id"));
 				selectors.setRowsSelector(rs.getString("rows_selector"));
 				selectors.setLinkSelector(rs.getString("link_selector"));
 				selectors.setTitleSelector(rs.getString("title_selector"));
@@ -65,9 +105,9 @@ public class ScrapDAOImpl implements ScrapDAO {
 		
 	}
 	
-	private ArrayList<ScrapNewsDTO> scrapNews(StructureDTO selector){
+	private ArrayList<NewsDTO> scrapNews(StructureDTO selector){
 		
-		ArrayList<ScrapNewsDTO> news = new ArrayList<ScrapNewsDTO>();
+		ArrayList<NewsDTO> news = new ArrayList<NewsDTO>();
 		
 		try {
 			Document doc = Jsoup.connect(selector.getUrl()).timeout(30000).get();
@@ -81,7 +121,22 @@ public class ScrapDAOImpl implements ScrapDAO {
 				String image = e.select(selector.getImageSelector()).attr("src");
 				String link = e.select(selector.getLinkSelector()).attr("href");
 				
-				news.add(new ScrapNewsDTO(link, image, title, description));
+				NewsDTO n = new NewsDTO();
+				n.setUrl(link);
+				n.setImage(image);
+				n.setTitle(title);
+				n.setDescription(description);
+				
+				CategoryDTO category = new CategoryDTO();
+				category.setId(selector.getCategoryId());
+				
+				SiteDTO site = new SiteDTO();
+				site.setId(selector.getSiteId());
+				
+				n.setCategory(category);
+				n.setSite(site);
+				
+				news.add(n);
 			}
 			
 		} catch (IOException e) {
