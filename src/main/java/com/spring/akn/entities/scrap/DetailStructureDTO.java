@@ -1,7 +1,8 @@
 package com.spring.akn.entities.scrap;
 
-public class DetailStructure {
+public class DetailStructureDTO {
 	private int id;
+	private String url;
 	private String titleSelector;
 	private String contentSelector;
 	public int getId() {
@@ -26,6 +27,12 @@ public class DetailStructure {
 	public String toString() {
 		return "DetailStructure [id=" + id + ", titleSelector=" + titleSelector + ", contentSelector=" + contentSelector
 				+ "]";
+	}
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String url) {
+		this.url = url;
 	}
 	
 }

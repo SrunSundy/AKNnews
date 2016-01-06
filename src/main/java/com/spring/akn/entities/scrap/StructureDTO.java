@@ -1,7 +1,8 @@
 package com.spring.akn.entities.scrap;
 
-public class Structure {
+public class StructureDTO {
 	private int id;
+	private String url;
 	private String rowsSelector;
 	private String imageSelector;
 	private String linkSelector;
@@ -48,6 +49,12 @@ public class Structure {
 		return "Structure [id=" + id + ", rowsSelector=" + rowsSelector + ", imageSelector=" + imageSelector
 				+ ", linkSelector=" + linkSelector + ", titleSelector=" + titleSelector + ", descriptionSelector="
 				+ descriptionSelector + "]";
+	}
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String url) {
+		this.url = url;
 	}
 	
 }
