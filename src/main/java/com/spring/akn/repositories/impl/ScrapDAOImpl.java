@@ -152,10 +152,10 @@ public class ScrapDAOImpl implements ScrapDAO {
 	@Override
 	public NewsDTO scrapNews(String url, int user_id) {
 		
-		if(url.contains("news.khmeracademy.org"))
-			return readAKNNews(url, user_id);
+		if(!url.contains("news.khmeracademy.org"))
+			return readOtherNews(url, user_id);
 		
-		return readOtherNews(url, user_id);
+		return readAKNNews(url, user_id);
 	
 	}
 	
