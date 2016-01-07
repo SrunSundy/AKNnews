@@ -50,4 +50,22 @@ public class NewsServiceImpl implements NewsService{
 		return newsrepository.searchNews(key, page, categoryid, siteid, userid);
 	}
 
+	@Override
+	public int saveNews(int newsid, int userid) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int deleteSavedNews(int newsid, int userid) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<NewsDTO> listSavedNews() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
