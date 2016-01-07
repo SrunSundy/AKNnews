@@ -10,7 +10,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import com.spring.akn.entities.CategoryDTO;
 import com.spring.akn.entities.NewsDTO;
 import com.spring.akn.entities.SiteDTO;
 import com.spring.akn.repositories.NewsRepositories;
@@ -33,51 +32,9 @@ public class NewsRepositriesImpl implements NewsRepositories {
 
 	@Override
 	public NewsDTO listNewsData(int newsid, int userid) {
-		String sql="";
-		if(userid != 0){
-			try{
-				sql="SELECT n.news_id,n.news_title,n.news_date,"
-						+ " (CASE WHEN n.news_id IN (SELECT news_id FROM tbsavelist WHERE user_id=? ) THEN TRUE ELSE FALSE END) AS news_issave"
-						+ " FROM tbnews n "
-						+ "WHERE n.news_status=true AND n.news_id=? ";
-				return jdbcTemplate.queryForObject(sql,new Object[]{ userid,newsid } , new RowMapper<NewsDTO>(){
-					@Override
-					public NewsDTO mapRow(ResultSet rs, int row) throws SQLException {
-						NewsDTO news = new NewsDTO();
-						
-						news.setId(rs.getInt("news_id"));
-						news.setTitle(rs.getString("news_title"));
-						news.setDate(rs.getDate("news_date"));
-						news.setSaved(rs.getBoolean("news_issave"));
-						return news;
-					}
-					
-				});
-			}catch(IncorrectResultSizeDataAccessException ex){
-				return null;
-			}
-			
-		}
-		try{
-			sql="SELECT n.news_id,n.news_title,n.news_date"
-					+ " FROM tbnews n "
-					+ "WHERE n.news_status=true AND n.news_id=? ";
-			return jdbcTemplate.queryForObject(sql,new Object[]{newsid } , new RowMapper<NewsDTO>(){
-				@Override
-				public NewsDTO mapRow(ResultSet rs, int row) throws SQLException {
-					NewsDTO news = new NewsDTO();
-					
-					news.setId(rs.getInt("news_id"));
-					news.setTitle(rs.getString("news_title"));
-					news.setDate(rs.getDate("news_date"));
-					return news;
-				}
-				
-			});
-		}catch(IncorrectResultSizeDataAccessException ex){
-			return null;
-		}
 		
+		if(userid != 0) return listDetailWithUserId(userid, newsid);
+		return listDetailWithNoUserId(newsid);
 	}
 
 	@Override
@@ -108,8 +65,26 @@ public class NewsRepositriesImpl implements NewsRepositories {
 
 	}
 	
+	@Override
+	public int saveNews(int newsid, int userid) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int deleteSavedNews(int newsid, int userid) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<NewsDTO> listSavedNews() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	/**
-	 * 
+	 * ADDITIONAL FUNCTION
 	 * 
 	 * @param key
 	 * @param categoryid
@@ -121,17 +96,17 @@ public class NewsRepositriesImpl implements NewsRepositories {
 	//SEARCHING FUNCTION 
 	public List<NewsDTO> searchByCategory(String key,int categoryid, int userid,int offset){
 		if(userid != 0){
-			String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_url,"
+			String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_id,s.s_url,"
 					+ "(CASE WHEN n.news_id IN (SELECT news_id FROM tbsavelist WHERE user_id=? ) THEN TRUE ELSE FALSE END) AS news_issave "
 					+ "FROM tbnews n INNER JOIN tbsite s "
 					+ "ON s.s_id=n.source_id "
 					+ "INNER JOIN tbcategory c "
 					+ "ON c.c_id=n.category_id "
 					+ "WHERE n.news_status=true AND n.category_id=?  AND n.news_title LIKE ? "
-					+ "LIMIT 10 OFFSET ? ";
+					+ "LIMIT 10 OFFSET ?";
 			return jdbcTemplate.query(sql, new Object[]{userid,categoryid,"%"+key+"%",offset},new GetNewsWithUserIDMapper());
 		}
-		String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_url "
+		String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_id,s.s_url "
 				+ "FROM tbnews n INNER JOIN tbsite s "
 				+ "ON s.s_id=n.source_id "
 				+ "INNER JOIN tbcategory c "
@@ -145,7 +120,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 	public List<NewsDTO> searchBySite(String key,int siteid,int userid,int offset){
 		
 		if(userid != 0){
-			String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_url,"
+			String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_id,s.s_url,"
 					+ "(CASE WHEN n.news_id IN (SELECT news_id FROM tbsavelist WHERE user_id=? ) THEN TRUE ELSE FALSE END) AS news_issave "
 					+ "FROM tbnews n INNER JOIN tbsite s "
 					+ "ON s.s_id=n.source_id "
@@ -153,9 +128,9 @@ public class NewsRepositriesImpl implements NewsRepositories {
 					+ "LIMIT 10 OFFSET ?";
 			return jdbcTemplate.query(sql, new Object[]{userid,siteid,"%"+key+"%",offset},new GetNewsWithUserIDMapper());
 		}
-		String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_url "
+		String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_id,s.s_url "
 				+ "FROM tbnews n INNER JOIN tbsite s "
-				+ "ON s.s_id=n.source_id "
+				+ " ON s.s_id=n.source_id "
 				+ "WHERE n.news_status=true AND s.s_id=? AND n.news_title LIKE ? "
 				+ "LIMIT 10 OFFSET ?";
 		return jdbcTemplate.query(sql, new Object[]{siteid,"%"+key+"%",offset},new GetNewsWithNoUserIDMapper());
@@ -164,7 +139,8 @@ public class NewsRepositriesImpl implements NewsRepositories {
 	public List<NewsDTO> searchAll(String key, int userid,int offset){
 		
 		if(userid!=0){
-			String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_url,"
+		
+			String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_id,s.s_url,"
 					+ "(CASE WHEN n.news_id IN (SELECT news_id FROM tbsavelist WHERE user_id=? ) THEN TRUE ELSE FALSE END) AS news_issave "
 					+ "FROM tbnews n INNER JOIN tbsite s "
 					+ "ON s.s_id=n.source_id "
@@ -172,10 +148,11 @@ public class NewsRepositriesImpl implements NewsRepositories {
 			return jdbcTemplate.query(sql, new Object[]{userid,"%"+key+"%",offset},new GetNewsWithUserIDMapper());
 
 		}
-		String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_id,s.s_url "
+	
+		String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_id,s.s_url  "
 				+ "FROM tbnews n INNER JOIN tbsite s "
 				+ "ON s.s_id=n.source_id "
-				+ "WHERE n.news_status=true  AND n.news_title LIKE ? LIMIT 10 OFFSET ?";
+				+ "WHERE n.news_status=true  AND n.news_title LIKE ?  LIMIT 10 OFFSET ?";
 		return jdbcTemplate.query(sql, new Object[]{"%"+key+"%",offset},new GetNewsWithNoUserIDMapper());
 
 	}
@@ -245,6 +222,59 @@ public class NewsRepositriesImpl implements NewsRepositories {
 	}
 	//END LIST NEWS FUNCTION 
 	
+	
+	
+	
+	//LIST NEWS DETAIL
+	
+	public NewsDTO listDetailWithUserId(int userid,int newsid){
+		try{
+			String sql="SELECT n.news_id,n.news_title,n.news_date,"
+					+ " (CASE WHEN n.news_id IN (SELECT news_id FROM tbsavelist WHERE user_id=? ) THEN TRUE ELSE FALSE END) AS news_issave"
+					+ " FROM tbnews n "
+					+ "WHERE n.news_status=true AND n.news_id=? ";
+			return jdbcTemplate.queryForObject(sql,new Object[]{ userid,newsid } , new RowMapper<NewsDTO>(){
+				@Override
+				public NewsDTO mapRow(ResultSet rs, int row) throws SQLException {
+					NewsDTO news = new NewsDTO();
+					
+					news.setId(rs.getInt("news_id"));
+					news.setTitle(rs.getString("news_title"));
+					news.setDate(rs.getDate("news_date"));
+					news.setSaved(rs.getBoolean("news_issave"));
+					return news;
+				}
+				
+			});
+		}catch(IncorrectResultSizeDataAccessException ex){
+			return null;
+		}
+		
+	}
+	public NewsDTO listDetailWithNoUserId(int newsid){
+		try{
+			String sql="SELECT n.news_id,n.news_title,n.news_date"
+					+ " FROM tbnews n "
+					+ "WHERE n.news_status=true AND n.news_id=? ";
+			return jdbcTemplate.queryForObject(sql,new Object[]{newsid } , new RowMapper<NewsDTO>(){
+				@Override
+				public NewsDTO mapRow(ResultSet rs, int row) throws SQLException {
+					NewsDTO news = new NewsDTO();
+					
+					news.setId(rs.getInt("news_id"));
+					news.setTitle(rs.getString("news_title"));
+					news.setDate(rs.getDate("news_date"));
+					return news;
+				}
+				
+			});
+		}catch(IncorrectResultSizeDataAccessException ex){
+			return null;
+		}
+		
+	}
+	//END LIST NEWS DETAIL
+	
 	private static final class GetNewsWithUserIDMapper implements RowMapper<NewsDTO>{		
 		public NewsDTO mapRow(ResultSet rs, int row) throws SQLException {
 			NewsDTO news = new NewsDTO();
@@ -288,4 +318,5 @@ public class NewsRepositriesImpl implements NewsRepositories {
 			return news;
 		}
 	}
+
 }
