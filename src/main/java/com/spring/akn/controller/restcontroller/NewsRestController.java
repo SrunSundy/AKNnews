@@ -25,7 +25,7 @@ public class NewsRestController {
 	
 	@RequestMapping(value="/", method=RequestMethod.GET)
 	public ResponseEntity<Map<String,Object>> listNews(){
-		List<NewsDTO> news = newsservice.listNewsDatas(1, 0, 1, 0);
+		List<NewsDTO> news = newsservice.listNewsDatas(1, 0, 0, 0);
 		
 		Map<String, Object> map = new HashMap<String,Object>();
 		if(news.isEmpty()){
@@ -64,7 +64,8 @@ public class NewsRestController {
 	
 	@RequestMapping(value="/search", method=RequestMethod.GET)
 	public ResponseEntity<Map<String,Object>> searchNews(){
-		List<NewsDTO> news = newsservice.searchNews("", 1, 0, 1, 0);
+		List<NewsDTO> news = newsservice.searchNews("", 1, 8, 0, 1);
+		
 		Map<String, Object> map = new HashMap<String,Object>();
 		if(news.isEmpty()){
 			map.put("STATUS", HttpStatus.OK.value());
