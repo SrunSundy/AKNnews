@@ -196,6 +196,7 @@ public class ScrapDAOImpl implements ScrapDAO {
 		news.setTitle(st.getTitleSelector());
 		news.setHit(st.getHit());
 		news.setSaved(st.isSaved());
+		
 		return news;
 	}
 	
@@ -207,7 +208,13 @@ public class ScrapDAOImpl implements ScrapDAO {
 		try{
 			Document doc = Jsoup.connect(url).timeout(30000).get();
 			
-			String content = doc.select(st.getContentSelector()).text();
+			Elements elements = doc.select(st.getContentSelector());
+			
+			String content = "";
+			
+			for(Element element : elements){
+				content += element.text() + "\n";
+			}
 			
 			news.setContent(content);
 			news.setTitle(st.getTitleSelector());
@@ -223,5 +230,58 @@ public class ScrapDAOImpl implements ScrapDAO {
 		
 		return news;
 	}
+
+	@Override
+	public int[] scrapSite(int site_id) {
+		
+		ArrayList<NewsDTO> news = new ArrayList<NewsDTO>();
+		
+		ArrayList<StructureDTO> selectors = (ArrayList<StructureDTO>) this.getAllSelectors(site_id);
+		
+		System.out.println("Size : "+selectors.size());
+		
+		for(StructureDTO selector:selectors){
+			System.out.println("=>> Scraping URL : " + selector.getUrl());
+			news.addAll(scrapNews(selector));
+			System.out.println("=>> Completed..!");
+		}
+		System.out.println("=>> Scraping DONE..!");
+		
+		int []insertRow =  scrapNewsToDatabase(news);
+		
+		System.out.println("=>> Insert Into Database Successfully..!");
+		
+		return insertRow;
+		
+	}
+	
+	private List<StructureDTO> getAllSelectors(int site_id){
+		
+		String sql = "SELECT sd.url, link_selector, rows_selector, image_selector, title_selector, desc_selector, site_id, category_id " +  
+					 "FROM tbsite_detail sd INNER JOIN tbsite s ON sd.site_id=s.s_id " + 
+					 "INNER JOIN tbstructure st ON st.id=s.s_id " + 
+					 "WHERE sd.status=true AND site_id=?";
+		
+		return jdbcTemplate.query(sql, new Object[]{site_id}, new RowMapper<StructureDTO>() {
+
+			@Override
+			public StructureDTO mapRow(ResultSet rs, int rowNumber) throws SQLException {
+				StructureDTO selectors = new StructureDTO();
+				
+				selectors.setUrl(rs.getString("url"));
+				selectors.setCategoryId(rs.getInt("category_id"));
+				selectors.setSiteId(rs.getInt("site_id"));
+				selectors.setRowsSelector(rs.getString("rows_selector"));
+				selectors.setLinkSelector(rs.getString("link_selector"));
+				selectors.setTitleSelector(rs.getString("title_selector"));
+				selectors.setImageSelector(rs.getString("image_selector"));
+				selectors.setDescriptionSelector(rs.getString("desc_selector"));
+				
+				return selectors;
+			}
+		});
+		
+	}
+
 	
 }

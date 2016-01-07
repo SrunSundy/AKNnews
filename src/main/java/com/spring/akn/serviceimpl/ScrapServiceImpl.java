@@ -32,6 +32,19 @@ public class ScrapServiceImpl implements ScrapService{
 		return scrapDAO.scrapNews(url, user_id);
 		
 	}
+
+	@Override
+	public int scrapSite(int site_id) {
+		int[] size = scrapDAO.scrapSite(site_id);
+		
+		int affected = 0;
+		
+		for(int i=0; i<size.length; i++)
+			if(size[i]==1)
+				affected++;
+		
+		return affected;
+	}
 	
 	
 }
