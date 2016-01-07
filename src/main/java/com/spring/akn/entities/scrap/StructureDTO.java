@@ -4,12 +4,17 @@ public class StructureDTO {
 	private int id;
 	private String url;
 	private int siteId;
+	private int hit;
+	private boolean isSaved;
+	private String content;
 	private int categoryId;
 	private String rowsSelector;
 	private String imageSelector;
 	private String linkSelector;
 	private String titleSelector;
 	private String descriptionSelector;
+	private String contentSelector;
+	
 	public int getId() {
 		return id;
 	}
@@ -69,6 +74,30 @@ public class StructureDTO {
 	}
 	public void setCategoryId(int categoryId) {
 		this.categoryId = categoryId;
+	}
+	public String getContentSelector() {
+		return contentSelector;
+	}
+	public void setContentSelector(String contentSelector) {
+		this.contentSelector = contentSelector;
+	}
+	public int getHit() {
+		return hit;
+	}
+	public void setHit(int hit) {
+		this.hit = hit;
+	}
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
+	}
+	public boolean isSaved() {
+		return isSaved;
+	}
+	public void setSaved(boolean isSaved) {
+		this.isSaved = isSaved;
 	}
 	
 }
