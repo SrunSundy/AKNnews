@@ -5,11 +5,11 @@ import com.spring.akn.entities.NewsDTO;
 public interface ScrapDAO {
 	
 		/***
-		 * return affected row
+		 * return number of news being insert
 		 */
-		public int scrapAllSites();
+		public int[] scrapAllSites();
 		
-		public NewsDTO scrapNews(String url);
+		public NewsDTO scrapNews(String url, int user_id);
 		
 }
 	
