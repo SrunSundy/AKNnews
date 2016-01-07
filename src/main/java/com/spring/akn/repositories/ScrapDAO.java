@@ -11,6 +11,9 @@ public interface ScrapDAO {
 		
 		public NewsDTO scrapNews(String url, int user_id);
 		
+		/***
+		 * return number of news being insert
+		 */
 		public int[] scrapSite(int site_id);
 }
 	
