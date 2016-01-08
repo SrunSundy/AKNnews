@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.spring.akn.entities.CategoryDTO;
 import com.spring.akn.services.CategoryServices;
 
@@ -29,7 +28,6 @@ public class CategoryRestController {
 	 * Get all category data
 	 * @return
 	 */
-	@ApiIgnore
 	@RequestMapping(value="/", method = RequestMethod.GET)
 	public ResponseEntity<Map<String, Object>> listCategory(){
 		Map<String, Object> map = new Hashtable<String, Object>();
@@ -139,7 +137,7 @@ public class CategoryRestController {
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value="/toggle/{id}", method = RequestMethod.PUT)
+	@RequestMapping(value="/toggle/{id}", method = RequestMethod.PATCH)
 	public ResponseEntity<Map<String, Object>> toggleCategory(@PathVariable("id") int id){
 		Map<String, Object> map = new Hashtable<String,Object>();
 		if ( categoryServices.isMenuToggle(id) ){

@@ -42,5 +42,13 @@ public class SiteDetailDAOImpl implements SiteDetailDAO{
 			return true;
 		return false;
 	}
+	@Override
+	public boolean isToggleStatusSiteDetail(int s_id, int c_id) {
+		String sql = "UPDATE tbsite_detail SET status = CASE WHEN status=true THEN  FALSE ELSE TRUE END WHERE (site_id = ? AND category_id = ?)";
+		int result = getJdbcTemplate().update(sql , new Object[]{s_id, c_id});
+		if ( result > 0 )
+			return true;
+		return false;
+	}
 
 }

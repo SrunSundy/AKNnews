@@ -77,7 +77,6 @@ public class SiteDetailRestController {
 
 	/**
 	 * Delete from sitedetail
-	 * 
 	 * @param s_id
 	 * @param c_id
 	 * @return
@@ -94,6 +93,26 @@ public class SiteDetailRestController {
 		map.put("STATUS", HttpStatus.NOT_FOUND.value());
 		map.put("MESSAGE", "SITEDETAIL DELETE FAIL!");
 		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+	}
+	
+	/**
+	 * Toggle status change
+	 * @param s_id
+	 * @param c_id
+	 * @return
+	 */
+	@RequestMapping(value="/{s_id}/{c_id}", method = RequestMethod.PATCH)
+	public ResponseEntity<Map<String, Object>> toggleStatusSiteDetail(@PathVariable("s_id")int s_id, 
+			@PathVariable("c_id")int c_id){
+		Map<String, Object> map = new Hashtable<String, Object>();
+		if (siteDetailServices.isToggleStatusSiteDetail(s_id, c_id)) {
+			map.put("STATUS", HttpStatus.OK.value());
+			map.put("MESSAGE", "SITE DETAIL CHANGE STATUS SUCCESS!");
+			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+		}
+		map.put("STATUS", HttpStatus.NOT_FOUND.value());
+		map.put("MESSAGE", "SITE DETAIL CHANGE STATUS FAIL!");
+		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);		
 	}
 
 }

@@ -25,6 +25,11 @@ public class SiteDetailServiceImpl implements SiteDetailServices{
 	public boolean isDeleteSiteDetail(int s_id, int c_id) {
 		return siteDetailDAO.isDeleteSiteDetail(s_id, c_id);
 	}
+
+	@Override
+	public boolean isToggleStatusSiteDetail(int s_id, int c_id) {
+		return siteDetailDAO.isToggleStatusSiteDetail(s_id, c_id);
+	}
 	
 	
 }
