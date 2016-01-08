@@ -18,9 +18,9 @@ public interface NewsRepositories {
 	
 	public List<NewsDTO> searchNews(String key,int page,int categoryid,int siteid,int userid);
 	
-	public int saveNews(int newsid,int userid);
+	public int saveNews(NewsDTO news);
 	
-	public int deleteSavedNews(int newsid,int userid);
+	public int deleteSavedNews(NewsDTO news);
 	
-	public List<NewsDTO> listSavedNews();
+	public List<NewsDTO> listSavedNews(int userid);
 }
