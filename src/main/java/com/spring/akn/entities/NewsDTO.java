@@ -2,6 +2,8 @@ package com.spring.akn.entities;
 
 import java.util.Date;
 
+import com.spring.akn.entities.user.User;
+
 public class NewsDTO {
 	private int id;
 	private String title;
@@ -16,6 +18,7 @@ public class NewsDTO {
 
 	private SiteDTO site;
 	private CategoryDTO category;
+	private User user;
 	
 	public int getId() {
 		return id;
@@ -90,12 +93,20 @@ public class NewsDTO {
 	public void setCategory(CategoryDTO category) {
 		this.category = category;
 	}
+	
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
 	@Override
 	public String toString() {
 		return "NewsDTO [id=" + id + ", title=" + title + ", description=" + description + ", image=" + image
 				+ ", date=" + date + ", hit=" + hit + ", url=" + url + ", status=" + status + ", content=" + content
-				+ ", site=" + site + ", category=" + category + ", isSaved=" + isSaved + "]";
+				+ ", isSaved=" + isSaved + ", site=" + site + ", category=" + category + ", user=" + user + "]";
 	}
+	
 	
 	
 }
