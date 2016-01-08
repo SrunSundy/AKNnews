@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.spring.akn.entities.CategoryDTO;
 import com.spring.akn.services.CategoryServices;
 
@@ -28,6 +29,7 @@ public class CategoryRestController {
 	 * Get all category data
 	 * @return
 	 */
+	@ApiIgnore
 	@RequestMapping(value="/", method = RequestMethod.GET)
 	public ResponseEntity<Map<String, Object>> listCategory(){
 		Map<String, Object> map = new Hashtable<String, Object>();
