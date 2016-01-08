@@ -66,21 +66,26 @@ public class NewsRepositriesImpl implements NewsRepositories {
 	}
 	
 	@Override
-	public int saveNews(int newsid, int userid) {
+	public int saveNews(NewsDTO news) {
+		String sql="INSERT INTO tbsavelist(news_id,user_id) VALUES(?,?)";
+		return jdbcTemplate.update(sql,news.getId(),news.getUser().getId());
+	}
+
+	@Override
+	public int deleteSavedNews(NewsDTO news) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public int deleteSavedNews(int newsid, int userid) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public List<NewsDTO> listSavedNews() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<NewsDTO> listSavedNews(int userid) {
+		String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_url,n.news_hit,s.s_id,s.s_url "
+				+ "FROM tbsavelist sl "
+				+ "INNER JOIN tbnews n ON sl.news_id=n.news_id "
+				+ "INNER JOIN tbuser u ON u.user_id=sl.user_id "
+				+ "INNER JOIN tbsite s ON s.s_id =n.source_id "
+				+ "WHERE u.user_id=?";
+		return jdbcTemplate.query(sql, new Object[]{userid},new GetNewsWithNoUserIDMapper());
 	}
 	
 	/**
