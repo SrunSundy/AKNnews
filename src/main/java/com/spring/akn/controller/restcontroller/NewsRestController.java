@@ -24,30 +24,36 @@ public class NewsRestController {
 	NewsService newsservice;
 	
 	
-	@RequestMapping(value="/", method=RequestMethod.GET)
-	public ResponseEntity<Map<String,Object>> listNews(){
-		List<NewsDTO> news = newsservice.listNewsDatas(1, 0, 0, 0);
+	@RequestMapping(value="/{page}/{cid}/{sid}/{uid}/", method=RequestMethod.GET)
+	public ResponseEntity<Map<String,Object>> listNews(@PathVariable("page") int page,@PathVariable("cid") int cid,@PathVariable("sid") int sid,@PathVariable("uid") int uid){
+		List<NewsDTO> news = newsservice.listNewsDatas(page, cid, sid, uid);
 		
 		Map<String, Object> map = new HashMap<String,Object>();
 		if(news.isEmpty()){
 			map.put("STATUS", HttpStatus.OK.value());
 			map.put("MESSAGE", "NEWS NOT FOUND...");
+			map.put("TOTAL_PAGE", newsservice.getNewsTotalPage("",cid,sid));
+			map.put("TOTAL_RECORDS", newsservice.getNewsTotalRecords("",cid ,sid));
 			map.put("RESPONSE_DATA",news);
+			
 			return new ResponseEntity<Map<String,Object>>
 							(map,HttpStatus.OK);
 
 		}	
 		map.put("STATUS", HttpStatus.OK.value());
 		map.put("MESSAGE", "NEWS HAS BEEN FOUND");
+		map.put("TOTAL_PAGE", newsservice.getNewsTotalPage("",cid,sid));
+		map.put("TOTAL_RECORDS", newsservice.getNewsTotalRecords("",cid ,sid));
 		map.put("RESPONSE_DATA",news);
+		
 		return new ResponseEntity<Map<String,Object>>
 									(map,HttpStatus.OK);	
 	}
 	
-	@RequestMapping(value="/{id}", method=RequestMethod.GET)
-	public ResponseEntity<Map<String,Object>> listArticle(@PathVariable("id") int id ){
+	@RequestMapping(value="/{id}/{uid}", method=RequestMethod.GET)
+	public ResponseEntity<Map<String,Object>> listNewData(@PathVariable("id") int id,@PathVariable("uid") int uid ){
 		
-		NewsDTO news= newsservice.listNewsData(id, 0);
+		NewsDTO news= newsservice.listNewsData(id, uid);
 		System.err.println(news);
 		Map<String, Object> map = new HashMap<String,Object>();
 		if(news == null){
