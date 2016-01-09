@@ -1,5 +1,7 @@
 package com.spring.akn.serviceimpl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +42,18 @@ public class UserServicesImpl implements UserServices{
 	
 	public int changePassword(String oldpass, String newpass, int id) {
 		return userRespositories.changePassword(newpass, oldpass, id);
+	}
+
+
+	@Override
+	public List<User> listUser(String key, int page) {
+		return userRespositories.listUser(key, page);
+	}
+
+
+	@Override
+	public String getCurrentImage(int id) {
+		return userRespositories.getCurrentImage(id);
 	}
 	
 }
