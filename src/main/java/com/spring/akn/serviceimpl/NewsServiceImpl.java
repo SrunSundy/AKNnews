@@ -59,7 +59,7 @@ public class NewsServiceImpl implements NewsService{
 	@Override
 	public int deleteSavedNews(NewsDTO news) {
 		// TODO Auto-generated method stub
-		return 0;
+		return newsrepository.deleteSavedNews(news);
 	}
 
 	@Override
