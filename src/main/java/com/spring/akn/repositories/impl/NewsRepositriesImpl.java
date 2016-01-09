@@ -73,8 +73,8 @@ public class NewsRepositriesImpl implements NewsRepositories {
 
 	@Override
 	public int deleteSavedNews(NewsDTO news) {
-		// TODO Auto-generated method stub
-		return 0;
+		String sql="DELETE FROM tbsavelist WHERE news_id=? AND user_id=?";
+		return jdbcTemplate.update(sql,news.getId(),news.getUser().getId());
 	}
 
 	@Override
