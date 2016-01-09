@@ -9,6 +9,10 @@ public interface ScrapDAO {
 		 */
 		public int[] scrapAllSites();
 		
+		
+		/***
+		 * detail news for reading
+		 * */
 		public NewsDTO scrapNews(String url, int user_id);
 		
 		/***
