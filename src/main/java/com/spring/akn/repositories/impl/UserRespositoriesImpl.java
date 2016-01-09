@@ -2,6 +2,8 @@ package com.spring.akn.repositories.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -22,7 +24,7 @@ public class UserRespositoriesImpl implements UserRespositories {
 
 	public int userRegister(User user) {
 		String sql="INSERT INTO tbuser(user_name, user_email, user_password, user_image) VALUES(?,?,md5(?),?)";
-		user.setImage("default.jpg");
+		if (user.getImage()==""){user.setImage("default.jpg");}
 		Object[] obj={user.getUsername(),user.getEmail(),user.getPassword(),user.getImage()};
 		return jdbcTemplate.update(sql,obj);
 	}
@@ -54,8 +56,8 @@ public class UserRespositoriesImpl implements UserRespositories {
 
 	
 	public int updateUser(User user) {
-		String sql="UPDATE tbuser SET user_name=? WHERE user_id=?";
-		return jdbcTemplate.update(sql, new Object[] {user.getUsername(),user.getId()});
+		String sql="UPDATE tbuser SET user_name=?,user_image=? WHERE user_id=?";
+		return jdbcTemplate.update(sql, new Object[] {user.getUsername(),user.getImage(),user.getId()});
 	}
 
 
@@ -82,12 +84,40 @@ public class UserRespositoriesImpl implements UserRespositories {
 		String sql="UPDATE tbuser SET user_password=md5(?) WHERE user_id=? AND user_password=md5(?)";
 		return jdbcTemplate.update(sql,newpass,id,oldpass);
 	}
-	/*
-	 * // User Mapper Class private static final class UserMapper implements
-	 * RowMapper<User> { public User mapRow(ResultSet rs, int rowNumber) throws
-	 * SQLException {
-	 * 
-	 * } }
-	 */
 
+	@Override
+	public List<User> listUser(String key, int page) {
+		int offset=(page*10)-10;
+		if((page == 0 && key.equals("*")) || page == 0){
+			if(page == 0 && key.equals("*")) key="%";
+			return jdbcTemplate.query("SELECT  user_id, user_name, user_email, user_image, enabled FROM tbuser WHERE UPPER(user_name) LIKE UPPER(?) ORDER BY user_id DESC",new Object[]{"%"+key+"%"},new UserMapper());
+		}
+		else if((page != 0 && key.equals("*")))
+			key = "%";		
+		return jdbcTemplate.query("SELECT user_id, user_name, user_email, user_image, enabled FROM tbuser WHERE UPPER(user_name) LIKE UPPER(?) ORDER BY user_id DESC LIMIT 10 OFFSET ?", new Object[]{"%"+key+"%", offset}, new UserMapper());
+	}
+	
+	//cLass user for wrapper user information
+	private static final class UserMapper implements RowMapper<User>{		
+		public User mapRow(ResultSet rs, int rowNumber) throws SQLException {
+			User user = new User();
+			user.setId(rs.getInt("user_id"));
+			user.setUsername(rs.getString("user_name"));
+			user.setEmail(rs.getString("user_email"));
+			user.setImage(rs.getString("user_image"));
+			user.setEnabled(rs.getBoolean("enabled"));
+			return user;
+		}
+	}
+
+	@Override
+	public String getCurrentImage(int id) {
+		String sql = "SELECT user_image FROM tbuser WHERE user_id=? ";
+		try {
+			return jdbcTemplate.queryForObject(sql, new Object[] { id },String.class );
+		} catch (IncorrectResultSizeDataAccessException ex) {
+			return null;
+
+	     }
+  }
 }
