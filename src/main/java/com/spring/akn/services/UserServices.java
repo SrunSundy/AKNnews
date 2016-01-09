@@ -1,5 +1,7 @@
 package com.spring.akn.services;
 
+import java.util.List;
+
 import com.spring.akn.entities.user.User;
 
 public interface UserServices {
@@ -9,5 +11,7 @@ public interface UserServices {
 	public int updateUser(User user);
 	public User getUser(int id);
 	public int changePassword( String oldpass,String newpass,int id);
-
+	public List<User> listUser(String key,int page);
+	public String getCurrentImage(int id);
+	
 }
