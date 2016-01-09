@@ -68,4 +68,22 @@ public class NewsServiceImpl implements NewsService{
 		return newsrepository.listSavedNews(userid);
 	}
 
+	@Override
+	public List<NewsDTO> getPopularNews(int userid) {
+		// TODO Auto-generated method stub
+		return newsrepository.getPopularNews(userid);
+	}
+
+	@Override
+	public int getNewsTotalPage(String key,int categoryid,int siteid)  {
+		// TODO Auto-generated method stub
+		return newsrepository.getNewsTotalPage(key, categoryid, siteid);
+	}
+
+	@Override
+	public int getNewsTotalRecords(String key, int categoryid, int siteid) {
+		// TODO Auto-generated method stub
+		return newsrepository.getNewsTotalRecords(key, categoryid, siteid);
+	}
+
 }
