@@ -18,6 +18,12 @@ public interface NewsService {
 	
 	public List<NewsDTO> searchNews(String key,int page,int categoryid,int siteid,int userid);
 	
+	public int getNewsTotalPage(String key,int categoryid,int siteid);
+	
+	public int getNewsTotalRecords(String key,int categoryid,int siteid);
+	
+	public List<NewsDTO> getPopularNews(int userid);
+	
 	public int saveNews(NewsDTO news);
 	
 	public int deleteSavedNews(NewsDTO news);
