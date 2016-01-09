@@ -125,19 +125,84 @@ public class UserRestController {
 		map.put("MESSAGE","SUCCESS TO UPDTE USERT INFORMATION");
 		return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
 	}
+	//list user
+	@RequestMapping(value="/{page}/{key}",method=RequestMethod.GET)
+	public ResponseEntity<Map<String,Object>> listUser(@PathVariable("page") int page,@PathVariable("key") String key) {
+		Map<String,Object> map=new HashMap<String, Object>();
+		if(userServices.listUser(key, page)==null){
+		    map.put("STATUS", HttpStatus.NOT_FOUND.value());
+		    map.put("MESSAGE","USER NOT FOUND");
+		    return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
+		}
+	    map.put("DATA", userServices.listUser(key, page));
+		map.put("STATUS", HttpStatus.FOUND.value());
+		map.put("MESSAGE","USER FOUND");
+		return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
+	}
 	
 	//upload image
-	@RequestMapping(value="/upload", method= RequestMethod.POST )
-	public ResponseEntity<Map<String,Object>> uploadImage( @RequestParam("file") MultipartFile file, HttpServletRequest request){
+		@RequestMapping(value="/upload", method= RequestMethod.POST )
+		public ResponseEntity<Map<String,Object>> uploadImage( @RequestParam("file") MultipartFile file, HttpServletRequest request){
+			Map<String, Object> map  = new HashMap<String, Object>();
+			if(!file.isEmpty()){
+				try{
+					UUID uuid = UUID.randomUUID();
+		            String originalFilename = file.getOriginalFilename(); 
+		            String extension = originalFilename.substring(originalFilename.lastIndexOf(".")+1);
+		            
+		            
+		            
+		            //for random file name
+		            String randowFileName=uuid+"."+extension;
+		            
+     	            String filename =randowFileName;
+					byte[] bytes = file.getBytes();
+
+					// creating the directory to store file
+					String savePath = request.getSession().getServletContext().getRealPath("/resources/images/");
+					System.out.println(savePath);
+					File path = new File(savePath);
+					if(!path.exists()){
+						path.mkdir();
+					}
+					
+
+					// creating the file on server
+					File serverFile = new File(savePath + File.separator + filename );
+					BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
+					stream.write(bytes);
+					stream.close();
+					
+					System.out.println(serverFile.getAbsolutePath());
+					System.out.println("You are successfully uploaded file " + filename);
+					map.put("MESSAGE","UPLOAD IMAGE SUCCESS");
+					map.put("STATUS", HttpStatus.OK.value());
+					map.put("IMAGE", request.getContextPath() + "/images/" + filename);
+					return new ResponseEntity<Map<String,Object>>
+										(map, HttpStatus.OK);
+				}catch(Exception e){
+					System.out.println("You are failed to upload  => " + e.getMessage());
+				}
+			}else{
+				System.err.println("File not found");
+			}
+			return null;
+		}
+
+	//upload change image
+	@RequestMapping(value="/editupload", method= RequestMethod.POST )
+	public ResponseEntity<Map<String,Object>> editUploadImage( @RequestParam("file") MultipartFile file, @RequestParam("id") int id, HttpServletRequest request){
 		Map<String, Object> map  = new HashMap<String, Object>();
 		if(!file.isEmpty()){
 			try{
 				UUID uuid = UUID.randomUUID();
 	            String originalFilename = file.getOriginalFilename(); 
 	            String extension = originalFilename.substring(originalFilename.lastIndexOf(".")+1);
-	            String randomUUIDFileName = uuid.toString();
 	            
-	            String filename = originalFilename;
+	            //for random file name
+	        
+	            String randowFileName=userServices.getCurrentImage(id);
+	            String filename =randowFileName;
 				byte[] bytes = file.getBytes();
 
 				// creating the directory to store file
@@ -148,6 +213,7 @@ public class UserRestController {
 					path.mkdir();
 				}
 				
+
 				// creating the file on server
 				File serverFile = new File(savePath + File.separator + filename );
 				BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
