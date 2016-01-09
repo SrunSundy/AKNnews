@@ -12,6 +12,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -183,7 +184,7 @@ public class ScrapDAOImpl implements ScrapDAO {
 				}
 			});
 
-		}catch (Exception ex){
+		}catch (IncorrectResultSizeDataAccessException ex){
 			return null;
 		}
 	}
