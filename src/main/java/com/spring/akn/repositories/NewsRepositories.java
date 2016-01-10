@@ -3,6 +3,7 @@ package com.spring.akn.repositories;
 import java.util.List;
 
 import com.spring.akn.entities.NewsDTO;
+import com.spring.akn.entities.SearchNewsDTO;
 
 public interface NewsRepositories {
 
@@ -16,7 +17,7 @@ public interface NewsRepositories {
 	
 	public int deleteNews(int news);
 	
-	public List<NewsDTO> searchNews(String key,int page,int categoryid,int siteid,int userid);
+	public List<NewsDTO> searchNews(SearchNewsDTO search);
 	
 	public List<NewsDTO> getPopularNews(int userid);
 	
@@ -26,7 +27,7 @@ public interface NewsRepositories {
 	
 	public int saveNews(NewsDTO news);
 	
-	public int deleteSavedNews(NewsDTO news);
+	public int deleteSavedNews(int newsid,int userid);
 	
 	public List<NewsDTO> listSavedNews(int userid);
 }
