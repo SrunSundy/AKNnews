@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring.akn.entities.NewsDTO;
+import com.spring.akn.entities.SearchNewsDTO;
 import com.spring.akn.repositories.NewsRepositories;
 import com.spring.akn.services.NewsService;
 
@@ -45,9 +46,9 @@ public class NewsServiceImpl implements NewsService{
 	}
 
 	@Override
-	public List<NewsDTO> searchNews(String key, int page, int categoryid, int siteid, int userid) {
+	public List<NewsDTO> searchNews(SearchNewsDTO search) {
 		// TODO Auto-generated method stub
-		return newsrepository.searchNews(key, page, categoryid, siteid, userid);
+		return newsrepository.searchNews(search);
 	}
 
 	@Override
@@ -57,9 +58,9 @@ public class NewsServiceImpl implements NewsService{
 	}
 
 	@Override
-	public int deleteSavedNews(NewsDTO news) {
+	public int deleteSavedNews(int newsid,int userid) {
 		// TODO Auto-generated method stub
-		return newsrepository.deleteSavedNews(news);
+		return newsrepository.deleteSavedNews(newsid,userid);
 	}
 
 	@Override
