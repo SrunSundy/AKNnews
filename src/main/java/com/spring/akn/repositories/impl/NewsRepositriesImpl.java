@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.spring.akn.entities.NewsDTO;
+import com.spring.akn.entities.SearchNewsDTO;
 import com.spring.akn.entities.SiteDTO;
 import com.spring.akn.repositories.NewsRepositories;
 
@@ -56,12 +57,14 @@ public class NewsRepositriesImpl implements NewsRepositories {
 	}
 
 	@Override
-	public List<NewsDTO> searchNews(String key, int page, int categoryid, int siteid, int userid) {
-		int offset=(page*10)-10;
+	public List<NewsDTO> searchNews(SearchNewsDTO search) {
+		int offset=(search.getPage()*10)-10;
 
-		if(categoryid != 0 ) return searchByCategory(key , categoryid, userid, offset);
-		if(siteid != 0) return searchBySite(key ,siteid, userid,offset);
-		return searchAll(key, userid, offset);
+		if(search.getCid() != 0 ) 
+			return searchByCategory(search.getKey() , search.getCid(), search.getSid(), offset);
+		if(search.getSid() != 0) 
+			return searchBySite(search.getKey() ,search.getSid(), search.getUid(),offset);
+		return searchAll(search.getKey(), search.getUid(), offset);
 
 	}
 	
@@ -132,9 +135,9 @@ public class NewsRepositriesImpl implements NewsRepositories {
 	}
 
 	@Override
-	public int deleteSavedNews(NewsDTO news) {
+	public int deleteSavedNews(int newsid,int userid) {
 		String sql="DELETE FROM tbsavelist WHERE news_id=? AND user_id=?";
-		return jdbcTemplate.update(sql,news.getId(),news.getUser().getId());
+		return jdbcTemplate.update(sql,newsid,userid);
 	}
 
 	@Override
