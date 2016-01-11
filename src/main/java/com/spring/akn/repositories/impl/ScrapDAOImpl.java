@@ -158,7 +158,7 @@ public class ScrapDAOImpl implements ScrapDAO {
 		if(url != null)
 			return readOtherNews(url, user_id);
 		
-		return readAKNNews(url, user_id);
+		return readAKNNews(id, user_id);
 	
 	}
 	
@@ -204,16 +204,29 @@ public class ScrapDAOImpl implements ScrapDAO {
 		}
 	}
 	
-	private NewsDTO readAKNNews(String url, int user_id){
-		StructureDTO st = this.getSelector(url, user_id);
+	private NewsDTO readAKNNews(int id, int user_id){
 		
-		NewsDTO news = new NewsDTO();
-		news.setContent(st.getContent());
-		news.setTitle(st.getTitleSelector());
-		news.setHit(st.getHit());
-		news.setSaved(st.isSaved());
+		String sql = "SELECT (CASE WHEN n.news_id IN (SELECT news_id FROM tbsavelist WHERE user_id=?) THEN TRUE ELSE FALSE END) AS issaved, " +
+					 "n.news_title, n.news_content, n.news_hit " + 
+					 "FROM tbnews n WHERE n.news_id=? ";
+		try{
+			return jdbcTemplate.queryForObject(sql, new Object[]{user_id, id}, new RowMapper<NewsDTO>() {
+
+				@Override
+				public NewsDTO mapRow(ResultSet rs, int rowNumber) throws SQLException {
+					NewsDTO news = new NewsDTO();
+					news.setContent(rs.getString("news_content"));
+					news.setTitle(rs.getString("news_title"));
+					news.setHit(rs.getInt("news_hit"));
+					news.setSaved(rs.getBoolean("issaved"));
+					return news;
+				}
+			});
+
+		}catch (IncorrectResultSizeDataAccessException ex){
+			return null;
+		}
 		
-		return news;
 	}
 	
 	private NewsDTO readOtherNews(String url, int user_id){
