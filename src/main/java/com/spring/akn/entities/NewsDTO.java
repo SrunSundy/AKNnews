@@ -18,7 +18,7 @@ public class NewsDTO {
 
 	private SiteDTO site;
 	private CategoryDTO category;
-	private User user;
+
 	
 	public int getId() {
 		return id;
@@ -93,20 +93,14 @@ public class NewsDTO {
 	public void setCategory(CategoryDTO category) {
 		this.category = category;
 	}
-	
-	public User getUser() {
-		return user;
-	}
-	public void setUser(User user) {
-		this.user = user;
-	}
 	@Override
 	public String toString() {
 		return "NewsDTO [id=" + id + ", title=" + title + ", description=" + description + ", image=" + image
 				+ ", date=" + date + ", hit=" + hit + ", url=" + url + ", status=" + status + ", content=" + content
-				+ ", isSaved=" + isSaved + ", site=" + site + ", category=" + category + ", user=" + user + "]";
+				+ ", isSaved=" + isSaved + ", site=" + site + ", category=" + category + "]";
 	}
 	
+
 	
 	
 }
