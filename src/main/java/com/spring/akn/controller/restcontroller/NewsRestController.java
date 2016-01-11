@@ -14,8 +14,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.spring.akn.entities.NewsDTO;
+import com.spring.akn.entities.SaveListDTO;
 import com.spring.akn.entities.SearchNewsDTO;
+import com.spring.akn.repositories.ScrapDAO;
 import com.spring.akn.services.NewsService;
+import com.spring.akn.services.ScrapService;
 
 @RestController
 @RequestMapping("api/article")
@@ -24,6 +27,8 @@ public class NewsRestController {
 	@Autowired
 	NewsService newsservice;
 	
+	@Autowired
+	ScrapService scrapservice;
 	
 	@RequestMapping(value="/{page}/{cid}/{sid}/{uid}/", method=RequestMethod.GET)
 	public ResponseEntity<Map<String,Object>> listNews(@PathVariable("page") int page,@PathVariable("cid") int cid
@@ -55,7 +60,7 @@ public class NewsRestController {
 	@RequestMapping(value="/{id}/{uid}", method=RequestMethod.GET)
 	public ResponseEntity<Map<String,Object>> listNewData(@PathVariable("id") int id,@PathVariable("uid") int uid ){
 		
-		NewsDTO news= newsservice.listNewsData(id, uid);
+		NewsDTO news= scrapservice.scrapNews(id+"", uid);
 		System.err.println(news);
 		Map<String, Object> map = new HashMap<String,Object>();
 		if(news == null){
@@ -117,12 +122,12 @@ public class NewsRestController {
 	}
 	
 	@RequestMapping(value="/savelist", method= RequestMethod.POST )
-	public ResponseEntity<Map<String,Object>> saveNews(@RequestBody NewsDTO news){
+	public ResponseEntity<Map<String,Object>> saveNews(@RequestBody SaveListDTO savenews){
 		
 		System.err.println("Save news");
 		Map<String, Object> map  = new HashMap<String, Object>();
 	
-		if(newsservice.saveNews(news)>0){
+		if(newsservice.saveNews(savenews)>0){
 			
 			map.put("MESSAGE","NEWS HAS BEEN SAVED.");
 			map.put("STATUS", HttpStatus.OK.value());
