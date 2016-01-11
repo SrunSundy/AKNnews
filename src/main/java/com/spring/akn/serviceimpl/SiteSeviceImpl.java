@@ -2,8 +2,11 @@ package com.spring.akn.serviceimpl;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.akn.entities.SiteDTO;
 import com.spring.akn.repositories.SiteDAO;
@@ -43,5 +46,11 @@ public class SiteSeviceImpl implements SiteServices{
 	public int countSiteRecord() {
 		return siteDAO.countSiteRecord();
 	}
+
+	@Override
+	public boolean isUploadLogo(MultipartFile file, HttpServletRequest request, int s_id) {
+		return siteDAO.isUploadLogo(file, request, s_id);
+	}
+
 
 }

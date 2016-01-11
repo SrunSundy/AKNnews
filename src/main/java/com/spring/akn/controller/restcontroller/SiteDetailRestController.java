@@ -1,6 +1,6 @@
 package com.spring.akn.controller.restcontroller;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.json.simple.JSONObject;
@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.spring.akn.services.SiteDetailServices;
 
 @RestController
 @RequestMapping(value = "/api/article/sitedetail")
+@ApiIgnore
 public class SiteDetailRestController {
 	@Autowired
 	private SiteDetailServices siteDetailServices;
@@ -31,7 +33,7 @@ public class SiteDetailRestController {
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public ResponseEntity<Map<String, Object>> insertSiteDetail(@RequestBody String siteDetail) throws ParseException {
-		Map<String, Object> map = new Hashtable<String, Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		JSONParser jsonParser = new JSONParser();
 		JSONObject jsonObject = (JSONObject) jsonParser.parse(siteDetail);
 		
@@ -57,7 +59,7 @@ public class SiteDetailRestController {
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.PUT)
 	public ResponseEntity<Map<String, Object>> updateSiteDetail(@RequestBody String siteDetail) throws ParseException {
-		Map<String, Object> map = new Hashtable<String, Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		JSONParser jsonParser = new JSONParser();
 		JSONObject jsonObject = (JSONObject) jsonParser.parse(siteDetail);
 		
@@ -84,7 +86,7 @@ public class SiteDetailRestController {
 	@RequestMapping(value = "/{s_id}/{c_id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Map<String, Object>> deleteSiteDetail(@PathVariable("s_id") int s_id,
 			@PathVariable("c_id") int c_id) {
-		Map<String, Object> map = new Hashtable<String, Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		if (siteDetailServices.isDeleteSiteDetail(s_id, c_id)) {
 			map.put("STATUS", HttpStatus.OK.value());
 			map.put("MESSAGE", "SITE DETAIL DELETE SUCCESS!");
@@ -104,7 +106,7 @@ public class SiteDetailRestController {
 	@RequestMapping(value="/{s_id}/{c_id}", method = RequestMethod.PATCH)
 	public ResponseEntity<Map<String, Object>> toggleStatusSiteDetail(@PathVariable("s_id")int s_id, 
 			@PathVariable("c_id")int c_id){
-		Map<String, Object> map = new Hashtable<String, Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		if (siteDetailServices.isToggleStatusSiteDetail(s_id, c_id)) {
 			map.put("STATUS", HttpStatus.OK.value());
 			map.put("MESSAGE", "SITE DETAIL CHANGE STATUS SUCCESS!");
