@@ -23,6 +23,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.spring.akn.entities.frmApiDoc.FrmUserAdd;
+import com.spring.akn.entities.frmApiDoc.FrmUserChangePwd;
+import com.spring.akn.entities.frmApiDoc.FrmUserLogin;
+import com.spring.akn.entities.frmApiDoc.FrmUserUpdate;
 import com.spring.akn.entities.user.User;
 import com.spring.akn.services.UserServices;
 
@@ -35,18 +39,20 @@ public class UserRestController {
 	
 	//login process
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public ResponseEntity<Map<String, Object>> login(@RequestBody String data) throws ParseException {
+	public ResponseEntity<Map<String, Object>> login(@RequestBody FrmUserLogin user) throws ParseException {
 		Map<String, Object> map = new HashMap<String, Object>();
-		// for get data from json string
+		
+		/*// for get data from json string
 		JSONParser jsonParser = new JSONParser();
 		JSONObject jsonObject = (JSONObject) jsonParser.parse(data);
 		// get a String from the JSON object
 		String email = (String) jsonObject.get("email");
-		String password = (String) jsonObject.get("password");
-		if (userServices.userLogin(email, password) != null) {
+		String password = (String) jsonObject.get("password");*/
+		
+		if (userServices.userLogin(user) != null) {
 			map.put("STATUS", HttpStatus.FOUND.value());
 			map.put("MESSAGE", "LOGIN SUCCESS");
-			map.put("DATA",userServices.userLogin(email, password));
+			map.put("DATA",userServices.userLogin(user));
 			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 		}
 		
@@ -57,7 +63,7 @@ public class UserRestController {
 	
 	//register proccess
 	@RequestMapping(value="/",method=RequestMethod.POST)
-	public ResponseEntity<Map<String,Object>> addUser(@RequestBody User user) {
+	public ResponseEntity<Map<String,Object>> addUser(@RequestBody FrmUserAdd user) {
 		
 		Map<String,Object> map=new HashMap<String, Object>();
 		if( userServices.userRegister(user)== 0){
@@ -70,7 +76,7 @@ public class UserRestController {
 		return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
 	}
 	
-	//User Status process
+/*	//User Status process
 	@RequestMapping(value="toggle/{id}",method=RequestMethod.PATCH)
 	public ResponseEntity<Map<String,Object>> toggleStatus(@PathVariable("id") int id) {
 		Map<String,Object> map=new HashMap<String, Object>();
@@ -83,24 +89,24 @@ public class UserRestController {
 		map.put("STATUS", HttpStatus.FOUND.value());
 		map.put("MESSAGE","SUCCESS TO UPDTE USERT STATUS");
 		return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
-	}
+	}*/
     
 	//change password process
 	@RequestMapping(value="/changepwd",method=RequestMethod.PUT)
-	public ResponseEntity<Map<String,Object>> changePassword(@RequestBody String data) throws ParseException {
+	public ResponseEntity<Map<String,Object>> changePassword(@RequestBody FrmUserChangePwd user) throws ParseException {
 		Map<String,Object> map=new HashMap<String, Object>();
 
-		// for get data from json string
+		/*// for get data from json string
 		JSONParser jsonParser = new JSONParser();
 		JSONObject jsonObject = (JSONObject) jsonParser.parse(data);
 		// get a String from the JSON object
 		String oldpass = (String) jsonObject.get("oldpass");
 		String newpass = (String) jsonObject.get("newpass");
 		String uid=(String) jsonObject.get("id");
-		int id=Integer.parseInt(uid);
+		int id=Integer.parseInt(uid);*/
 		
 		
-		if(userServices.changePassword(oldpass, newpass, id)==0){
+		if(userServices.changePassword(user)==0){
 		    map.put("STATUS", HttpStatus.NOT_FOUND.value());
 		    map.put("MESSAGE","FAILD TO CHANGE PASSWORD");
 		    return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
@@ -113,7 +119,7 @@ public class UserRestController {
 	
 	//Update user infor process
 	@RequestMapping(value="/update",method=RequestMethod.PUT)
-	public ResponseEntity<Map<String,Object>> updateUser(@RequestBody User user) {
+	public ResponseEntity<Map<String,Object>> updateUser(@RequestBody FrmUserUpdate user) {
 		Map<String,Object> map=new HashMap<String, Object>();
 		if(userServices.updateUser(user)==0){
 		    map.put("STATUS", HttpStatus.NOT_FOUND.value());
