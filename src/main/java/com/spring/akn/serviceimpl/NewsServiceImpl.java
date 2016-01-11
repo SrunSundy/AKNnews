@@ -21,11 +21,11 @@ public class NewsServiceImpl implements NewsService{
 		return newsrepository.listNewsDatas(page, categoryid, siteid, userid);
 	}
 
-	@Override
+	/*@Override
 	public NewsDTO listNewsData(int newsid, int userid) {
 		// TODO Auto-generated method stub
 		return newsrepository.listNewsData(newsid, userid);
-	}
+	}*/
 
 	@Override
 	public int insertNews(NewsDTO news) {
