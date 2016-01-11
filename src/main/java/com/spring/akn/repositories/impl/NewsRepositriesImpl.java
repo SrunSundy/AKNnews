@@ -31,12 +31,12 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		
 	}
 
-	@Override
+	/*@Override
 	public NewsDTO listNewsData(int newsid, int userid) {
 		
 		if(userid != 0) return listDetailWithUserId(userid, newsid);
 		return listDetailWithNoUserId(newsid);
-	}
+	}*/
 
 	@Override
 	public int insertNews(NewsDTO news) {
@@ -294,7 +294,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 	
 	
 	//LIST NEWS DETAIL
-	
+/*	
 	public NewsDTO listDetailWithUserId(int userid,int newsid){
 		try{
 			String sql="SELECT n.news_id,n.news_title,n.news_date,"
@@ -340,7 +340,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 			return null;
 		}
 		
-	}
+	}*/
 	//END LIST NEWS DETAIL
 	
 	private static final class GetNewsWithUserIDMapper implements RowMapper<NewsDTO>{		
