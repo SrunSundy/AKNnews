@@ -9,7 +9,7 @@ public interface NewsRepositories {
 
 	public List<NewsDTO> listNewsDatas(int page,int categoryid,int siteid,int userid);
 	
-	public NewsDTO listNewsData(int newsid,int userid);
+	//public NewsDTO listNewsData(int newsid,int userid);
 	
 	public int insertNews(NewsDTO news);
 	
