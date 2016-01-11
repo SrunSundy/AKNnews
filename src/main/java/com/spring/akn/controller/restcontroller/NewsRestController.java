@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.spring.akn.entities.NewsDTO;
 import com.spring.akn.entities.SaveListDTO;
 import com.spring.akn.entities.SearchNewsDTO;
-import com.spring.akn.repositories.ScrapDAO;
 import com.spring.akn.services.NewsService;
 import com.spring.akn.services.ScrapService;
 
@@ -30,16 +29,18 @@ public class NewsRestController {
 	@Autowired
 	ScrapService scrapservice;
 	
-	@RequestMapping(value="/{page}/{cid}/{sid}/{uid}/", method=RequestMethod.GET)
-	public ResponseEntity<Map<String,Object>> listNews(@PathVariable("page") int page,@PathVariable("cid") int cid
+	@RequestMapping(value="/{page}/{row}/{cid}/{sid}/{uid}/", method=RequestMethod.GET)
+	public ResponseEntity<Map<String,Object>> listNews(@PathVariable("page") int page,@PathVariable("row") int row,@PathVariable("cid") int cid
 			,@PathVariable("sid") int sid,@PathVariable("uid") int uid){
-		List<NewsDTO> news = newsservice.listNewsDatas(page, cid, sid, uid);
-		
+		List<NewsDTO> news = newsservice.listNewsDatas(page,row, cid, sid, uid);
+		System.err.println(news);
 		Map<String, Object> map = new HashMap<String,Object>();
-		if(news.isEmpty()){
+	
+		if(news == null || news.isEmpty()){
+			
 			map.put("STATUS", HttpStatus.OK.value());
 			map.put("MESSAGE", "NEWS NOT FOUND...");
-			map.put("TOTAL_PAGES", newsservice.getNewsTotalPage("",cid,sid));
+			map.put("TOTAL_PAGES", newsservice.getNewsTotalPage("",row,cid,sid));
 			map.put("TOTAL_RECORDS", newsservice.getNewsTotalRecords("",cid ,sid));
 			map.put("RESPONSE_DATA",news);
 			
@@ -47,9 +48,10 @@ public class NewsRestController {
 							(map,HttpStatus.OK);
 
 		}	
+	
 		map.put("STATUS", HttpStatus.OK.value());
 		map.put("MESSAGE", "NEWS HAS BEEN FOUND");
-		map.put("TOTAL_PAGES", newsservice.getNewsTotalPage("",cid,sid));
+		map.put("TOTAL_PAGES", newsservice.getNewsTotalPage("",row,cid,sid));
 		map.put("TOTAL_RECORDS", newsservice.getNewsTotalRecords("",cid ,sid));
 		map.put("RESPONSE_DATA",news);
 		
@@ -81,10 +83,10 @@ public class NewsRestController {
 		List<NewsDTO> news = newsservice.searchNews(search);
 		
 		Map<String, Object> map = new HashMap<String,Object>();
-		if(news.isEmpty()){
+		if(news == null || news.isEmpty()){
 			map.put("STATUS", HttpStatus.OK.value());
 			map.put("MESSAGE", "NEWS NOT FOUND...");
-			map.put("TOTAL_PAGES", newsservice.getNewsTotalPage(search.getKey(),search.getCid(),search.getSid()));
+			map.put("TOTAL_PAGES", newsservice.getNewsTotalPage(search.getKey(),search.getRow(),search.getCid(),search.getSid()));
 			map.put("TOTAL_RECORDS", newsservice.getNewsTotalRecords(search.getKey(),search.getCid() ,search.getSid()));
 			map.put("RESPONSE_DATA",news);
 			return new ResponseEntity<Map<String,Object>>
@@ -93,7 +95,7 @@ public class NewsRestController {
 		}	
 		map.put("STATUS", HttpStatus.OK.value());
 		map.put("MESSAGE", "NEWS HAS BEEN FOUND");
-		map.put("TOTAL_PAGES", newsservice.getNewsTotalPage(search.getKey(),search.getCid(),search.getSid()));
+		map.put("TOTAL_PAGES", newsservice.getNewsTotalPage(search.getKey(),search.getRow(),search.getCid(),search.getSid()));
 		map.put("TOTAL_RECORDS", newsservice.getNewsTotalRecords(search.getKey(),search.getCid() ,search.getSid()));
 		map.put("RESPONSE_DATA",news);
 		return new ResponseEntity<Map<String,Object>>
