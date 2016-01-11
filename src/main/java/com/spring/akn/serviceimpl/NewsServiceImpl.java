@@ -17,9 +17,9 @@ public class NewsServiceImpl implements NewsService{
 	@Autowired
 	NewsRepositories newsrepository;
 	@Override
-	public List<NewsDTO> listNewsDatas(int page, int categoryid, int siteid, int userid) {
+	public List<NewsDTO> listNewsDatas(int page,int row, int categoryid, int siteid, int userid) {
 		// TODO Auto-generated method stub
-		return newsrepository.listNewsDatas(page, categoryid, siteid, userid);
+		return newsrepository.listNewsDatas(page,row, categoryid, siteid, userid);
 	}
 
 	/*@Override
@@ -60,9 +60,9 @@ public class NewsServiceImpl implements NewsService{
 	}
 
 	@Override
-	public int getNewsTotalPage(String key,int categoryid,int siteid)  {
+	public int getNewsTotalPage(String key,int row,int categoryid,int siteid)  {
 		// TODO Auto-generated method stub
-		return newsrepository.getNewsTotalPage(key, categoryid, siteid);
+		return newsrepository.getNewsTotalPage(key,row, categoryid, siteid);
 	}
 
 	@Override
