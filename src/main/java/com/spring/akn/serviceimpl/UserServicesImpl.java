@@ -5,6 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.spring.akn.entities.frmApiDoc.FrmUserAdd;
+import com.spring.akn.entities.frmApiDoc.FrmUserChangePwd;
+import com.spring.akn.entities.frmApiDoc.FrmUserLogin;
+import com.spring.akn.entities.frmApiDoc.FrmUserUpdate;
 import com.spring.akn.entities.user.User;
 import com.spring.akn.repositories.UserRespositories;
 import com.spring.akn.services.UserServices;
@@ -15,22 +19,22 @@ public class UserServicesImpl implements UserServices{
     UserRespositories userRespositories;
     
 
-	public int userRegister(User user) {	
+	public int userRegister(FrmUserAdd user) {	
 		return userRespositories.userRegister(user);
 	}
 
 
-	public User userLogin(String email, String password) {
-		return userRespositories.userLogin(email, password);
+	public User userLogin(FrmUserLogin user) {
+		return userRespositories.userLogin(user);
 	}
 
 
-	public int enableUser(int id) {
+/*	public int enableUser(int id) {
 		return userRespositories.enableUser(id);
-	}
+	}*/
 
 	
-	public int updateUser(User user) {
+	public int updateUser(FrmUserUpdate user) {
 		return userRespositories.updateUser(user);
 	}
 
@@ -40,8 +44,8 @@ public class UserServicesImpl implements UserServices{
 	}
 
 	
-	public int changePassword(String oldpass, String newpass, int id) {
-		return userRespositories.changePassword(newpass, oldpass, id);
+	public int changePassword(FrmUserChangePwd user) {
+		return userRespositories.changePassword(user);
 	}
 
 
