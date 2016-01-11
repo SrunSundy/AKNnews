@@ -5,12 +5,12 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.spring.akn.entities.NewsDTO;
+import com.spring.akn.entities.SaveListDTO;
 import com.spring.akn.entities.SearchNewsDTO;
 import com.spring.akn.entities.SiteDTO;
 import com.spring.akn.repositories.NewsRepositories;
@@ -129,9 +129,9 @@ public class NewsRepositriesImpl implements NewsRepositories {
 	}
 	
 	@Override
-	public int saveNews(NewsDTO news) {
+	public int saveNews(SaveListDTO savenews) {
 		String sql="INSERT INTO tbsavelist(news_id,user_id) VALUES(?,?)";
-		return jdbcTemplate.update(sql,news.getId(),news.getUser().getId());
+		return jdbcTemplate.update(sql,savenews.getNewsid(),savenews.getUserid());
 	}
 
 	@Override
