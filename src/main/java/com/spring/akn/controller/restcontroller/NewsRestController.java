@@ -79,6 +79,8 @@ public class NewsRestController {
 		if(news.isEmpty()){
 			map.put("STATUS", HttpStatus.OK.value());
 			map.put("MESSAGE", "NEWS NOT FOUND...");
+			map.put("TOTAL_PAGE", newsservice.getNewsTotalPage(search.getKey(),search.getCid(),search.getSid()));
+			map.put("TOTAL_RECORDS", newsservice.getNewsTotalRecords(search.getKey(),search.getCid() ,search.getSid()));
 			map.put("RESPONSE_DATA",news);
 			return new ResponseEntity<Map<String,Object>>
 							(map,HttpStatus.OK);
@@ -86,6 +88,8 @@ public class NewsRestController {
 		}	
 		map.put("STATUS", HttpStatus.OK.value());
 		map.put("MESSAGE", "NEWS HAS BEEN FOUND");
+		map.put("TOTAL_PAGE", newsservice.getNewsTotalPage(search.getKey(),search.getCid(),search.getSid()));
+		map.put("TOTAL_RECORDS", newsservice.getNewsTotalRecords(search.getKey(),search.getCid() ,search.getSid()));
 		map.put("RESPONSE_DATA",news);
 		return new ResponseEntity<Map<String,Object>>
 									(map,HttpStatus.OK);	
