@@ -151,13 +151,28 @@ public class ScrapDAOImpl implements ScrapDAO {
 	}
 
 	@Override
-	public NewsDTO scrapNews(String url, int user_id) {
+	public NewsDTO scrapNews(int id, int user_id) {
 		
-		if(!url.contains("news.khmeracademy.org"))
+		String url = this.getURLNotAKN(id);
+		System.out.println("Scraping URL : "+url);
+		if(url != null)
 			return readOtherNews(url, user_id);
 		
 		return readAKNNews(url, user_id);
 	
+	}
+	
+	private String getURLNotAKN(int id){
+		try{
+			String sql = "SELECT n.news_url " + 
+						 "FROM tbnews n INNER JOIN tbsite s ON n.source_id=s.s_id " + 
+						 "WHERE n.news_id=? AND s.s_url NOT LIKE '%news.khmeracademy.org%'";
+			
+			return jdbcTemplate.queryForObject(sql , new Object[]{id}, String.class);		
+			
+		}catch(IncorrectResultSizeDataAccessException ex){
+			return null;
+		}
 	}
 	
 	private StructureDTO getSelector(String url, int user_id){

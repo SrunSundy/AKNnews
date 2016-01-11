@@ -13,7 +13,7 @@ public interface ScrapDAO {
 		/***
 		 * detail news for reading
 		 * */
-		public NewsDTO scrapNews(String url, int user_id);
+		public NewsDTO scrapNews(int id, int user_id);
 		
 		/***
 		 * return number of news being insert
