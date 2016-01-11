@@ -8,14 +8,14 @@ import com.spring.akn.entities.SearchNewsDTO;
 
 public interface NewsService {
 
-	public List<NewsDTO> listNewsDatas(int page,int categoryid,int siteid,int userid);
+	public List<NewsDTO> listNewsDatas(int page,int row,int categoryid,int siteid,int userid);
 	
 	//public NewsDTO listNewsData(int newsid,int userid);
 	
 	
 	public List<NewsDTO> searchNews(SearchNewsDTO search);
 	
-	public int getNewsTotalPage(String key,int categoryid,int siteid);
+	public int getNewsTotalPage(String key,int row,int categoryid,int siteid);
 	
 	public int getNewsTotalRecords(String key,int categoryid,int siteid);
 	
