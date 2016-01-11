@@ -3,6 +3,7 @@ package com.spring.akn.services;
 import java.util.List;
 
 import com.spring.akn.entities.NewsDTO;
+import com.spring.akn.entities.SaveListDTO;
 import com.spring.akn.entities.SearchNewsDTO;
 
 public interface NewsService {
@@ -25,7 +26,7 @@ public interface NewsService {
 	
 	public List<NewsDTO> getPopularNews(int userid);
 	
-	public int saveNews(NewsDTO news);
+	public int saveNews(SaveListDTO savenews);
 	
 	public int deleteSavedNews(int newsid,int userid);
 	
