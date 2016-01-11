@@ -27,9 +27,9 @@ public class ScrapServiceImpl implements ScrapService{
 	}
 
 	@Override
-	public NewsDTO scrapNews(String url, int user_id) {
+	public NewsDTO scrapNews(int id, int user_id) {
 		
-		return scrapDAO.scrapNews(url, user_id);
+		return scrapDAO.scrapNews(id, user_id);
 		
 	}
 
@@ -45,6 +45,5 @@ public class ScrapServiceImpl implements ScrapService{
 		
 		return affected;
 	}
-	
-	
+
 }

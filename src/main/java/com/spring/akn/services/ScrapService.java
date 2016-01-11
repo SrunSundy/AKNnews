@@ -12,9 +12,9 @@ public interface ScrapService {
 	/***
 	 * detail news for reading
 	 * */
-	public NewsDTO scrapNews(String url, int user_id);
+	public NewsDTO scrapNews(int id, int user_id);
 	
-	/***
+		/***
 	 * scrap by one site<br>
 	 * return row affected after insert into database
 	 */
