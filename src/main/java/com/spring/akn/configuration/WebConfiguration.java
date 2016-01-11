@@ -12,10 +12,12 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import com.mangofactory.swagger.plugin.EnableSwagger;
+
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = "com.spring.akn")
-
+//@EnableSwagger
 public class WebConfiguration extends WebMvcConfigurerAdapter {
 
 	// For set Resource folder path
@@ -27,7 +29,7 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 	@Bean
 	public DataSource dataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		dataSource.setUrl("jdbc:postgresql://localhost:5432/AKN");
+		dataSource.setUrl("jdbc:postgresql://192.168.178.144:5432/AKN");
 		dataSource.setDriverClassName("org.postgresql.Driver");
 		dataSource.setUsername("postgres");
 		dataSource.setPassword("12345");
