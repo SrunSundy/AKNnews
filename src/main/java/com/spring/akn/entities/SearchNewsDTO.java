@@ -4,6 +4,7 @@ public class SearchNewsDTO {
 	
 	private String key;
 	private int page;
+	private int row;
 	
 	private int cid;
 	private int sid;
@@ -19,6 +20,13 @@ public class SearchNewsDTO {
 	}
 	public void setPage(int page) {
 		this.page = page;
+	}
+	
+	public int getRow() {
+		return row;
+	}
+	public void setRow(int row) {
+		this.row = row;
 	}
 	public int getCid() {
 		return cid;
@@ -40,8 +48,10 @@ public class SearchNewsDTO {
 	}
 	@Override
 	public String toString() {
-		return "SearchNewsDTO [key=" + key + ", page=" + page + ", cid=" + cid + ", sid=" + sid + ", uid=" + uid + "]";
+		return "SearchNewsDTO [key=" + key + ", page=" + page + ", row=" + row + ", cid=" + cid + ", sid=" + sid
+				+ ", uid=" + uid + "]";
 	}
+	
 	
 	
 	
