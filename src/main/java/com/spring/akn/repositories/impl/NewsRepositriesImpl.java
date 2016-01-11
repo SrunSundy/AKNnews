@@ -38,23 +38,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		return listDetailWithNoUserId(newsid);
 	}*/
 
-	@Override
-	public int insertNews(NewsDTO news) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
-	@Override
-	public int updateNews(NewsDTO news) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int deleteNews(int news) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
 	@Override
 	public List<NewsDTO> searchNews(SearchNewsDTO search) {
