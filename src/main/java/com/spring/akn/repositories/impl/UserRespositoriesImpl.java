@@ -9,6 +9,11 @@ import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+
+import com.spring.akn.entities.frmApiDoc.FrmUserAdd;
+import com.spring.akn.entities.frmApiDoc.FrmUserChangePwd;
+import com.spring.akn.entities.frmApiDoc.FrmUserLogin;
+import com.spring.akn.entities.frmApiDoc.FrmUserUpdate;
 import com.spring.akn.entities.user.User;
 import com.spring.akn.repositories.UserRespositories;
 
@@ -22,17 +27,16 @@ public class UserRespositoriesImpl implements UserRespositories {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	public int userRegister(User user) {
+	public int userRegister(FrmUserAdd user) {
 		String sql="INSERT INTO tbuser(user_name, user_email, user_password, user_image) VALUES(?,?,md5(?),?)";
-		if (user.getImage()==""){user.setImage("default.jpg");}
 		Object[] obj={user.getUsername(),user.getEmail(),user.getPassword(),user.getImage()};
 		return jdbcTemplate.update(sql,obj);
 	}
 
-	public User userLogin(String email, String password) {
+	public User userLogin(FrmUserLogin user) {
 		String sql = "SELECT user_id, user_name, user_email, user_password, user_image, enabled FROM tbuser WHERE enabled = 't' AND ( UPPER(user_email) = UPPER(?) AND user_password = md5(?) ) ";
 		try {
-			return jdbcTemplate.queryForObject(sql, new Object[] { email, password }, new RowMapper<User>() {
+			return jdbcTemplate.queryForObject(sql, new Object[] { user.getEmail(), user.getPassword() }, new RowMapper<User>() {
 				public User mapRow(ResultSet rs, int rowNumber) throws SQLException {
 					User user = new User();
 					user.setId(rs.getInt("user_id"));
@@ -49,15 +53,15 @@ public class UserRespositoriesImpl implements UserRespositories {
 	}
 
 
-	public int enableUser(int id) {
+/*	public int enableUser(int id) {
 		String sql="UPDATE tbuser SET enabled=(SELECT CASE WHEN enabled =false THEN true ELSE false END FROM tbuser WHERE user_id=?) WHERE user_id=?";
 		return jdbcTemplate.update(sql,id,id);
-	}
+	}*/
 
 	
-	public int updateUser(User user) {
-		String sql="UPDATE tbuser SET user_name=?,user_image=? WHERE user_id=?";
-		return jdbcTemplate.update(sql, new Object[] {user.getUsername(),user.getImage(),user.getId()});
+	public int updateUser(FrmUserUpdate user) {
+		String sql="UPDATE tbuser SET user_name=? WHERE user_id=?";
+		return jdbcTemplate.update(sql, new Object[] {user.getUsername(),user.getId()});
 	}
 
 
@@ -80,9 +84,9 @@ public class UserRespositoriesImpl implements UserRespositories {
 	}
 
 
-	public int changePassword(String newpass,String oldpass, int id) {
+	public int changePassword(FrmUserChangePwd user) {
 		String sql="UPDATE tbuser SET user_password=md5(?) WHERE user_id=? AND user_password=md5(?)";
-		return jdbcTemplate.update(sql,newpass,id,oldpass);
+		return jdbcTemplate.update(sql,new Object[] {user.getId(),user.getNewpass(),user.getOldpass()});
 	}
 
 	@Override
