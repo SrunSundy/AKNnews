@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.spring.akn.entities.NewsDTO;
-import com.spring.akn.entities.SaveListDTO;
 import com.spring.akn.entities.SearchNewsDTO;
+import com.spring.akn.entities.frmApiDoc.FrmSaveListAdd;
 import com.spring.akn.services.NewsService;
 import com.spring.akn.services.ScrapService;
 
@@ -124,7 +124,7 @@ public class NewsRestController {
 	}
 	
 	@RequestMapping(value="/savelist", method= RequestMethod.POST )
-	public ResponseEntity<Map<String,Object>> saveNews(@RequestBody SaveListDTO savenews){
+	public ResponseEntity<Map<String,Object>> saveNews(@RequestBody FrmSaveListAdd savenews){
 		
 		System.err.println("Save news");
 		Map<String, Object> map  = new HashMap<String, Object>();

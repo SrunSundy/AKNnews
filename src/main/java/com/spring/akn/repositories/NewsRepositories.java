@@ -3,8 +3,8 @@ package com.spring.akn.repositories;
 import java.util.List;
 
 import com.spring.akn.entities.NewsDTO;
-import com.spring.akn.entities.SaveListDTO;
 import com.spring.akn.entities.SearchNewsDTO;
+import com.spring.akn.entities.frmApiDoc.FrmSaveListAdd;
 
 public interface NewsRepositories {
 
@@ -28,7 +28,7 @@ public interface NewsRepositories {
 	
 	public int getNewsTotalRecords(String key,int categoryid,int siteid);
 	
-	public int saveNews(SaveListDTO savenews);
+	public int saveNews(FrmSaveListAdd savenews);
 	
 	public int deleteSavedNews(int newsid,int userid);
 	

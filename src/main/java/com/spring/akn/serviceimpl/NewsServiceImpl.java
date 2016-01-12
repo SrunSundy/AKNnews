@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring.akn.entities.NewsDTO;
-import com.spring.akn.entities.SaveListDTO;
 import com.spring.akn.entities.SearchNewsDTO;
+import com.spring.akn.entities.frmApiDoc.FrmSaveListAdd;
 import com.spring.akn.repositories.NewsRepositories;
 import com.spring.akn.services.NewsService;
 
@@ -36,7 +36,7 @@ public class NewsServiceImpl implements NewsService{
 	}
 
 	@Override
-	public int saveNews(SaveListDTO savenews) {
+	public int saveNews(FrmSaveListAdd savenews) {
 		// TODO Auto-generated method stub
 		return newsrepository.saveNews(savenews);
 	}

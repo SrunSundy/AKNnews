@@ -86,7 +86,7 @@ public class UserRespositoriesImpl implements UserRespositories {
 
 	public int changePassword(FrmUserChangePwd user) {
 		String sql="UPDATE tbuser SET user_password=md5(?) WHERE user_id=? AND user_password=md5(?)";
-		return jdbcTemplate.update(sql,new Object[] {user.getId(),user.getNewpass(),user.getOldpass()});
+		return jdbcTemplate.update(sql,new Object[] {user.getNewpass(),user.getId(),user.getOldpass()});
 	}
 
 	@Override

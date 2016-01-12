@@ -11,9 +11,9 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.spring.akn.entities.NewsDTO;
-import com.spring.akn.entities.SaveListDTO;
 import com.spring.akn.entities.SearchNewsDTO;
 import com.spring.akn.entities.SiteDTO;
+import com.spring.akn.entities.frmApiDoc.FrmSaveListAdd;
 import com.spring.akn.repositories.NewsRepositories;
 
 @Repository
@@ -144,7 +144,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 	}
 	
 	@Override
-	public int saveNews(SaveListDTO savenews) {
+	public int saveNews(FrmSaveListAdd savenews) {
 		String sql="INSERT INTO tbsavelist(news_id,user_id) VALUES(?,?)";
 		return jdbcTemplate.update(sql,savenews.getNewsid(),savenews.getUserid());
 	}
