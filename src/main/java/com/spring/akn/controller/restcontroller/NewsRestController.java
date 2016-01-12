@@ -62,7 +62,7 @@ public class NewsRestController {
 	@RequestMapping(value="/{id}/{uid}", method=RequestMethod.GET)
 	public ResponseEntity<Map<String,Object>> listNewData(@PathVariable("id") int id,@PathVariable("uid") int uid ){
 		
-		NewsDTO news= scrapservice.scrapNews(id+"", uid);
+		NewsDTO news= scrapservice.scrapNews(id, uid);
 		System.err.println(news);
 		Map<String, Object> map = new HashMap<String,Object>();
 		if(news == null){

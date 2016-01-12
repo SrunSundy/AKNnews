@@ -32,6 +32,30 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		return listAllNews(userid, row,offset);
 		
 	}
+	
+	@Override
+	public int insertNews(NewsDTO news) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int deleteNews(int newsid) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int updateNews(NewsDTO news) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int toggleNews(int newsid) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
 	/*@Override
 	public NewsDTO listNewsData(int newsid, int userid) {
@@ -377,6 +401,8 @@ public class NewsRepositriesImpl implements NewsRepositories {
 			return news;
 		}
 	}
+
+
 
 
 

@@ -11,7 +11,13 @@ public interface NewsService {
 	public List<NewsDTO> listNewsDatas(int page,int row,int categoryid,int siteid,int userid);
 	
 	//public NewsDTO listNewsData(int newsid,int userid);
+	public int insertNews(NewsDTO news);
 	
+	public int deleteNews(int newsid);
+	
+	public int updateNews(NewsDTO news);
+	
+	public int toggleNews(int newsid);
 	
 	public List<NewsDTO> searchNews(SearchNewsDTO search);
 	
