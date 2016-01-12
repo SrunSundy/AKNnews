@@ -140,14 +140,17 @@ public class SiteRestController {
 	
 
 	
-	@RequestMapping(value="/upload/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<Map<String, Object>> uploadSiteLogo( @RequestParam("file") MultipartFile file, HttpServletRequest request, @PathVariable("id")int s_id ){
+	@RequestMapping(value="/upload", method = RequestMethod.POST)
+	public ResponseEntity<Map<String, Object>> uploadSiteLogo( @RequestParam("file") MultipartFile file, HttpServletRequest request,
+			@RequestParam("id")int s_id ){
 		Map<String, Object> map = new HashMap<String,Object>();
-/*		if ( siteServices.isUploadLogo(file, request, s_id) ){
+
+		if ( siteServices.isUploadLogo(file, request, s_id) ){
 			map.put("STATUS", HttpStatus.OK.value());
 			map.put("MESSAGE", "SITE UPDATE SUCCESS!");
+			map.put("IMAGE", siteServices.getLogoPath(request, s_id));
 			return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
-		}*/
+		}
 		map.put("STATUS", HttpStatus.NOT_FOUND.value());
 		map.put("MESSAGE", "SITE UPDATE FAIL!");
 		return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);

@@ -16,6 +16,6 @@ public interface SiteDAO {
 	public boolean isUpdateSite(SiteDTO siteDTO);
 	public int countSiteRecord();
 	public boolean isUploadLogo(MultipartFile file, HttpServletRequest request, int s_id);
-	public boolean isUpdateLogo(MultipartFile file, HttpServletRequest request);
-	public boolean isDeleteLogo(MultipartFile file, HttpServletRequest request);
+	public int editLogoName(int s_id, String name);
+	public String getLogoName(int s_id);
 }

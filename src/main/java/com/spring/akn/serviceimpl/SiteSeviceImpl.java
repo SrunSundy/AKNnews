@@ -52,5 +52,22 @@ public class SiteSeviceImpl implements SiteServices{
 		return siteDAO.isUploadLogo(file, request, s_id);
 	}
 
+	@Override
+	public int editLogoName(int s_id, String name) {
+		return siteDAO.editLogoName(s_id, name);
+	}
+
+	@Override
+	public String getLogoName(int s_id) {
+		return siteDAO.getLogoName(s_id);
+	}
+
+	@Override
+	public String getLogoPath(HttpServletRequest request, int s_id) {				
+		return request.getContextPath() + "/images/"+siteDAO.getLogoName(s_id);
+	}
+	
+	
+
 
 }

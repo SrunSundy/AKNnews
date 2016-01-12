@@ -16,5 +16,8 @@ public interface SiteServices {
 	public boolean isUpdateSite(SiteDTO siteDTO);
 	public int countSiteRecord();	
 	public boolean isUploadLogo(MultipartFile file, HttpServletRequest request, int s_id);
+	public int editLogoName(int s_id, String name);
+	public String getLogoName(int s_id);
+	public String getLogoPath(HttpServletRequest request, int s_id);
 
 }

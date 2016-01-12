@@ -146,26 +146,11 @@ public class SiteDaoImpl implements SiteDAO {
 		return false;
 	}
 	@Override
-	public boolean isUpdateLogo(MultipartFile file, HttpServletRequest request) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	@Override
-	public boolean isDeleteLogo(MultipartFile file, HttpServletRequest request) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	
-/*	public void insertLogoName(String name, int s_id){
-		String sql = "INSERT INTO tbsite(s_logo) VALUES(?) ;";
-		getJdbcTemplate().update(sql , new Object[]{name});
-	}*/
-	
 	public int editLogoName(int s_id, String name){
 		String sql = "UPDATE tbsite SET s_logo = ? WHERE s_id = ?;";
 		return getJdbcTemplate().update(sql , new Object[]{name , s_id});
 	}
-	
+	@Override
 	public String getLogoName(int s_id){
 		String sql = "SELECT s_logo FROM tbsite WHERE (s_id = ?);";
 		return getJdbcTemplate().queryForObject(sql, new Object[]{ s_id }, String.class);

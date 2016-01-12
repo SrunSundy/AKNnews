@@ -17,7 +17,7 @@ import com.mangofactory.swagger.plugin.EnableSwagger;
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = "com.spring.akn")
-//@EnableSwagger
+@EnableSwagger
 public class WebConfiguration extends WebMvcConfigurerAdapter {
 
 	// For set Resource folder path
