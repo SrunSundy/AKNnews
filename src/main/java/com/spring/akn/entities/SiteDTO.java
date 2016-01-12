@@ -4,6 +4,7 @@ public class SiteDTO {
 	private int id;
 	private String name;
 	private String url;
+	private String logo;
 	
 	public int getId() {
 		return id;
@@ -23,10 +24,16 @@ public class SiteDTO {
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	
+	public String getLogo() {
+		return logo;
+	}
+	public void setLogo(String logo) {
+		this.logo = logo;
+	}
 	@Override
 	public String toString() {
-		return "SiteDTO [id=" + id + ", name=" + name + ", url=" + url + "]";
+		return "SiteDTO [id=" + id + ", name=" + name + ", url=" + url + ", logo=" + logo + "]";
 	}
+	
 	
 }
