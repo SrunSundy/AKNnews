@@ -36,8 +36,11 @@ public class NewsRepositriesImpl implements NewsRepositories {
 	
 	@Override
 	public int insertNews(NewsDTO news) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		String sql="INSERT INTO tbnews(news_title,news_description,news_img,news_url,category_id,source_id,news_content) "
+				+ "VALUES(?,?,?,?,?,?,?)";
+		return jdbcTemplate.update(sql,news.getTitle(),news.getDescription(),news.getImage(),news.getUrl(),
+				news.getCategory().getId(),news.getSite().getId(),news.getContent());
 	}
 
 	@Override
@@ -49,13 +52,18 @@ public class NewsRepositriesImpl implements NewsRepositories {
 	@Override
 	public int updateNews(NewsDTO news) {
 		// TODO Auto-generated method stub
-		return 0;
+		String sql="UPDATE tbnews SET  news_title= ?,news_description= ?,news_img =?,news_url =? "
+				+ ",category_id =? ,source_id =?,news_content=? ";
+		return jdbcTemplate.update(sql,news.getTitle(),news.getDescription(),news.getImage(),news.getUrl(),
+				news.getCategory().getId(),news.getSite().getId(),news.getContent());
 	}
 
 	@Override
 	public int toggleNews(int newsid) {
 		// TODO Auto-generated method stub
-		return 0;
+		String sql="UPDATE tbnews set news_status=(select CASE WHEN news_status = true THEN false ELSE true END from tbnews"
+				+ " WHERE news_id=4) WHERE news_id=4";
+		return jdbcTemplate.update(sql,newsid);
 	}
 
 	/*@Override

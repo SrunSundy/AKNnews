@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.spring.akn.entities.NewsDTO;
 import com.spring.akn.entities.SearchNewsDTO;
 import com.spring.akn.entities.frmApiDoc.FrmSaveListAdd;
@@ -29,9 +30,9 @@ public class NewsRestController {
 	@Autowired
 	ScrapService scrapservice;
 	
-	@RequestMapping(value="/{page}/{row}/{cid}/{sid}/{uid}/", method=RequestMethod.GET)
-	public ResponseEntity<Map<String,Object>> listNews(@PathVariable("page") int page,@PathVariable("row") int row,@PathVariable("cid") int cid
-			,@PathVariable("sid") int sid,@PathVariable("uid") int uid){
+	@RequestMapping(value="/{page}/{row}/{categoryid}/{sourceid}/{userid}/", method=RequestMethod.GET)
+	public ResponseEntity<Map<String,Object>> listNews(@PathVariable("page") int page,@PathVariable("row") int row,@PathVariable("categoryid") int cid
+			,@PathVariable("sourceid") int sid,@PathVariable("userid") int uid){
 		List<NewsDTO> news = newsservice.listNewsDatas(page,row, cid, sid, uid);
 		System.err.println(news);
 		Map<String, Object> map = new HashMap<String,Object>();
@@ -77,6 +78,70 @@ public class NewsRestController {
 		return new ResponseEntity<Map<String,Object>>
 									(map,HttpStatus.OK);	
 	}
+	
+	@ApiIgnore
+	@RequestMapping(value="",method=RequestMethod.POST)
+	public ResponseEntity<Map<String,Object>> insertNews(@RequestBody NewsDTO news){
+		
+		Map<String, Object> map  = new HashMap<String, Object>();
+		
+		if(newsservice.insertNews(news)>0){
+			
+			map.put("MESSAGE","NEWS HAS BEEN INSERTED.");
+			map.put("STATUS", HttpStatus.OK.value());
+			return new ResponseEntity<Map<String,Object>>
+								(map, HttpStatus.OK);
+		}else{
+			map.put("MESSAGE","INSERT FAILS.");
+			map.put("STATUS", HttpStatus.NOT_FOUND.value());
+			return new ResponseEntity<Map<String,Object>>
+								(map, HttpStatus.OK);
+		}
+		
+	}
+	
+	@ApiIgnore
+	@RequestMapping(value="",method=RequestMethod.POST)
+	public ResponseEntity<Map<String,Object>> updateNews(@RequestBody NewsDTO news){
+		
+		Map<String, Object> map  = new HashMap<String, Object>();
+		
+		if(newsservice.updateNews(news)>0){
+			
+			map.put("MESSAGE","NEWS HAS BEEN UPDATED.");
+			map.put("STATUS", HttpStatus.OK.value());
+			return new ResponseEntity<Map<String,Object>>
+								(map, HttpStatus.OK);
+		}else{
+			map.put("MESSAGE","UPDATE FAILS.");
+			map.put("STATUS", HttpStatus.NOT_FOUND.value());
+			return new ResponseEntity<Map<String,Object>>
+								(map, HttpStatus.OK);
+		}
+		
+	}
+	
+	@ApiIgnore
+	@RequestMapping(value="/toggle/{newsid}",method=RequestMethod.PATCH)
+	public ResponseEntity<Map<String,Object>> updateNewsStatus(@PathVariable("newsid") int newsid){
+		
+		Map<String, Object> map  = new HashMap<String, Object>();
+		
+		if(newsservice.toggleNews(newsid)>0){
+			
+			map.put("MESSAGE","NEWS STATUS HAS BEEN UPDATED.");
+			map.put("STATUS", HttpStatus.OK.value());
+			return new ResponseEntity<Map<String,Object>>
+								(map, HttpStatus.OK);
+		}else{
+			map.put("MESSAGE","UPDATE FAILS.");
+			map.put("STATUS", HttpStatus.NOT_FOUND.value());
+			return new ResponseEntity<Map<String,Object>>
+								(map, HttpStatus.OK);
+		}
+		
+	}
+	
 	
 	@RequestMapping(value="/search", method=RequestMethod.POST)
 	public ResponseEntity<Map<String,Object>> searchNews(@RequestBody SearchNewsDTO search){

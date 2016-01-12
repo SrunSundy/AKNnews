@@ -28,6 +28,29 @@ public class NewsServiceImpl implements NewsService{
 		return newsrepository.listNewsData(newsid, userid);
 	}*/
 
+	@Override
+	public int insertNews(NewsDTO news) {
+		// TODO Auto-generated method stub
+		return newsrepository.insertNews(news);
+	}
+
+	@Override
+	public int deleteNews(int newsid) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int updateNews(NewsDTO news) {
+		// TODO Auto-generated method stub
+		return newsrepository.updateNews(news);
+	}
+
+	@Override
+	public int toggleNews(int newsid) {
+		// TODO Auto-generated method stub
+		return newsrepository.toggleNews(newsid);
+	}
 
 	@Override
 	public List<NewsDTO> searchNews(SearchNewsDTO search) {
@@ -71,28 +94,6 @@ public class NewsServiceImpl implements NewsService{
 		return newsrepository.getNewsTotalRecords(key, categoryid, siteid);
 	}
 
-	@Override
-	public int insertNews(NewsDTO news) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int deleteNews(int newsid) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int updateNews(NewsDTO news) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int toggleNews(int newsid) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	
 
 }
