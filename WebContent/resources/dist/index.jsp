@@ -14,6 +14,8 @@
   <link href='css/screen.css' media='screen' rel='stylesheet' type='text/css'/>
   <link href='css/reset.css' media='print' rel='stylesheet' type='text/css'/>
   <link href='css/print.css' media='print' rel='stylesheet' type='text/css'/>
+  
+  
   <script src='lib/jquery-1.8.0.min.js' type='text/javascript'></script>
   <script src='lib/jquery.slideto.min.js' type='text/javascript'></script>
   <script src='lib/jquery.wiggle.min.js' type='text/javascript'></script>
@@ -32,6 +34,11 @@
   <!-- <script src='lang/ru.js' type='text/javascript'></script> -->
   <!-- <script src='lang/en.js' type='text/javascript'></script> -->
 
+  <style>
+  	.info{
+  		display:none;
+  	}
+  </style>
   <script type="text/javascript">
     $(function () {
       var url = window.location.search.match(/url=([^&]+)/);
