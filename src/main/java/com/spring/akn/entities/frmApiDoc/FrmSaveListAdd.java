@@ -1,8 +1,6 @@
-package com.spring.akn.entities;
+package com.spring.akn.entities.frmApiDoc;
 
-public class SaveListDTO {
-
-	
+public class FrmSaveListAdd {
 	private int newsid;
 	private int userid;
 	public int getNewsid() {
@@ -21,6 +19,4 @@ public class SaveListDTO {
 	public String toString() {
 		return "SaveListDTO [newsid=" + newsid + ", userid=" + userid + "]";
 	}
-	
-	
 }
