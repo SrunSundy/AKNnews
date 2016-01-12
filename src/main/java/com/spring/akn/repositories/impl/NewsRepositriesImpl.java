@@ -2,6 +2,7 @@ package com.spring.akn.repositories.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 	
 	@Override
 	public List<NewsDTO> listNewsDatas(int page,int row, int categoryid, int siteid, int userid) {
-		if(page <= 0) return null;
+		if(page <= 0) return new ArrayList<NewsDTO>();
 		if(row <=0 ) row=10;
 		
 		int offset = ( page * row ) - row;
@@ -68,7 +69,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		int row=search.getRow();
 		int page =search.getPage();
 		
-		if(page <=0 ) return null;
+		if(page <=0 )  return new ArrayList<NewsDTO>();
 		if(row <=0 ) row=10;
 		
 		int offset=(page* row)-row;
@@ -373,7 +374,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 			
 			SiteDTO site=new SiteDTO();
 			site.setId(rs.getInt("s_id"));
-			site.setUrl(rs.getString("s_logo"));
+			site.setLogo(rs.getString("s_logo"));
 			
 			news.setSite(site);
 			return news;
@@ -395,7 +396,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 			
 			SiteDTO site=new SiteDTO();
 			site.setId(rs.getInt("s_id"));
-			site.setUrl(rs.getString("s_logo"));
+			site.setLogo(rs.getString("s_logo"));
 			
 			news.setSite(site);
 			return news;
