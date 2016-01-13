@@ -50,7 +50,7 @@ public class CategoryRestController {
 	 * Get all category data have news data
 	 * @return
 	 */
-	@RequestMapping(value="/", method = RequestMethod.GET)
+	@RequestMapping(value="/1", method = RequestMethod.GET)
 	public ResponseEntity<Map<String, Object>> listCategoryHaveNews(){
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<CategoryDTO> lst = categoryServices.listCategoryHaveNews();
