@@ -30,9 +30,9 @@ public class NewsRestController {
 	@Autowired
 	ScrapService scrapservice;
 	
-	@RequestMapping(value="/{page}/{row}/{cid}/{sid}/{uid}/", method=RequestMethod.GET)
-	public ResponseEntity<Map<String,Object>> listNews(@PathVariable("page") int page,@PathVariable("row") int row,@PathVariable("cid") int cid
-			,@PathVariable("sid") int sid,@PathVariable("uid") int uid){
+	@RequestMapping(value="/{page}/{row}/{categoryid}/{sourceid}/{userid}/", method=RequestMethod.GET)
+	public ResponseEntity<Map<String,Object>> listNews(@PathVariable("page") int page,@PathVariable("row") int row,@PathVariable("categoryid") int cid
+			,@PathVariable("sourceid") int sid,@PathVariable("userid") int uid){
 		List<NewsDTO> news = newsservice.listNewsDatas(page,row, cid, sid, uid);
 		System.err.println(news);
 		Map<String, Object> map = new HashMap<String,Object>();
@@ -60,8 +60,8 @@ public class NewsRestController {
 									(map,HttpStatus.OK);	
 	}
 	
-	@RequestMapping(value="/{id}/{uid}", method=RequestMethod.GET)
-	public ResponseEntity<Map<String,Object>> listNewData(@PathVariable("id") int id,@PathVariable("uid") int uid ){
+	@RequestMapping(value="/{newsid}/{userid}", method=RequestMethod.GET)
+	public ResponseEntity<Map<String,Object>> listNewData(@PathVariable("newsid") int id,@PathVariable("userid") int uid ){
 		
 		NewsDTO news= scrapservice.scrapNews(id, uid);
 		System.err.println(news);
@@ -170,8 +170,8 @@ public class NewsRestController {
 	}
 	
 	
-	@RequestMapping(value="/popular/{uid}", method=RequestMethod.GET)
-	public ResponseEntity<Map<String,Object>> getPopNews(@PathVariable("uid") int uid){
+	@RequestMapping(value="/popular/{userid}", method=RequestMethod.GET)
+	public ResponseEntity<Map<String,Object>> getPopNews(@PathVariable("userid") int uid){
 		List<NewsDTO> news = newsservice.getPopularNews(uid);
 		
 		Map<String, Object> map = new HashMap<String,Object>();
@@ -212,8 +212,8 @@ public class NewsRestController {
 	}
 	
 	
-	@RequestMapping(value="/savelist/{uid}", method=RequestMethod.GET)
-	public ResponseEntity<Map<String,Object>> listSavedNews(@PathVariable("uid") int userid){
+	@RequestMapping(value="/savelist/{userid}", method=RequestMethod.GET)
+	public ResponseEntity<Map<String,Object>> listSavedNews(@PathVariable("userid") int userid){
 		List<NewsDTO> news = newsservice.listSavedNews(userid);
 		Map<String, Object> map = new HashMap<String,Object>();
 		if(news.isEmpty()){
@@ -231,8 +231,8 @@ public class NewsRestController {
 									(map,HttpStatus.OK);	
 	}
 	
-	@RequestMapping(value="/savelist/{id}/{uid}", method=RequestMethod.DELETE)
-	public ResponseEntity<Map<String,Object>> deleteSavedNews(@PathVariable("id") int id,@PathVariable("uid") int uid ){
+	@RequestMapping(value="/savelist/{newsid}/{userid}", method=RequestMethod.DELETE)
+	public ResponseEntity<Map<String,Object>> deleteSavedNews(@PathVariable("newsid") int id,@PathVariable("userid") int uid ){
 		System.err.println("delete Saved news");
 		Map<String, Object> map  = new HashMap<String, Object>();
 	
