@@ -30,9 +30,9 @@ public class NewsRestController {
 	@Autowired
 	ScrapService scrapservice;
 	
-	@RequestMapping(value="/{page}/{row}/{categoryid}/{sourceid}/{userid}/", method=RequestMethod.GET)
-	public ResponseEntity<Map<String,Object>> listNews(@PathVariable("page") int page,@PathVariable("row") int row,@PathVariable("categoryid") int cid
-			,@PathVariable("sourceid") int sid,@PathVariable("userid") int uid){
+	@RequestMapping(value="/{page}/{row}/{cid}/{sid}/{uid}/", method=RequestMethod.GET)
+	public ResponseEntity<Map<String,Object>> listNews(@PathVariable("page") int page,@PathVariable("row") int row,@PathVariable("cid") int cid
+			,@PathVariable("sid") int sid,@PathVariable("uid") int uid){
 		List<NewsDTO> news = newsservice.listNewsDatas(page,row, cid, sid, uid);
 		System.err.println(news);
 		Map<String, Object> map = new HashMap<String,Object>();
@@ -79,8 +79,9 @@ public class NewsRestController {
 									(map,HttpStatus.OK);	
 	}
 	
+	
 	@ApiIgnore
-	@RequestMapping(value="",method=RequestMethod.POST)
+	@RequestMapping(value="/",method=RequestMethod.POST)
 	public ResponseEntity<Map<String,Object>> insertNews(@RequestBody NewsDTO news){
 		
 		Map<String, Object> map  = new HashMap<String, Object>();
@@ -100,8 +101,9 @@ public class NewsRestController {
 		
 	}
 	
+	
 	@ApiIgnore
-	@RequestMapping(value="",method=RequestMethod.POST)
+	@RequestMapping(value="/",method=RequestMethod.PUT)
 	public ResponseEntity<Map<String,Object>> updateNews(@RequestBody NewsDTO news){
 		
 		Map<String, Object> map  = new HashMap<String, Object>();
