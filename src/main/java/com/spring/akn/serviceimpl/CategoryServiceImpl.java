@@ -44,7 +44,7 @@ public class CategoryServiceImpl implements CategoryServices{
 
 	@Override
 	public List<CategoryDTO> listCategoryHaveNews() {
-		return categoryDAO.listCategory();
+		return categoryDAO.listCategoryHaveNews();
 	}
 	
 	
