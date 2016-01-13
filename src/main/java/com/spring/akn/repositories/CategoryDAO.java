@@ -13,5 +13,6 @@ public interface CategoryDAO {
 	public boolean isUpdateCategory(CategoryDTO categoryDTO);
 	public boolean isMenuToggle(int id);
 	public int countCategoryRecord();
+	public List<CategoryDTO> listCategoryHaveNews();
 	
 }

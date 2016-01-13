@@ -47,6 +47,26 @@ public class CategoryRestController {
 	}
 	
 	/**
+	 * Get all category data have news data
+	 * @return
+	 */
+	@RequestMapping(value="/", method = RequestMethod.GET)
+	public ResponseEntity<Map<String, Object>> listCategoryHaveNews(){
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<CategoryDTO> lst = categoryServices.listCategoryHaveNews();
+		if ( !lst.isEmpty() ) {
+			map.put("STATUS", HttpStatus.FOUND.value());
+			map.put("MESSAGE", "CATEGORY LIST FOUND!" );
+			map.put("DATA", lst);
+			return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
+		}
+		map.put("STATUS", HttpStatus.NOT_FOUND.value());
+		map.put("MESSAGE", "CATEGORY LIST NOT FOUND!" );
+		map.put("DATA", lst);
+		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+	}
+	
+	/**
 	 * Find category object by id
 	 * @param id
 	 * @return

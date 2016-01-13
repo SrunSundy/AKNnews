@@ -41,5 +41,11 @@ public class CategoryServiceImpl implements CategoryServices{
 	public int countCategoryRecord() {
 		return categoryDAO.countCategoryRecord();
 	}
+
+	@Override
+	public List<CategoryDTO> listCategoryHaveNews() {
+		return categoryDAO.listCategory();
+	}
+	
 	
 }

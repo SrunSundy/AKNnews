@@ -126,4 +126,10 @@ public class CategoryDaoImpl implements CategoryDAO{
 		
 	}
 
+	@Override
+	public List<CategoryDTO> listCategoryHaveNews() {
+		String sql = "SELECT c_id, c_name, c_ismenu FROM tbcategory WHERE c_id in (SELECT DISTINCT category_id FROM tbnews);";
+		return getJdbcTemplate().query(sql, new CategoryRowMapper());
+	}
+
 }
