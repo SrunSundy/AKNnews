@@ -32,7 +32,16 @@ public class CategoryDaoImpl implements CategoryDAO{
 	 * get all category record
 	 */
 	public List<CategoryDTO> listCategory() {
-		String sql = "SELECT c_id, c_name, c_ismenu FROM tbcategory;";
+		String sql = "SELECT c_id, c_name, c_ismenu FROM tbcategory ORDER BY c_id;";
+		return getJdbcTemplate().query(sql, new CategoryRowMapper());
+	}
+	
+	/**
+	 * Get all category have news
+	 */
+	@Override
+	public List<CategoryDTO> listCategoryHaveNews() {
+		String sql = "SELECT c_id, c_name, c_ismenu FROM tbcategory WHERE c_id in (SELECT DISTINCT category_id FROM tbnews) ORDER BY c_id;";
 		return getJdbcTemplate().query(sql, new CategoryRowMapper());
 	}
 	
@@ -89,7 +98,7 @@ public class CategoryDaoImpl implements CategoryDAO{
 	 * Count Total record of category
 	 */
 	public int countCategoryRecord() {		
-		String sql = "SELECT COUNT(*) FROM tbcategory";
+		String sql = "SELECT COUNT(*) FROM tbcategory ";
 		return getJdbcTemplate().queryForObject(sql , Integer.class);
 	}
 	
@@ -126,10 +135,6 @@ public class CategoryDaoImpl implements CategoryDAO{
 		
 	}
 
-	@Override
-	public List<CategoryDTO> listCategoryHaveNews() {
-		String sql = "SELECT c_id, c_name, c_ismenu FROM tbcategory WHERE c_id in (SELECT DISTINCT category_id FROM tbnews);";
-		return getJdbcTemplate().query(sql, new CategoryRowMapper());
-	}
+
 
 }
