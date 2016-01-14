@@ -1231,8 +1231,9 @@
   cursor: pointer;
 }
 .swagger-section #header {
-  background-color: #89bf04;
+  background-color: #4aaf51;;
   padding: 14px;
+  overflow: hidden;
 }
 .swagger-section #input_baseUrl {
   width: 400px;
