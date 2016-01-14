@@ -4,9 +4,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>${msg}</title>
 </head>
 <body>
-HELLO AKN
+<center><h1>${msg}</h1><a href="${pageContext.request.contextPath}">Login</a></center>
 </body>
 </html>

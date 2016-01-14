@@ -6,7 +6,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <meta charset="UTF-8">
-  <title>Swagger UI</title>
+  <title>AKN NEWS API</title>
   <link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32" />
   <link rel="icon" type="image/png" href="images/favicon-16x16.png" sizes="16x16" />
   <link href='${pageContext.request.contextPath}/resources/dist/css/typography.css' media='screen' rel='stylesheet' type='text/css'/>
@@ -118,7 +118,8 @@
 <body class="swagger-section">
 <div id='header'>
   <div class="swagger-ui-wrap">
-    <a id="logo" href="#" >AKN api-docs</a>
+    <a id="logo" style="float:left">AKN api-docs</a>
+    <a style="float:right;text-decoration: none;color: #fff;font-size: 15px;" href="${pageContext.request.contextPath}/login?logout">Logout</a>
     <form id='api_selector'>
       <div class='input'><input placeholder="http://example.com/api"  id="input_baseUrl" name="baseUrl" type="hidden" value="${pageContext.request.contextPath}/api-docs"/></div>
       <div class='input'><input placeholder="api_key" id="input_apiKey" name="apiKey" type="hidden" value="Basic YXBpOmFrbm5ld3M=" /></div>
