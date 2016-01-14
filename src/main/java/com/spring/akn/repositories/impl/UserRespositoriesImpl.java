@@ -1,8 +1,13 @@
 package com.spring.akn.repositories.impl;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
@@ -14,12 +19,15 @@ import com.spring.akn.entities.frmApiDoc.FrmUserAdd;
 import com.spring.akn.entities.frmApiDoc.FrmUserChangePwd;
 import com.spring.akn.entities.frmApiDoc.FrmUserLogin;
 import com.spring.akn.entities.frmApiDoc.FrmUserUpdate;
+import com.spring.akn.entities.user.Role;
 import com.spring.akn.entities.user.User;
 import com.spring.akn.repositories.UserRespositories;
 
 @Repository
 public class UserRespositoriesImpl implements UserRespositories {
-
+    
+	@Autowired
+	DataSource dataSource;
 	private JdbcTemplate jdbcTemplate;
 
 	@Autowired
@@ -124,4 +132,46 @@ public class UserRespositoriesImpl implements UserRespositories {
 
 	     }
   }
+
+	@Override
+	public User findUserByUserName(String username) {
+		String sql = "SELECT user_id, user_name, user_email, user_password, enabled FROM tbuser WHERE user_name = ?";
+		try (Connection cnn = dataSource.getConnection(); PreparedStatement ps = cnn.prepareStatement(sql);) {
+			ps.setString(1, username);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				User user = new User();
+				user.setId(rs.getInt("user_id"));
+				user.setUsername(rs.getString("user_name"));
+				user.setPassword(rs.getString("user_password"));
+				user.setEmail(rs.getString("user_email"));
+				user.setEnabled(rs.getBoolean("enabled"));
+				user.setRoles(this.findUserRoleByUserId(user.getId()));
+				return user;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	public List<Role> findUserRoleByUserId(int id) {
+		List<Role> roles = new ArrayList<Role>();
+		String sql = "SELECT tbrole.role_id, tbrole.role_name FROM tbuser "
+				+ "LEFT JOIN tbuser_role ON tbuser.user_id = tbuser_role.user_id "
+				+ "LEFT JOIN tbrole ON tbrole.role_id= tbuser_role.role_id WHERE tbuser.user_id=? ";
+		try (Connection cnn = dataSource.getConnection(); PreparedStatement ps = cnn.prepareStatement(sql);) {
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				Role role = new Role();
+				role.setId(rs.getInt("role_id"));
+				role.setName("ROLE_" + rs.getString("role_name"));
+				roles.add(role);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return roles;
+	}
 }
