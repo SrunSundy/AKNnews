@@ -17,4 +17,5 @@ public interface UserRespositories {
 	public int changePassword(FrmUserChangePwd user);
     public List<User> listUser(String key,int page);
     public String getCurrentImage(int id);
+    public User findUserByUserName(String username);
 }
