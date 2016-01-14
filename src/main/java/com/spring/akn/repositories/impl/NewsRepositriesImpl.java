@@ -374,7 +374,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 			news.setTitle(rs.getString("news_title"));
 			news.setDescription(rs.getString("news_description"));
 			news.setImage(rs.getString("news_img"));
-			news.setDate(rs.getDate("news_date"));
+			news.setDate(rs.getTimestamp("news_date"));
 			news.setHit(rs.getInt("news_hit"));
 			news.setUrl(rs.getString("news_url"));
 			news.setSaved(rs.getBoolean("news_issave"));
@@ -398,7 +398,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 			news.setTitle(rs.getString("news_title"));
 			news.setDescription(rs.getString("news_description"));
 			news.setImage(rs.getString("news_img"));
-			news.setDate(rs.getDate("news_date"));
+			news.setDate(rs.getTimestamp("news_date"));
 			news.setHit(rs.getInt("news_hit"));
 			news.setUrl(rs.getString("news_url"));
 		

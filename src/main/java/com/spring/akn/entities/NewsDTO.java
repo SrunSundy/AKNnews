@@ -1,15 +1,14 @@
 package com.spring.akn.entities;
 
+import java.sql.Timestamp;
 import java.util.Date;
-
-import com.spring.akn.entities.user.User;
 
 public class NewsDTO {
 	private int id;
 	private String title;
 	private String description;
 	private String image;
-	private Date date;
+	private Timestamp date;
 	private int hit;
 	private String url;
 	private boolean status;
@@ -47,7 +46,7 @@ public class NewsDTO {
 	public Date getDate() {
 		return date;
 	}
-	public void setDate(Date date) {
+	public void setDate(Timestamp date) {
 		this.date = date;
 	}	
 	public int getHit() {
