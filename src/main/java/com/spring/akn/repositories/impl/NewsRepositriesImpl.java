@@ -136,7 +136,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		String sql="";
 		if(userid!=0){
 			sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,"
-					+ "n.news_date,n.news_hit,n.news_url,s.s_id,s.s_name,s.s_logo,"
+					+ "n.news_date,n.news_hit,n.news_url,s.s_id,s.s_name,s.s_logo,n.news_status,"
 					+ "(CASE WHEN n.news_id IN (SELECT news_id FROM tbsavelist WHERE user_id=? ) THEN TRUE ELSE FALSE END) AS news_issave "
 					+ "FROM tbnews n INNER JOIN tbsite s "
 					+ "ON s.s_id=n.source_id "
@@ -144,7 +144,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 			return jdbcTemplate.query(sql, new Object[]{userid},new GetNewsWithUserIDMapper());
 		}
 		sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,"
-				+ "n.news_date,n.news_hit,n.news_url,s.s_id,s.s_name,s.s_logo "
+				+ "n.news_date,n.news_hit,n.news_url,s.s_id,s.s_name,s.s_logo,n.news_status, "
 				+ "FROM tbnews n INNER JOIN tbsite s ON s.s_id=n.source_id "
 				+ "WHERE n.news_status=true AND n.news_date  >= CURRENT_DATE -INTERVAL '1 day' "
 				+ "ORDER BY n.news_hit DESC LIMIT 10";
@@ -165,7 +165,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 
 	@Override
 	public List<NewsDTO> listSavedNews(int userid) {
-		String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_url,n.news_hit,s.s_id,s.s_name,s.s_logo "
+		String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_url,n.news_hit,s.s_id,s.s_name,s.s_logo,n.news_status "
 				+ "FROM tbsavelist sl "
 				+ "INNER JOIN tbnews n ON sl.news_id=n.news_id "
 				+ "INNER JOIN tbuser u ON u.user_id=sl.user_id "
@@ -187,7 +187,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 	//SEARCHING FUNCTION 
 	public List<NewsDTO> searchByCategory(String key,int categoryid, int userid,int row,int offset){
 		if(userid != 0){
-			String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_id,s.s_name,s.s_logo,"
+			String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_id,s.s_name,s.s_logo,n.news_status,"
 					+ "(CASE WHEN n.news_id IN (SELECT news_id FROM tbsavelist WHERE user_id=? ) THEN TRUE ELSE FALSE END) AS news_issave "
 					+ "FROM tbnews n INNER JOIN tbsite s "
 					+ "ON s.s_id=n.source_id "
@@ -197,7 +197,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 					+ "LIMIT ? OFFSET ?";
 			return jdbcTemplate.query(sql, new Object[]{userid,categoryid,"%"+key+"%",row,offset},new GetNewsWithUserIDMapper());
 		}
-		String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_id,s.s_name,s.s_logo "
+		String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_id,s.s_name,s.s_logo,n.news_status "
 				+ "FROM tbnews n INNER JOIN tbsite s "
 				+ "ON s.s_id=n.source_id "
 				+ "INNER JOIN tbcategory c "
@@ -211,7 +211,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 	public List<NewsDTO> searchBySite(String key,int siteid,int userid,int row,int offset){
 		
 		if(userid != 0){
-			String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_id,s.s_name,s.s_logo,"
+			String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_id,s.s_name,s.s_logo,n.news_status,"
 					+ "(CASE WHEN n.news_id IN (SELECT news_id FROM tbsavelist WHERE user_id=? ) THEN TRUE ELSE FALSE END) AS news_issave "
 					+ "FROM tbnews n INNER JOIN tbsite s "
 					+ "ON s.s_id=n.source_id "
@@ -219,7 +219,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 					+ "LIMIT ? OFFSET ?";
 			return jdbcTemplate.query(sql, new Object[]{userid,siteid,"%"+key+"%",row,offset},new GetNewsWithUserIDMapper());
 		}
-		String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_id,s.s_name,s.s_logo "
+		String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_id,s.s_name,s.s_logo,n.news_status "
 				+ "FROM tbnews n INNER JOIN tbsite s "
 				+ " ON s.s_id=n.source_id "
 				+ "WHERE n.news_status=true AND s.s_id=? AND n.news_title LIKE ? ORDER BY n.news_date DESC "
@@ -231,7 +231,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		
 		if(userid!=0){
 		
-			String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_id,s.s_name,s.s_logo,"
+			String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_id,s.s_name,s.s_logo,n.news_status,"
 					+ "(CASE WHEN n.news_id IN (SELECT news_id FROM tbsavelist WHERE user_id=? ) THEN TRUE ELSE FALSE END) AS news_issave "
 					+ "FROM tbnews n INNER JOIN tbsite s "
 					+ "ON s.s_id=n.source_id "
@@ -240,7 +240,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 
 		}
 	
-		String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_id,s.s_name,s.s_logo  "
+		String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_id,s.s_name,s.s_logo,n.news_status  "
 				+ "FROM tbnews n INNER JOIN tbsite s "
 				+ "ON s.s_id=n.source_id "
 				+ "WHERE n.news_status=true  AND n.news_title LIKE ? ORDER BY n.news_date DESC LIMIT ? OFFSET ?";
@@ -257,7 +257,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		
 	public List<NewsDTO> listNewsByCategory(int userid,int categoryid,int row,int offset){
 		if(userid!=0){
-			String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_id,s.s_name,s.s_logo,"
+			String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_id,s.s_name,s.s_logo,n.news_status,"
 					+ "(CASE WHEN n.news_id IN (SELECT news_id FROM tbsavelist WHERE user_id=? ) THEN TRUE ELSE FALSE END) AS news_issave "
 					+ "FROM tbnews n INNER JOIN tbsite s "
 					+ "  ON s.s_id=n.source_id "
@@ -269,7 +269,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		}
 
 			String sql="SELECT n.news_id,n.news_title,n.news_description"
-					+ ",n.news_img,n.news_date,n.news_url,n.news_hit,s.s_id,s.s_name,s.s_logo "
+					+ ",n.news_img,n.news_date,n.news_url,n.news_hit,s.s_id,s.s_name,s.s_logo,n.news_status "
 					+ "FROM tbnews n INNER JOIN tbcategory c ON c.c_id=n.category_id "
 					+ "INNER JOIN tbsite s ON s.s_id=n.source_id "
 					+ "WHERE n.news_status=true AND n.category_id=? ORDER BY n.news_date DESC LIMIT ? OFFSET ?";
@@ -281,13 +281,13 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		if(userid!=0){
 			String sql="SELECT n.news_id,n.news_title,n.news_description"
 					+ ",n.news_img,n.news_date,n.news_url,n.news_hit,"
-					+ "(CASE WHEN n.news_id IN (SELECT news_id FROM tbsavelist WHERE user_id=? ) THEN TRUE ELSE FALSE END) AS news_issave ,s.s_id,s.s_name,s.s_logo "
+					+ "(CASE WHEN n.news_id IN (SELECT news_id FROM tbsavelist WHERE user_id=? ) THEN TRUE ELSE FALSE END) AS news_issave ,s.s_id,s.s_name,s.s_logo,n.news_status "
 					+ "FROM tbnews n INNER JOIN tbsite s ON s.s_id = n.source_id "
 					+ "WHERE n.news_status=true AND n.source_id=? ORDER BY n.news_date DESC LIMIT ? OFFSET ? ";
 			return jdbcTemplate.query(sql,new Object[]{ userid,siteid,row ,offset } ,new GetNewsWithUserIDMapper());
 		}
 		String sql="SELECT n.news_id,n.news_title,n.news_description"
-				+ ",n.news_img,n.news_date,n.news_url,n.news_hit,s.s_id,s.s_name,s.s_logo "
+				+ ",n.news_img,n.news_date,n.news_url,n.news_hit,s.s_id,s.s_name,s.s_logo,n.news_status "
 				+ "FROM tbnews n INNER JOIN tbsite s ON s.s_id = n.source_id "
 				+ "WHERE n.news_status=true AND n.source_id=? ORDER BY n.news_date DESC LIMIT ? OFFSET ? ";
 		return jdbcTemplate.query(sql,new Object[]{ siteid ,row,offset } ,new GetNewsWithNoUserIDMapper());
@@ -297,7 +297,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 
 			String sql="SELECT n.news_id,n.news_title,n.news_description"
 					+ ",n.news_img,n.news_date,n.news_url,n.news_hit,"
-					+ "(CASE WHEN n.news_id IN (SELECT news_id FROM tbsavelist WHERE user_id=? ) THEN TRUE ELSE FALSE END) AS news_issave,s.s_id,s.s_name,s.s_logo "
+					+ "(CASE WHEN n.news_id IN (SELECT news_id FROM tbsavelist WHERE user_id=? ) THEN TRUE ELSE FALSE END) AS news_issave,s.s_id,s.s_name,s.s_logo,n.news_status "
 					+ "FROM tbnews n INNER JOIN tbsite s "
 					+ "ON s.s_id=n.source_id "
 					+ "WHERE n.news_status=true ORDER BY n.news_date DESC LIMIT ? OFFSET ?";
@@ -305,7 +305,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		}
 	
 		String sql="SELECT n.news_id,n.news_title,n.news_description"
-				+ ",n.news_img,n.news_date,n.news_url,n.news_hit,s.s_id,s.s_name,s.s_logo "
+				+ ",n.news_img,n.news_date,n.news_url,n.news_hit,s.s_id,s.s_name,s.s_logo,n.news_status "
 				+ "FROM tbnews n INNER JOIN tbsite s "
 				+ "ON s.s_id=n.source_id "
 				+ "WHERE n.news_status=true ORDER BY n.news_date DESC LIMIT ? OFFSET ?";
@@ -377,6 +377,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 			news.setDate(rs.getTimestamp("news_date"));
 			news.setHit(rs.getInt("news_hit"));
 			news.setUrl(rs.getString("news_url"));
+			news.setStatus(rs.getBoolean("news_status"));
 			news.setSaved(rs.getBoolean("news_issave"));
 		
 			
@@ -400,6 +401,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 			news.setImage(rs.getString("news_img"));
 			news.setDate(rs.getTimestamp("news_date"));
 			news.setHit(rs.getInt("news_hit"));
+			news.setStatus(rs.getBoolean("news_status"));
 			news.setUrl(rs.getString("news_url"));
 		
 			
