@@ -149,7 +149,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 			return jdbcTemplate.query(sql, new Object[]{userid},new GetNewsWithUserIDMapper());
 		}
 		sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,"
-				+ "n.news_date,n.news_hit,n.news_url,s.s_id,s.s_name,s.s_logo,n.news_status, "
+				+ "n.news_date,n.news_hit,n.news_url,s.s_id,s.s_name,s.s_logo,n.news_status "
 				+ "FROM tbnews n INNER JOIN tbsite s ON s.s_id=n.source_id "
 				+ "WHERE n.news_status=true AND n.news_date  >= CURRENT_DATE -INTERVAL '1 day' "
 				+ "ORDER BY n.news_hit DESC LIMIT 10";
