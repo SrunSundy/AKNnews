@@ -54,7 +54,7 @@ public class ScrapDAOImpl implements ScrapDAO {
 	private int[] scrapNewsToDatabase(final ArrayList<NewsDTO> news){
 		
 		String sql = "INSERT INTO tbnews(news_title, news_description, news_img, news_url, category_id, source_id) "+
-			  "SELECT ?, ?, ?, ?, ?, ? " +
+			  "SELECT ?, ?, (SELECT DISTINCT s_basepath || ? FROM tbsite INNER JOIN tbnews ON tbsite.s_id=tbnews.source_id WHERE source_id=?), ?, ?, ? " +
 			  "WHERE NOT EXISTS(SELECT news_url FROM tbnews WHERE news_url=?)";
 		
 		return jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
@@ -65,10 +65,11 @@ public class ScrapDAOImpl implements ScrapDAO {
 						ps.setString(1, n.getTitle());
 						ps.setString(2, n.getDescription());
 						ps.setString(3, n.getImage());
-						ps.setString(4, n.getUrl());
-						ps.setInt(5, n.getCategory().getId());
-						ps.setInt(6, n.getSite().getId());
-						ps.setString(7, n.getUrl());
+						ps.setInt(4, n.getSite().getId());
+						ps.setString(5, n.getUrl());
+						ps.setInt(6, n.getCategory().getId());
+						ps.setInt(7, n.getSite().getId());
+						ps.setString(8, n.getUrl());
 			}
 			
 			@Override
