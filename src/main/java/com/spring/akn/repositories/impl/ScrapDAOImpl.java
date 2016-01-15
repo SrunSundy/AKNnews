@@ -179,7 +179,7 @@ public class ScrapDAOImpl implements ScrapDAO {
 	private StructureDTO getSelector(String url, int user_id){
 		
 		String sql = "SELECT (CASE WHEN n.news_id IN (SELECT news_id FROM tbsavelist WHERE user_id=? ) THEN TRUE ELSE FALSE END) AS issaved, " +
-					 "content_selector, n.news_title, n.news_content, n.news_hit " +
+					 "content_selector, n.news_title, n.news_content, n.news_hit, n.news_img " +
 				     "FROM tbsite INNER JOIN tbstructure ON tbstructure.id=tbsite.s_id " + 
 					 "INNER JOIN tbnews n ON n.source_id=tbsite.s_id " +
 					 "WHERE ? LIKE '%'|| s_url ||'%' AND n.news_url=?";
@@ -195,6 +195,7 @@ public class ScrapDAOImpl implements ScrapDAO {
 					structure.setTitleSelector(rs.getString("news_title"));
 					structure.setHit(rs.getInt("news_hit"));
 					structure.setContent(rs.getString("news_content"));
+					structure.setImageSelector(rs.getString("news_img"));
 					
 					return structure;
 				}
@@ -208,7 +209,7 @@ public class ScrapDAOImpl implements ScrapDAO {
 	private NewsDTO readAKNNews(int id, int user_id){
 		
 		String sql = "SELECT (CASE WHEN n.news_id IN (SELECT news_id FROM tbsavelist WHERE user_id=?) THEN TRUE ELSE FALSE END) AS issaved, " +
-					 "n.news_title, n.news_content, n.news_hit " + 
+					 "n.news_title, n.news_content, n.news_hit, n.news_img " + 
 					 "FROM tbnews n WHERE n.news_id=? ";
 		try{
 			return jdbcTemplate.queryForObject(sql, new Object[]{user_id, id}, new RowMapper<NewsDTO>() {
@@ -220,6 +221,7 @@ public class ScrapDAOImpl implements ScrapDAO {
 					news.setTitle(rs.getString("news_title"));
 					news.setHit(rs.getInt("news_hit"));
 					news.setSaved(rs.getBoolean("issaved"));
+					news.setImage(rs.getString("news_img"));
 					return news;
 				}
 			});
@@ -250,6 +252,7 @@ public class ScrapDAOImpl implements ScrapDAO {
 			news.setTitle(st.getTitleSelector());
 			news.setHit(st.getHit());
 			news.setSaved(st.isSaved());
+			news.setImage(st.getImageSelector());
 			
 		} catch (IOException e) {
 			System.err.println("IOException Occurr + " + e.toString());
