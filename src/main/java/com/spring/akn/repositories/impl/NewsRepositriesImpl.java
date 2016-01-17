@@ -30,9 +30,11 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		if(row <=0 ) row=10;
 		
 		int offset = ( page * row ) - row;
+		
+		if(categoryid !=0 && siteid!=0) return listNewsBySiteAndCategory(userid, siteid, categoryid, row, offset);
 		if(categoryid!=0) return listNewsByCategory(userid, categoryid, row ,offset);
 		if(siteid!=0) return listNewsBySite(userid, siteid, row,offset);
-		if(categoryid !=0 && siteid!=0) return listNewsBySiteAndCategory(userid, siteid, categoryid, row, offset);
+		
 		return listAllNews(userid, row,offset);
 		
 	}
@@ -85,12 +87,13 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		
 		int offset=(page* row)-row;
 
+		if(search.getCid() !=0 && search.getSid() !=0)
+			return searchBySiteAndCategory(search.getKey(), search.getSid(), search.getUid(), search.getCid(), row, offset);
 		if(search.getCid() != 0 ) 
 			return searchByCategory(search.getKey() , search.getCid(), search.getSid(),row, offset);
 		if(search.getSid() != 0) 
 			return searchBySite(search.getKey() ,search.getSid(), search.getUid(),row,offset);
-		if(search.getCid() !=0 && search.getSid() !=0)
-			return searchBySiteAndCategory(search.getKey(), search.getSid(), search.getUid(), search.getCid(), row, offset);
+	
 		return searchAll(search.getKey(), search.getUid(),row, offset);
 
 	}
@@ -98,6 +101,13 @@ public class NewsRepositriesImpl implements NewsRepositories {
 	@Override
 	public int getNewsTotalPage(String key,int row,int categoryid,int siteid) {
 		if(row <=0 ) row=10;
+		if(categoryid != 0 && siteid != 0){
+			String sql="SELECT CASE WHEN COUNT(*)% ? !=0 THEN COUNT(*)/ ? +1 "
+					+ "ELSE COUNT(*)/? END news_page FROM tbnews "
+					+ "WHERE news_status=true AND category_id=? AND source_id=? "
+					+ "AND news_title LIKE ?";
+			return jdbcTemplate.queryForObject(sql, new Object[]{row,row,row,categoryid,siteid,"%"+key+"%"} ,Integer.class);
+		}
 		if(categoryid != 0){
 			String sql="SELECT CASE WHEN COUNT(*)% ? !=0 THEN COUNT(*)/ ? +1 "
 					+ "ELSE COUNT(*)/? END news_page FROM tbnews "
@@ -121,6 +131,11 @@ public class NewsRepositriesImpl implements NewsRepositories {
 	
 	@Override
 	public int getNewsTotalRecords(String key,int categoryid,int siteid){
+		if(categoryid !=0 && siteid !=0){
+			String sql="SELECT COUNT(*) FROM tbnews WHERE news_status=true "
+					+ "AND category_id=? AND source_id=? AND news_title LIKE ?";
+			return jdbcTemplate.queryForObject(sql, new Object[]{categoryid,siteid,"%"+key+"%"} ,Integer.class);	
+		}
 		if(categoryid !=0){
 			String sql="SELECT COUNT(*) FROM tbnews WHERE news_status=true "
 					+ "AND category_id=? AND news_title LIKE ?";
