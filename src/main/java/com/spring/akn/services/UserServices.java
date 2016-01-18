@@ -17,4 +17,6 @@ public interface UserServices {
 	public int changePassword(FrmUserChangePwd user);
     public List<User> listUser(String key,int page);
     public String getCurrentImage(int id);
+    public int updateUserImage(String imagename,int id);
+    public int addUserRole(int uid,int rid);
 }

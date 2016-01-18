@@ -18,4 +18,6 @@ public interface UserRespositories {
     public List<User> listUser(String key,int page);
     public String getCurrentImage(int id);
     public User findUserByUserName(String username);
+    public int updateUserImage(String imagename,int id);
+    public int addUserRole(int uid,int rid);
 }

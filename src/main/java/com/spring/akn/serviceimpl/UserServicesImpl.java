@@ -59,5 +59,15 @@ public class UserServicesImpl implements UserServices{
 	public String getCurrentImage(int id) {
 		return userRespositories.getCurrentImage(id);
 	}
+
+
+	@Override
+	public int updateUserImage(String imagename, int id) {
+		return userRespositories.updateUserImage(imagename, id);
+	}
 	
+	@Override
+	public int addUserRole(int uid, int rid) {
+		return userRespositories.addUserRole(uid, rid);
+	}
 }
