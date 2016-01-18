@@ -18,4 +18,5 @@ public interface SiteDAO {
 	public boolean isUploadLogo(MultipartFile file, HttpServletRequest request, int s_id);
 	public int editLogoName(int s_id, String name);
 	public String getLogoName(int s_id);
+	public boolean updateSiteBasePath(int id, String basePath);
 }
