@@ -94,7 +94,15 @@ public class SiteDaoImpl implements SiteDAO {
 		return false;
 	}
 	
-
+	public boolean isUUID(String filename){
+		//String filename = "4a6978a5-ec94-484f-88c1-51f3ee52221e.png"; //define it!
+		String[] fn = filename.split("\\.");
+		System.out.println(fn[0]);		
+		if (fn[0].matches("[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}")) {
+			return true;
+		}
+		return false;
+	}
 	@Override
 	public boolean isUploadLogo(MultipartFile file, HttpServletRequest request, int s_id) {
 		if(!file.isEmpty()){
@@ -109,7 +117,7 @@ public class SiteDaoImpl implements SiteDAO {
 	            String randowFileName = null;
 	            
 	            
-				if ( getLogoName(s_id) == null){
+				if (!isUUID(getLogoName(s_id))){
 		            //for random file name
 		            randowFileName=uuid+"."+extension;
 				}else{
