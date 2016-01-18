@@ -125,6 +125,19 @@ public class SiteRestController {
 		return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
 	}
 	
+	@RequestMapping(value="/{id}/{basepath}", method = RequestMethod.PUT)
+	public ResponseEntity<Map<String, Object>> updateBasePath(@PathVariable("id")int id ,@PathVariable("basepath")String basepath){
+		Map<String, Object> map = new HashMap<String,Object>();
+		if ( siteServices.updateSiteBasePath(id, basepath) ){
+			map.put("STATUS", HttpStatus.OK.value());
+			map.put("MESSAGE", "SITE BASEPATH UPDATE SUCCESS!");
+			return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
+		}
+		map.put("STATUS", HttpStatus.NOT_FOUND.value());
+		map.put("MESSAGE", "SITE BASEPATH UPDATE FAIL!");
+		return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
+	}
+	
 	/**
 	 * Count total record in tbsite
 	 * @return
