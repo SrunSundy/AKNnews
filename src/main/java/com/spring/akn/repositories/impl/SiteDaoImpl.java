@@ -181,6 +181,8 @@ public class SiteDaoImpl implements SiteDAO {
 			dto.setId(rs.getInt("s_id"));
 			dto.setName(rs.getString("s_name"));
 			dto.setUrl(rs.getString("s_url"));
+			dto.setUrl(rs.getString("s_logo"));
+			dto.setUrl(rs.getString("s_basepath"));
 			return dto;
 		}		
 	}
@@ -193,6 +195,8 @@ public class SiteDaoImpl implements SiteDAO {
 				dto.setId(rs.getInt("s_id"));
 				dto.setName(rs.getString("s_name"));
 				dto.setUrl(rs.getString("s_url"));
+				dto.setUrl(rs.getString("s_logo"));
+				dto.setUrl(rs.getString("s_basepath"));
 				return dto;
 			}
 			return null;
