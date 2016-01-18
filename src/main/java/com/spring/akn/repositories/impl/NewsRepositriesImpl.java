@@ -111,56 +111,67 @@ public class NewsRepositriesImpl implements NewsRepositories {
 	}
 	
 	@Override
-	public int getNewsTotalPage(String key,int row,int categoryid,int siteid) {
+	public int getNewsTotalPage(String key,int row,int categoryid,int siteid,int userid) {
+		
+		boolean status1=true;
+		boolean status2=true;
 		if(row <=0 ) row=10;
+		
+		if(userid<0) status2=false;
+		
 		if(categoryid != 0 && siteid != 0){
 			String sql="SELECT CASE WHEN COUNT(*)% ? !=0 THEN COUNT(*)/ ? +1 "
 					+ "ELSE COUNT(*)/? END news_page FROM tbnews "
-					+ "WHERE news_status=true AND category_id=? AND source_id=? "
+					+ "WHERE (news_status=? OR news_status=?) AND category_id=? AND source_id=? "
 					+ "AND news_title LIKE ?";
-			return jdbcTemplate.queryForObject(sql, new Object[]{row,row,row,categoryid,siteid,"%"+key+"%"} ,Integer.class);
+			return jdbcTemplate.queryForObject(sql, new Object[]{row,row,row,status1,status2,categoryid,siteid,"%"+key+"%"} ,Integer.class);
 		}
 		if(categoryid != 0){
 			String sql="SELECT CASE WHEN COUNT(*)% ? !=0 THEN COUNT(*)/ ? +1 "
 					+ "ELSE COUNT(*)/? END news_page FROM tbnews "
-					+ "WHERE news_status=true AND category_id=? "
+					+ "WHERE (news_status=? OR news_status=?) AND category_id=? "
 					+ "AND news_title LIKE ?";
-			return jdbcTemplate.queryForObject(sql, new Object[]{row,row,row,categoryid,"%"+key+"%"} ,Integer.class);
+			return jdbcTemplate.queryForObject(sql, new Object[]{row,row,row,status1,status2,categoryid,"%"+key+"%"} ,Integer.class);
 		}
 		if(siteid != 0){
 			String sql="SELECT CASE WHEN COUNT(*)% ? !=0 THEN COUNT(*)/ ? +1 "
 					+ "ELSE COUNT(*)/? END news_page FROM tbnews "
-					+ "WHERE news_status=true AND source_id=? "
+					+ "WHERE (news_status=? OR news_status=?) AND source_id=? "
 					+ "AND news_title LIKE ?";
-			return jdbcTemplate.queryForObject(sql, new Object[]{row,row,row,siteid,"%"+key+"%"} ,Integer.class);
+			return jdbcTemplate.queryForObject(sql, new Object[]{row,row,row,status1,status2,siteid,"%"+key+"%"} ,Integer.class);
 		}
 		String sql="SELECT CASE WHEN COUNT(*)% ? !=0 THEN COUNT(*)/ ? +1 "
 				+ "ELSE COUNT(*)/? END news_page FROM tbnews "
-				+ "WHERE news_status=true "
+				+ "WHERE (news_status=? OR news_status=?) "
 				+ "AND news_title LIKE ?";
-		return jdbcTemplate.queryForObject(sql, new Object[]{row,row,row,"%"+key+"%"} ,Integer.class);	
+		return jdbcTemplate.queryForObject(sql, new Object[]{row,row,row,status1,status2,"%"+key+"%"} ,Integer.class);	
 	}
 	
 	@Override
-	public int getNewsTotalRecords(String key,int categoryid,int siteid){
+	public int getNewsTotalRecords(String key,int categoryid,int siteid,int userid){
+		
+		boolean status1=true;
+		boolean status2=true;
+		
+		if(userid<0) status2=false;
 		if(categoryid !=0 && siteid !=0){
-			String sql="SELECT COUNT(*) FROM tbnews WHERE news_status=true "
+			String sql="SELECT COUNT(*) FROM tbnews WHERE (news_status=? OR news_status=?) "
 					+ "AND category_id=? AND source_id=? AND news_title LIKE ?";
-			return jdbcTemplate.queryForObject(sql, new Object[]{categoryid,siteid,"%"+key+"%"} ,Integer.class);	
+			return jdbcTemplate.queryForObject(sql, new Object[]{status1,status2,categoryid,siteid,"%"+key+"%"} ,Integer.class);	
 		}
 		if(categoryid !=0){
-			String sql="SELECT COUNT(*) FROM tbnews WHERE news_status=true "
+			String sql="SELECT COUNT(*) FROM tbnews WHERE (news_status=? OR news_status=?) "
 					+ "AND category_id=? AND news_title LIKE ?";
-			return jdbcTemplate.queryForObject(sql, new Object[]{categoryid,"%"+key+"%"} ,Integer.class);	
+			return jdbcTemplate.queryForObject(sql, new Object[]{status1,status2,categoryid,"%"+key+"%"} ,Integer.class);	
 		}
 		if(siteid !=0){
-			String sql="SELECT COUNT(*) FROM tbnews WHERE news_status=true "
+			String sql="SELECT COUNT(*) FROM tbnews WHERE (news_status=? OR news_status=?) "
 					+ "AND source_id=? AND news_title LIKE ?";
-			return jdbcTemplate.queryForObject(sql, new Object[]{siteid,"%"+key+"%"} ,Integer.class);	
+			return jdbcTemplate.queryForObject(sql, new Object[]{status1,status2,siteid,"%"+key+"%"} ,Integer.class);	
 		}
-		String sql="SELECT COUNT(*) FROM tbnews WHERE news_status=true "
+		String sql="SELECT COUNT(*) FROM tbnews WHERE (news_status=? OR news_status=?) "
 				+ "AND news_title LIKE ?";
-		return jdbcTemplate.queryForObject(sql, new Object[]{"%"+key+"%"} ,Integer.class);	
+		return jdbcTemplate.queryForObject(sql, new Object[]{status1,status2,"%"+key+"%"} ,Integer.class);	
 	}
 	
 	@Override
@@ -221,7 +232,9 @@ public class NewsRepositriesImpl implements NewsRepositories {
 	
 	//SEARCHING FUNCTION 
 	public List<NewsDTO> searchByCategory(String key,int categoryid, int userid,int row,int offset){
-		if(userid != 0){
+		boolean status1=true;
+		boolean status2=true;
+		if(userid > 0){
 			String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_id,s.s_name,s.s_logo,n.news_status,c.c_id,c.c_name,"
 					+ "(CASE WHEN n.news_id IN (SELECT news_id FROM tbsavelist WHERE user_id=? ) THEN TRUE ELSE FALSE END) AS news_issave "
 					+ "FROM tbnews n INNER JOIN tbsite s "
@@ -232,20 +245,23 @@ public class NewsRepositriesImpl implements NewsRepositories {
 					+ "LIMIT ? OFFSET ?";
 			return jdbcTemplate.query(sql, new Object[]{userid,categoryid,"%"+key+"%",row,offset},new GetNewsWithUserIDMapper());
 		}
+		if(userid<0)status2=false;
 		String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_id,s.s_name,s.s_logo,n.news_status,c.c_id,c.c_name "
 				+ "FROM tbnews n INNER JOIN tbsite s "
 				+ "ON s.s_id=n.source_id "
 				+ "INNER JOIN tbcategory c "
 				+ "ON c.c_id=n.category_id "
-				+ "WHERE n.news_status=true AND n.category_id=? AND n.news_title LIKE ? ORDER BY n.news_date DESC "
+				+ "WHERE (news_status=? OR news_status=?) AND n.category_id=? AND n.news_title LIKE ? ORDER BY n.news_date DESC "
 				+ "LIMIT ? OFFSET ? ";
-		return jdbcTemplate.query(sql, new Object[]{categoryid,"%"+key+"%",row,offset},new GetNewsWithNoUserIDMapper());
+		return jdbcTemplate.query(sql, new Object[]{status1,status2,categoryid,"%"+key+"%",row,offset},new GetNewsWithNoUserIDMapper());
 		
 	}
 	
 	public List<NewsDTO> searchBySite(String key,int siteid,int userid,int row,int offset){
 		
-		if(userid != 0){
+		boolean status1=true;
+		boolean status2=true;
+		if(userid > 0){
 			String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_id,s.s_name,s.s_logo,n.news_status,c.c_id,c.c_name,"
 					+ "(CASE WHEN n.news_id IN (SELECT news_id FROM tbsavelist WHERE user_id=? ) THEN TRUE ELSE FALSE END) AS news_issave "
 					+ "FROM tbnews n INNER JOIN tbsite s "
@@ -255,17 +271,21 @@ public class NewsRepositriesImpl implements NewsRepositories {
 					+ "LIMIT ? OFFSET ?";
 			return jdbcTemplate.query(sql, new Object[]{userid,siteid,"%"+key+"%",row,offset},new GetNewsWithUserIDMapper());
 		}
+		if(userid<0) status2=false;
 		String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_id,s.s_name,s.s_logo,n.news_status,c.c_id,c.c_name "
 				+ "FROM tbnews n INNER JOIN tbsite s "
 				+ " ON s.s_id=n.source_id "
 				+ "INNER JOIN tbcategory c ON c.c_id=n.category_id "
-				+ "WHERE n.news_status=true AND s.s_id=? AND n.news_title LIKE ? ORDER BY n.news_date DESC "
+				+ "WHERE (news_status=? OR news_status=?) AND s.s_id=? AND n.news_title LIKE ? ORDER BY n.news_date DESC "
 				+ "LIMIT ? OFFSET ?";
-		return jdbcTemplate.query(sql, new Object[]{siteid,"%"+key+"%",row,offset},new GetNewsWithNoUserIDMapper());
+		return jdbcTemplate.query(sql, new Object[]{status1,status2,siteid,"%"+key+"%",row,offset},new GetNewsWithNoUserIDMapper());
 	}
 	
 	public List<NewsDTO> searchBySiteAndCategory(String key,int siteid,int categoryid,int userid,int row,int offset){
-		if(userid != 0){
+		
+		boolean status1=true;
+		boolean status2=true;
+		if(userid > 0){
 			String sql="SELECT n.news_id,n.news_title,n.news_description,"
 					+ "n.news_img,n.news_date,n.news_url,n.news_hit,"
 					+ "(CASE WHEN n.news_id IN (SELECT news_id FROM tbsavelist WHERE user_id=? ) THEN TRUE ELSE FALSE END) AS news_issave ,s.s_id,s.s_name,s.s_logo,n.news_status,c.c_id,c.c_name "
@@ -274,18 +294,22 @@ public class NewsRepositriesImpl implements NewsRepositories {
 					+ "WHERE n.news_status=true AND n.news_title LIKE ? AND n.source_id=? AND c.c_id=? ORDER BY n.news_date DESC LIMIT ? OFFSET ? ";
 			return jdbcTemplate.query(sql, new Object[]{userid,"%"+key+"%",siteid,categoryid,row,offset},new GetNewsWithUserIDMapper());
 		}
+		if(userid<0) status2=false;
 		String sql="SELECT n.news_id,n.news_title,n.news_description,"
 				+ "n.news_img,n.news_date,n.news_url,n.news_hit,"
 				+ "s.s_id,s.s_name,s.s_logo,n.news_status,c.c_id,c.c_name "
 				+ "FROM tbnews n INNER JOIN tbsite s ON s.s_id = n.source_id "
 				+ "INNER JOIN tbcategory c ON c.c_id=n.category_id "
-				+ "WHERE n.news_status=true AND n.news_title LIKE ? AND n.source_id=? AND c.c_id=? ORDER BY n.news_date DESC LIMIT ? OFFSET ? ";
-		return jdbcTemplate.query(sql, new Object[]{"%"+key+"%",siteid,categoryid,row,offset},new GetNewsWithNoUserIDMapper());
+				+ "WHERE (news_status=? OR news_status=?) AND n.news_title LIKE ? AND n.source_id=? AND c.c_id=? ORDER BY n.news_date DESC LIMIT ? OFFSET ? ";
+		return jdbcTemplate.query(sql, new Object[]{status1,status2,"%"+key+"%",siteid,categoryid,row,offset},new GetNewsWithNoUserIDMapper());
 	}
 	
 	public List<NewsDTO> searchAll(String key, int userid,int row,int offset){
 		
-		if(userid!=0){
+		
+		boolean status1=true;
+		boolean status2=true;
+		if(userid>0){
 		
 			String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_id,s.s_name,s.s_logo,n.news_status,c.c_id,c.c_name,"
 					+ "(CASE WHEN n.news_id IN (SELECT news_id FROM tbsavelist WHERE user_id=? ) THEN TRUE ELSE FALSE END) AS news_issave "
@@ -296,13 +320,14 @@ public class NewsRepositriesImpl implements NewsRepositories {
 			return jdbcTemplate.query(sql, new Object[]{userid,"%"+key+"%",row,offset},new GetNewsWithUserIDMapper());
 
 		}
+		if(userid<0) status2=false;
 	
 		String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_id,s.s_name,s.s_logo,n.news_status,c.c_id,c.c_name  "
 				+ "FROM tbnews n INNER JOIN tbsite s "
 				+ "ON s.s_id=n.source_id "
 				+ "INNER JOIN tbcategory c ON c.c_id=n.category_id "
-				+ "WHERE n.news_status=true  AND n.news_title LIKE ? ORDER BY n.news_date DESC LIMIT ? OFFSET ?";
-		return jdbcTemplate.query(sql, new Object[]{"%"+key+"%",row,offset},new GetNewsWithNoUserIDMapper());
+				+ "WHERE (news_status=? OR news_status=?)  AND n.news_title LIKE ? ORDER BY n.news_date DESC LIMIT ? OFFSET ?";
+		return jdbcTemplate.query(sql, new Object[]{status1,status2,"%"+key+"%",row,offset},new GetNewsWithNoUserIDMapper());
 
 	}
 	
@@ -314,7 +339,12 @@ public class NewsRepositriesImpl implements NewsRepositories {
 	//LIST NEWS FUNCTION 
 		
 	public List<NewsDTO> listNewsByCategory(int userid,int categoryid,int row,int offset){
-		if(userid!=0){
+		
+		
+		boolean status1=true;
+		boolean status2=true;
+		if(userid>0){
+			System.err.println("LIST NEWS BY CATE");
 			String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_id,s.s_name,s.s_logo,n.news_status,c.c_id,c.c_name,"
 					+ "(CASE WHEN n.news_id IN (SELECT news_id FROM tbsavelist WHERE user_id=? ) THEN TRUE ELSE FALSE END) AS news_issave "
 					+ "FROM tbnews n INNER JOIN tbsite s "
@@ -326,17 +356,22 @@ public class NewsRepositriesImpl implements NewsRepositories {
 			return jdbcTemplate.query(sql,new Object[]{ userid,categoryid,row ,offset }, new GetNewsWithUserIDMapper());
 		}
 
+		if(userid<0){status2=false;System.err.println("yes");}
+		System.err.println(userid);
 			String sql="SELECT n.news_id,n.news_title,n.news_description"
 					+ ",n.news_img,n.news_date,n.news_url,n.news_hit,s.s_id,s.s_name,s.s_logo,n.news_status,c.c_id,c.c_name "
 					+ "FROM tbnews n INNER JOIN tbcategory c ON c.c_id=n.category_id "
 					+ "INNER JOIN tbsite s ON s.s_id=n.source_id "
-					+ "WHERE n.news_status=true AND n.category_id=? ORDER BY n.news_date DESC LIMIT ? OFFSET ?";
-			return jdbcTemplate.query(sql,new Object[]{categoryid ,row,offset }, new GetNewsWithNoUserIDMapper());
+					+ "WHERE (n.news_status=? OR n.news_status=?) AND n.category_id=? ORDER BY n.news_date DESC LIMIT ? OFFSET ?";
+			return jdbcTemplate.query(sql,new Object[]{status1,status2,categoryid ,row,offset }, new GetNewsWithNoUserIDMapper());
 		
 	}
 	
 	public List<NewsDTO> listNewsBySite(int userid,int siteid,int row,int offset){
-		if(userid!=0){
+		
+		boolean status1=true;
+		boolean status2=true;
+		if(userid>0){
 			String sql="SELECT n.news_id,n.news_title,n.news_description"
 					+ ",n.news_img,n.news_date,n.news_url,n.news_hit,"
 					+ "(CASE WHEN n.news_id IN (SELECT news_id FROM tbsavelist WHERE user_id=? ) THEN TRUE ELSE FALSE END) AS news_issave ,s.s_id,s.s_name,s.s_logo,n.news_status,c.c_id,c.c_name "
@@ -345,17 +380,20 @@ public class NewsRepositriesImpl implements NewsRepositories {
 					+ "WHERE n.news_status=true AND n.source_id=? ORDER BY n.news_date DESC LIMIT ? OFFSET ? ";
 			return jdbcTemplate.query(sql,new Object[]{ userid,siteid,row ,offset } ,new GetNewsWithUserIDMapper());
 		}
+		if(userid<0){status2=false;}
 		String sql="SELECT n.news_id,n.news_title,n.news_description"
 				+ ",n.news_img,n.news_date,n.news_url,n.news_hit,s.s_id,s.s_name,s.s_logo,n.news_status,c.c_id,c.c_name "
 				+ "FROM tbnews n INNER JOIN tbsite s ON s.s_id = n.source_id "
 				+ "INNER JOIN tbcategory c ON c.c_id=n.category_id "
-				+ "WHERE n.news_status=true AND n.source_id=? ORDER BY n.news_date DESC LIMIT ? OFFSET ? ";
-		return jdbcTemplate.query(sql,new Object[]{ siteid ,row,offset } ,new GetNewsWithNoUserIDMapper());
+				+ "WHERE (n.news_status=? OR n.news_status=?) AND n.source_id=? ORDER BY n.news_date DESC LIMIT ? OFFSET ? ";
+		return jdbcTemplate.query(sql,new Object[]{ status1,status2,siteid ,row,offset } ,new GetNewsWithNoUserIDMapper());
 	}
 	
 	public List<NewsDTO> listNewsBySiteAndCategory(int userid,int siteid,int categoryid,int row,int offset){
 		
-		if(userid != 0){
+		boolean status1=true;
+		boolean status2=true;
+		if(userid > 0){
 			String sql="SELECT n.news_id,n.news_title,n.news_description"
 					+ ",n.news_img,n.news_date,n.news_url,n.news_hit,"
 					+ "(CASE WHEN n.news_id IN (SELECT news_id FROM tbsavelist WHERE user_id=? ) THEN TRUE ELSE FALSE END) AS news_issave ,s.s_id,s.s_name,s.s_logo,n.news_status,c.c_id,c.c_name "
@@ -364,17 +402,21 @@ public class NewsRepositriesImpl implements NewsRepositories {
 					+ "WHERE n.news_status=true AND n.source_id=? AND c.c_id=? ORDER BY n.news_date DESC  LIMIT ? OFFSET ?";
 			return jdbcTemplate.query(sql,new Object[]{ userid,siteid,categoryid,row ,offset } ,new GetNewsWithUserIDMapper());
 		}
+		if(userid<0){status2=false;}
 		String sql="SELECT n.news_id,n.news_title,n.news_description"
 				+ ",n.news_img,n.news_date,n.news_url,n.news_hit,"
 				+ "s.s_id,s.s_name,s.s_logo,n.news_status,c.c_id,c.c_name "
 				+ "FROM tbnews n INNER JOIN tbsite s ON s.s_id = n.source_id "
 				+ "INNER JOIN tbcategory c ON c.c_id=n.category_id "
-				+ "WHERE n.news_status=true AND n.source_id=? AND c.c_id=? ORDER BY n.news_date DESC  LIMIT ? OFFSET ?";
-		return jdbcTemplate.query(sql,new Object[]{ siteid,categoryid,row ,offset } ,new GetNewsWithNoUserIDMapper());
+				+ "WHERE (n.news_status=? OR n.news_status=?) AND n.source_id=? AND c.c_id=? ORDER BY n.news_date DESC  LIMIT ? OFFSET ?";
+		return jdbcTemplate.query(sql,new Object[]{ status1,status2,siteid,categoryid,row ,offset } ,new GetNewsWithNoUserIDMapper());
 		
 	}
 	public List<NewsDTO> listAllNews(int userid,int row,int offset){
-		if(userid!=0){
+		
+		boolean status1=true;
+		boolean status2=true;
+		if(userid>0){
 
 			String sql="SELECT n.news_id,n.news_title,n.news_description"
 					+ ",n.news_img,n.news_date,n.news_url,n.news_hit,"
@@ -385,14 +427,14 @@ public class NewsRepositriesImpl implements NewsRepositories {
 					+ "WHERE n.news_status=true ORDER BY n.news_date DESC LIMIT ? OFFSET ?";
 			return jdbcTemplate.query(sql,new Object[]{ userid,row,offset } , new GetNewsWithUserIDMapper());
 		}
-	
+		if(userid<0){status2=false;}
 		String sql="SELECT n.news_id,n.news_title,n.news_description"
 				+ ",n.news_img,n.news_date,n.news_url,n.news_hit,s.s_id,s.s_name,s.s_logo,n.news_status,c.c_id,c.c_name "
 				+ "FROM tbnews n INNER JOIN tbsite s "
 				+ "ON s.s_id=n.source_id "
 				+ "INNER JOIN tbcategory c ON c.c_id=n.category_id "
-				+ "WHERE n.news_status=true ORDER BY n.news_date DESC LIMIT ? OFFSET ?";
-		return jdbcTemplate.query(sql,new Object[]{row, offset } , new GetNewsWithNoUserIDMapper());
+				+ "WHERE n.news_status=? OR n.news_status=? ORDER BY n.news_date DESC LIMIT ? OFFSET ?";
+		return jdbcTemplate.query(sql,new Object[]{status1,status2,row, offset } , new GetNewsWithNoUserIDMapper());
 	}
 	//END LIST NEWS FUNCTION 
 	

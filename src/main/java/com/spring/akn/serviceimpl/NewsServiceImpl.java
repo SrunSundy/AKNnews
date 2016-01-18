@@ -83,15 +83,15 @@ public class NewsServiceImpl implements NewsService{
 	}
 
 	@Override
-	public int getNewsTotalPage(String key,int row,int categoryid,int siteid)  {
+	public int getNewsTotalPage(String key,int row,int categoryid,int siteid,int userid)  {
 		// TODO Auto-generated method stub
-		return newsrepository.getNewsTotalPage(key,row, categoryid, siteid);
+		return newsrepository.getNewsTotalPage(key,row, categoryid, siteid,userid);
 	}
 
 	@Override
-	public int getNewsTotalRecords(String key, int categoryid, int siteid) {
+	public int getNewsTotalRecords(String key, int categoryid, int siteid,int userid) {
 		// TODO Auto-generated method stub
-		return newsrepository.getNewsTotalRecords(key, categoryid, siteid);
+		return newsrepository.getNewsTotalRecords(key, categoryid, siteid,userid);
 	}
 
 	@Override

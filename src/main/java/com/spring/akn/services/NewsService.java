@@ -23,9 +23,9 @@ public interface NewsService {
 	
 	public List<NewsDTO> searchNews(SearchNewsDTO search);
 	
-	public int getNewsTotalPage(String key,int row,int categoryid,int siteid);
+	public int getNewsTotalPage(String key,int row,int categoryid,int siteid,int userid);
 	
-	public int getNewsTotalRecords(String key,int categoryid,int siteid);
+	public int getNewsTotalRecords(String key,int categoryid,int siteid,int userid);
 	
 	public List<NewsDTO> getPopularNews(int userid);
 	
