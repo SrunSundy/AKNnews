@@ -81,7 +81,7 @@ public class NewsRestController {
 									(map,HttpStatus.OK);	
 	}
 	
-	
+	@ApiIgnore
 	@RequestMapping(value="/scrap",method=RequestMethod.GET)
 	public ResponseEntity<Map<String,Object>> scrapNews(){
 		
