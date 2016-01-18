@@ -57,8 +57,8 @@ public class CategoryDaoImpl implements CategoryDAO{
 	 * Delete category by id
 	 */
 	public boolean isDeleteCategoryById(int id) {		
-		String sql = "DELETE FROM tbcategory WHERE c_id = ?;";
-		int result = getJdbcTemplate().update(sql, new Object[]{id});
+		String sql = "DELETE FROM tbcategory WHERE c_id = ? AND (SELECT category_id FROM tbnews WHERE tbnews.category_id = ?) ISNULL;";
+		int result = getJdbcTemplate().update(sql, new Object[]{id,id});
 		if (result > 0)
 			return true;
 		return false;
