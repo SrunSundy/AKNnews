@@ -31,9 +31,12 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		
 		int offset = ( page * row ) - row;
 		
-		if(categoryid !=0 && siteid!=0) return listNewsBySiteAndCategory(userid, siteid, categoryid, row, offset);
-		if(categoryid!=0) return listNewsByCategory(userid, categoryid, row ,offset);
-		if(siteid!=0) return listNewsBySite(userid, siteid, row,offset);
+		if(categoryid !=0 && siteid!=0) 
+			return listNewsBySiteAndCategory(userid, siteid, categoryid, row, offset);
+		if(categoryid!=0) 
+			return listNewsByCategory(userid, categoryid, row ,offset);
+		if(siteid!=0) 
+			return listNewsBySite(userid, siteid, row,offset);
 		
 		return listAllNews(userid, row,offset);
 		
@@ -96,9 +99,10 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		int offset=(page* row)-row;
 
 		if(search.getCid() !=0 && search.getSid() !=0)
-			return searchBySiteAndCategory(search.getKey(), search.getSid(), search.getUid(), search.getCid(), row, offset);
+			return searchBySiteAndCategory(search.getKey(), search.getSid(),  search.getCid(),search.getUid(), row, offset);
+			
 		if(search.getCid() != 0 ) 
-			return searchByCategory(search.getKey() , search.getCid(), search.getSid(),row, offset);
+			return searchByCategory(search.getKey() , search.getCid(), search.getUid(),row, offset);
 		if(search.getSid() != 0) 
 			return searchBySite(search.getKey() ,search.getSid(), search.getUid(),row,offset);
 	
