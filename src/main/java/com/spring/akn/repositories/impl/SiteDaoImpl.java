@@ -42,7 +42,7 @@ public class SiteDaoImpl implements SiteDAO {
 
 	@Override
 	public List<SiteDTO> listSite() {
-		String sql = "SELECT s_id, s_name, s_url FROM tbsite;";
+		String sql = "SELECT s_id, s_name, s_url, s_logo,s_basepath FROM tbsite;";
 		return getJdbcTemplate().query(sql , new SiteRowMapper() );
 	}
 
@@ -83,6 +83,15 @@ public class SiteDaoImpl implements SiteDAO {
 	public int countSiteRecord() {		
 		String sql = "SELECT COUNT(*) FROM tbsite;";
 		return getJdbcTemplate().queryForObject(sql , Integer.class);
+	}
+	
+	@Override
+	public boolean updateSiteBasePath(int id,String basePath) {
+		String sql = "UPDATE tbsite SET s_basepath= ? WHERE s_id = ?";
+		int result = getJdbcTemplate().update(sql, new Object[]{basePath, id});
+		if (result > 0)
+			return true;
+		return false;
 	}
 	
 
@@ -182,6 +191,8 @@ public class SiteDaoImpl implements SiteDAO {
 		}
 		
 	}
+
+
 
 
 }
