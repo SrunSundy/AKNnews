@@ -66,6 +66,11 @@ public class SiteSeviceImpl implements SiteServices{
 	public String getLogoPath(HttpServletRequest request, int s_id) {				
 		return request.getContextPath() + "/images/"+siteDAO.getLogoName(s_id);
 	}
+
+	@Override
+	public boolean updateSiteBasePath(int id, String basePath) {
+		return siteDAO.updateSiteBasePath(id, basePath);
+	}
 	
 	
 
