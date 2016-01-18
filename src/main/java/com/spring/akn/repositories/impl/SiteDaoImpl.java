@@ -48,7 +48,7 @@ public class SiteDaoImpl implements SiteDAO {
 
 	@Override
 	public SiteDTO findSiteById(int id) {
-		String sql = "SELECT s_id, s_name, s_url FROM tbsite WHERE s_id = ?;";
+		String sql = "SELECT s_id, s_name, s_url , s_logo, s_basepath FROM tbsite WHERE s_id = ?;";
 		return getJdbcTemplate().query(sql , new Object[]{id} , new SiteResultSetExtractor());
 	}
 
