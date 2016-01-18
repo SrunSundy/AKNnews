@@ -81,31 +81,6 @@ public class NewsRestController {
 									(map,HttpStatus.OK);	
 	}
 	
-	@ApiIgnore
-	@RequestMapping(value="/scrap",method=RequestMethod.GET)
-	public ResponseEntity<Map<String,Object>> scrapNews(){
-		
-		Map<String, Object> map  = new HashMap<String, Object>();
-		int i=scrapservice.scrapAllSites();
-		if(i>0){
-			
-			map.put("MESSAGE","NEWS HAS BEEN SCRAPING");
-			map.put("NUMBER OF NEWS", i);
-			map.put("STATUS", HttpStatus.OK.value());
-			
-			return new ResponseEntity<Map<String,Object>>
-								(map, HttpStatus.OK);
-		}else{
-			map.put("MESSAGE","NO NEWS TO SCRAP");
-			map.put("NUMBER OF NEWS", i);
-			map.put("STATUS", HttpStatus.NOT_FOUND.value());
-			return new ResponseEntity<Map<String,Object>>
-								(map, HttpStatus.OK);
-		}
-		
-		
-	
-	}
 	
 	@ApiIgnore
 	@RequestMapping(value="/",method=RequestMethod.POST)
@@ -174,6 +149,7 @@ public class NewsRestController {
 	
 	@RequestMapping(value="/search", method=RequestMethod.POST)
 	public ResponseEntity<Map<String,Object>> searchNews(@RequestBody SearchNewsDTO search){
+		System.err.println("SEARCHING CID: "+search.getCid()+"KEY: "+search.getKey() +"SITEID"+ search.getSid());
 		List<NewsDTO> news = newsservice.searchNews(search);
 		
 		Map<String, Object> map = new HashMap<String,Object>();
