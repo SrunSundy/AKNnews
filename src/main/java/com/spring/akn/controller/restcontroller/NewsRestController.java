@@ -318,8 +318,8 @@ public class NewsRestController {
 		}
 	}
 	
-	@RequestMapping(value="/scrap/{id}", method=RequestMethod.POST)
-	public ResponseEntity<Map<String,Object>> scrapSite(@PathVariable int site_id){
+	@RequestMapping(value="/scrap/{id}", method=RequestMethod.GET)
+	public ResponseEntity<Map<String,Object>> scrapSite(@PathVariable("id") int site_id){
 		
 		System.err.println("scraping controller...");
 		
