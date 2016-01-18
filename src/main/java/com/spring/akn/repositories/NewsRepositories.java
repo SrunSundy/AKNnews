@@ -18,6 +18,8 @@ public interface NewsRepositories {
 	
 	public int updateNews(NewsDTO news);
 	
+	public int updateView(int newsid);
+	
 	public int toggleNews(int newsid);
 	
 	public List<NewsDTO> searchNews(SearchNewsDTO search);

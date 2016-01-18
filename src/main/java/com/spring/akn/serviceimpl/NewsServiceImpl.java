@@ -94,6 +94,12 @@ public class NewsServiceImpl implements NewsService{
 		return newsrepository.getNewsTotalRecords(key, categoryid, siteid);
 	}
 
+	@Override
+	public int updateView(int newsid) {
+		// TODO Auto-generated method stub
+		return newsrepository.updateView(newsid);
+	}
+
 	
 
 }

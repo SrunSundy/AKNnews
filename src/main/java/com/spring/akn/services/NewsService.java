@@ -19,6 +19,8 @@ public interface NewsService {
 	
 	public int toggleNews(int newsid);
 	
+	public int updateView(int newsid);
+	
 	public List<NewsDTO> searchNews(SearchNewsDTO search);
 	
 	public int getNewsTotalPage(String key,int row,int categoryid,int siteid);

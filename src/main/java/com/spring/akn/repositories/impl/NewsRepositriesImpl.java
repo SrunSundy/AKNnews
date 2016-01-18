@@ -70,6 +70,14 @@ public class NewsRepositriesImpl implements NewsRepositories {
 				+ " WHERE news_id=4) WHERE news_id=4";
 		return jdbcTemplate.update(sql,newsid);
 	}
+	
+	@Override
+	public int updateView(int newsid) {
+		// TODO Auto-generated method stub
+		String sql="UPDATE tbnews SET news_hit=news_hit+1 WHERE news_id=?";
+		return jdbcTemplate.update(sql,newsid);
+	}
+
 
 	/*@Override
 	public NewsDTO listNewsData(int newsid, int userid) {
@@ -496,6 +504,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		}
 	}
 
+	
 
 
 
