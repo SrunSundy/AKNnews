@@ -193,7 +193,6 @@ public class NewsRestController {
 	@RequestMapping(value="/savelist", method= RequestMethod.POST )
 	public ResponseEntity<Map<String,Object>> saveNews(@RequestBody FrmSaveListAdd savenews){
 		
-		System.err.println("Save news");
 		Map<String, Object> map  = new HashMap<String, Object>();
 	
 		if(newsservice.saveNews(savenews)>0){
@@ -204,6 +203,26 @@ public class NewsRestController {
 								(map, HttpStatus.OK);
 		}else{
 			map.put("MESSAGE","SAVE FAILS.");
+			map.put("STATUS", HttpStatus.NOT_FOUND.value());
+			return new ResponseEntity<Map<String,Object>>
+								(map, HttpStatus.OK);
+		}
+		
+	}
+	
+	@RequestMapping(value="/viewcount/{newsid}", method= RequestMethod.PATCH )
+	public ResponseEntity<Map<String,Object>> updateView(@PathVariable("newsid") int newsid){
+		
+		Map<String, Object> map  = new HashMap<String, Object>();
+	
+		if(newsservice.updateView(newsid)>0){
+			
+			map.put("MESSAGE","Count success");
+			map.put("STATUS", HttpStatus.OK.value());
+			return new ResponseEntity<Map<String,Object>>
+								(map, HttpStatus.OK);
+		}else{
+			map.put("MESSAGE","Count fails");
 			map.put("STATUS", HttpStatus.NOT_FOUND.value());
 			return new ResponseEntity<Map<String,Object>>
 								(map, HttpStatus.OK);
