@@ -11,7 +11,7 @@ import com.spring.akn.entities.user.User;
 public interface UserServices {
 	public int userRegister(FrmUserAdd user);
 	public User userLogin(FrmUserLogin user);
-	/*public int enableUser(int id);*/
+	public int enableUser(int id);
 	public int updateUser(FrmUserUpdate user);
 	public User getUser(int id);
 	public int changePassword(FrmUserChangePwd user);

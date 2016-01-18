@@ -29,9 +29,9 @@ public class UserServicesImpl implements UserServices{
 	}
 
 
-/*	public int enableUser(int id) {
+	public int enableUser(int id) {
 		return userRespositories.enableUser(id);
-	}*/
+	}
 
 	
 	public int updateUser(FrmUserUpdate user) {

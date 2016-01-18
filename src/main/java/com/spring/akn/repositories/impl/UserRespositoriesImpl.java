@@ -62,11 +62,11 @@ public class UserRespositoriesImpl implements UserRespositories {
 		}
 	}
 
-	/*
-	 * public int enableUser(int id) { String sql=
-	 * "UPDATE tbuser SET enabled=(SELECT CASE WHEN enabled =false THEN true ELSE false END FROM tbuser WHERE user_id=?) WHERE user_id=?"
-	 * ; return jdbcTemplate.update(sql,id,id); }
-	 */
+	
+	  public int enableUser(int id) { String sql=
+	  "UPDATE tbuser SET enabled=(SELECT CASE WHEN enabled =false THEN true ELSE false END FROM tbuser WHERE user_id=?) WHERE user_id=?"; 
+	  return jdbcTemplate.update(sql,id,id); }
+	 
 
 	public int updateUser(FrmUserUpdate user) {
 		String sql = "UPDATE tbuser SET user_name=? WHERE user_id=?";

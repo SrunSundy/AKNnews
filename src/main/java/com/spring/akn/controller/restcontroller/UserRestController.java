@@ -77,21 +77,21 @@ public class UserRestController {
 		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 	}
 
-	/*
-	 * //User Status process
-	 * 
-	 * @RequestMapping(value="toggle/{id}",method=RequestMethod.PATCH) public
-	 * ResponseEntity<Map<String,Object>> toggleStatus(@PathVariable("id") int
-	 * id) { Map<String,Object> map=new HashMap<String, Object>();
-	 * if(userServices.enableUser(id)==0){ map.put("STATUS",
-	 * HttpStatus.NOT_FOUND.value()); map.put("MESSAGE",
-	 * "FAILD TO UPDTE USERT STATUS"); return new
-	 * ResponseEntity<Map<String,Object>>(map,HttpStatus.OK); }
-	 * 
-	 * map.put("STATUS", HttpStatus.FOUND.value()); map.put("MESSAGE",
-	 * "SUCCESS TO UPDTE USERT STATUS"); return new
-	 * ResponseEntity<Map<String,Object>>(map,HttpStatus.OK); }
-	 */
+	
+	 //User Status process
+	 
+	  @RequestMapping(value="toggle/{id}",method=RequestMethod.PATCH) public
+	  ResponseEntity<Map<String,Object>> toggleStatus(@PathVariable("id") int
+	  id) { Map<String,Object> map=new HashMap<String, Object>();
+	  if(userServices.enableUser(id)==0){ map.put("STATUS",
+	  HttpStatus.NOT_FOUND.value()); map.put("MESSAGE",
+	  "FAILD TO UPDTE USERT STATUS"); return new
+	  ResponseEntity<Map<String,Object>>(map,HttpStatus.OK); }
+	  
+	  map.put("STATUS", HttpStatus.FOUND.value()); map.put("MESSAGE",
+	  "SUCCESS TO UPDTE USERT STATUS"); return new
+	  ResponseEntity<Map<String,Object>>(map,HttpStatus.OK); }
+	 
 
 	// change password process
 	@RequestMapping(value = "/changepwd", method = RequestMethod.PUT)

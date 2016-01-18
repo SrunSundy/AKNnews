@@ -56,6 +56,7 @@ public class SecurityAPIDoc extends WebSecurityConfigurerAdapter {
 		.logout()
 		.logoutUrl("/logout")
 		.logoutSuccessUrl("/login?logout")
+		
 		.invalidateHttpSession(true)
 		.deleteCookies("JESSIONID")
 		.permitAll();
