@@ -296,5 +296,28 @@ public class NewsRestController {
 		}
 	}
 	
+	@RequestMapping(value="/scrap/", method=RequestMethod.POST)
+	public ResponseEntity<Map<String,Object>> scrapAllSite(){
+		
+		System.err.println("scraping controller...");
+		
+		Map<String, Object> map  = new HashMap<String, Object>();
+		try{
+			int row_affected = scrapservice.scrapAllSites();
+			System.out.println(row_affected);
+			
+			map.put("ROW_AFFECTED", row_affected);
+			map.put("MESSAGE","NEWS HAS BEEN INSERTED.");
+			map.put("STATUS", HttpStatus.OK.value());
+			return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
+			
+		}catch(Exception ex){
+			map.put("MESSAGE","SCRAP FAILED.");
+			map.put("STATUS", HttpStatus.NOT_FOUND.value());
+			return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
+		}
+	}
+	
+	
 	
 }
