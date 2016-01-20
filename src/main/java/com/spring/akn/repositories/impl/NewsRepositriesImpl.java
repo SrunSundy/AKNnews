@@ -45,9 +45,9 @@ public class NewsRepositriesImpl implements NewsRepositories {
 	@Override
 	public int insertNews(NewsDTO news) {
 		
-		String sql="INSERT INTO tbnews(news_title,news_description,news_img,news_url,category_id,news_content) "
-				+ "VALUES(?,?,?,?,?,?)";
-		return jdbcTemplate.update(sql,news.getTitle(),news.getDescription(),news.getImage(),"sssssssssssssss",
+		String sql="INSERT INTO tbnews(news_title,news_description,news_img,news_url,category_id,source_id,news_content) "
+				+ "VALUES(?,?,?,?,?,?,?)";
+		return jdbcTemplate.update(sql,news.getTitle(),news.getDescription(),news.getImage(),"news.khmeracademy.com",6,
 				news.getCategory().getId(),news.getContent());
 	}
 
