@@ -42,7 +42,7 @@ public class SiteDaoImpl implements SiteDAO {
 
 	@Override
 	public List<SiteDTO> listSite() {
-		String sql = "SELECT s_id, s_name, s_url, s_logo,s_basepath FROM tbsite;";
+		String sql = "SELECT s_id, s_name, s_url, s_logo,s_basepath FROM tbsite ORDER BY s_id ASC;";
 		return getJdbcTemplate().query(sql , new SiteRowMapper() );
 	}
 
@@ -54,8 +54,8 @@ public class SiteDaoImpl implements SiteDAO {
 
 	@Override
 	public boolean isDeleteSiteById(int id) {
-		String sql = "DELETE FROM tbsite WHERE s_id = ? ;";
-		int result = getJdbcTemplate().update(sql , new Object[]{id});
+		String sql = "DELETE FROM tbsite WHERE s_id = ? AND (SELECT source_id FROM tbnews WHERE tbnews.source_id = ?) ISNULL ;";
+		int result = getJdbcTemplate().update(sql , new Object[]{id,id});
 		if (result > 0)
 			return true;
 		return false;
@@ -63,8 +63,8 @@ public class SiteDaoImpl implements SiteDAO {
 
 	@Override
 	public boolean isInsertSite(SiteDTO siteDTO) {
-		String sql = "INSERT INTO tbsite(s_name, s_url) VALUES(?,?)";
-		int result = getJdbcTemplate().update(sql , new Object[]{siteDTO.getName(), siteDTO.getUrl()});
+		String sql = "INSERT INTO tbsite(s_name, s_url, s_basepath) VALUES(?,?,?)";
+		int result = getJdbcTemplate().update(sql , new Object[]{siteDTO.getName(), siteDTO.getUrl(),siteDTO.getBasepath()});
 		if (result > 0)
 			return true;
 		return false;
@@ -72,8 +72,8 @@ public class SiteDaoImpl implements SiteDAO {
 
 	@Override
 	public boolean isUpdateSite(SiteDTO siteDTO) {
-		String sql = "UPDATE tbsite SET s_name=?, s_url=? WHERE s_id = ? ;";
-		int result = getJdbcTemplate().update(sql , new Object[]{siteDTO.getName(), siteDTO.getUrl(), siteDTO.getId()});
+		String sql = "UPDATE tbsite SET s_name=?, s_url=? ,s_basepath=? WHERE s_id = ?";
+		int result = getJdbcTemplate().update(sql , new Object[]{siteDTO.getName(), siteDTO.getUrl(), siteDTO.getBasepath(), siteDTO.getId()});
 		if (result > 0)
 			return true;
 		return false;
@@ -181,8 +181,8 @@ public class SiteDaoImpl implements SiteDAO {
 			dto.setId(rs.getInt("s_id"));
 			dto.setName(rs.getString("s_name"));
 			dto.setUrl(rs.getString("s_url"));
-			dto.setUrl(rs.getString("s_logo"));
-			dto.setUrl(rs.getString("s_basepath"));
+			dto.setLogo(rs.getString("s_logo"));
+			dto.setBasepath(rs.getString("s_basepath"));
 			return dto;
 		}		
 	}
@@ -195,8 +195,8 @@ public class SiteDaoImpl implements SiteDAO {
 				dto.setId(rs.getInt("s_id"));
 				dto.setName(rs.getString("s_name"));
 				dto.setUrl(rs.getString("s_url"));
-				dto.setUrl(rs.getString("s_logo"));
-				dto.setUrl(rs.getString("s_basepath"));
+				dto.setLogo(rs.getString("s_logo"));
+				dto.setBasepath(rs.getString("s_basepath"));
 				return dto;
 			}
 			return null;

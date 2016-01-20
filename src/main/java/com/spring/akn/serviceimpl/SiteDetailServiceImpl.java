@@ -1,8 +1,11 @@
 package com.spring.akn.serviceimpl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.spring.akn.entities.SiteDetailDTO;
 import com.spring.akn.repositories.SiteDetailDAO;
 import com.spring.akn.services.SiteDetailServices;
 
@@ -12,13 +15,13 @@ public class SiteDetailServiceImpl implements SiteDetailServices{
 	private SiteDetailDAO siteDetailDAO;
 
 	@Override
-	public boolean isInsertSiteDetail(int s_id, int c_id, String url) {
-		return siteDetailDAO.isInsertSiteDetail(s_id, c_id, url);
+	public boolean isInsertSiteDetail(SiteDetailDTO siteDetailDTO) {
+		return siteDetailDAO.isInsertSiteDetail(siteDetailDTO);
 	}
 
 	@Override
-	public boolean isUpdateSiteDetail(int s_id, int c_id, String url) {
-		return siteDetailDAO.isUpdateSiteDetail(s_id, c_id, url);
+	public boolean isUpdateSiteDetail(SiteDetailDTO siteDetailDTO) {
+		return siteDetailDAO.isUpdateSiteDetail( siteDetailDTO);
 	}
 
 	@Override
@@ -29,6 +32,11 @@ public class SiteDetailServiceImpl implements SiteDetailServices{
 	@Override
 	public boolean isToggleStatusSiteDetail(int s_id, int c_id) {
 		return siteDetailDAO.isToggleStatusSiteDetail(s_id, c_id);
+	}
+
+	@Override
+	public List<SiteDetailDTO> listSiteDetail() {
+		return siteDetailDAO.listSiteDetail();
 	}
 	
 	

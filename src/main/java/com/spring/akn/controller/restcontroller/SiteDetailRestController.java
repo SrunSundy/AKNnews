@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import static java.lang.Math.toIntExact;
 
 import com.mangofactory.swagger.annotations.ApiIgnore;
+import com.spring.akn.entities.SiteDetailDTO;
 import com.spring.akn.services.SiteDetailServices;
 
 @RestController
@@ -32,16 +34,10 @@ public class SiteDetailRestController {
 	 */
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
-	public ResponseEntity<Map<String, Object>> insertSiteDetail(@RequestBody String siteDetail) throws ParseException {
+	public ResponseEntity<Map<String, Object>> insertSiteDetail(@RequestBody SiteDetailDTO siteDetail){
 		Map<String, Object> map = new HashMap<String, Object>();
-		JSONParser jsonParser = new JSONParser();
-		JSONObject jsonObject = (JSONObject) jsonParser.parse(siteDetail);
-		
-		String s_id = (String) jsonObject.get("s_id");
-		String c_id = (String) jsonObject.get("c_id");
-		String url = (String) jsonObject.get("url");
-
-		if (siteDetailServices.isInsertSiteDetail(Integer.parseInt(s_id), Integer.parseInt(c_id), url)) {
+		System.out.println("site Detai "+ siteDetail);
+		if (siteDetailServices.isInsertSiteDetail( siteDetail )) {
 			map.put("STATUS", HttpStatus.OK.value());
 			map.put("MESSAGE", "SITE DETAIL INSERT SUCCESS!");
 			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
@@ -51,6 +47,23 @@ public class SiteDetailRestController {
 		map.put("MESSAGE", "SITEDETAIL INSERT FAIL!");
 		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public ResponseEntity<Map<String, Object>> listSiteDetail() throws ParseException {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		if (!siteDetailServices.listSiteDetail().isEmpty()) {
+			map.put("STATUS", HttpStatus.OK.value());
+			map.put("MESSAGE", "SITE DETAIL LIST DATA SUCCESS!");
+			map.put("DATA", siteDetailServices.listSiteDetail() );
+			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+		}
+
+		map.put("STATUS", HttpStatus.NOT_FOUND.value());
+		map.put("MESSAGE", "SITED ETAIL LIST DATA  FAIL!");
+		map.put("DATA", siteDetailServices.listSiteDetail() );
+		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+	}
 
 	/**
 	 * Update sitedetail data
@@ -58,16 +71,10 @@ public class SiteDetailRestController {
 	 * @throws ParseException 
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.PUT)
-	public ResponseEntity<Map<String, Object>> updateSiteDetail(@RequestBody String siteDetail) throws ParseException {
+	public ResponseEntity<Map<String, Object>> updateSiteDetail(@RequestBody SiteDetailDTO siteDetail){
 		Map<String, Object> map = new HashMap<String, Object>();
-		JSONParser jsonParser = new JSONParser();
-		JSONObject jsonObject = (JSONObject) jsonParser.parse(siteDetail);
-		
-		String s_id = (String) jsonObject.get("s_id");
-		String c_id = (String) jsonObject.get("c_id");
-		String url = (String) jsonObject.get("url");
-		
-		if (siteDetailServices.isUpdateSiteDetail(Integer.parseInt(s_id), Integer.parseInt(c_id), url)) {
+		System.out.println("site Detai "+ siteDetail);
+		if (siteDetailServices.isUpdateSiteDetail( siteDetail )) {
 			map.put("STATUS", HttpStatus.OK.value());
 			map.put("MESSAGE", "SITE DETAIL UPDATE SUCCESS!");
 			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
@@ -103,7 +110,7 @@ public class SiteDetailRestController {
 	 * @param c_id
 	 * @return
 	 */
-	@RequestMapping(value="/{s_id}/{c_id}", method = RequestMethod.PATCH)
+	@RequestMapping(value="/toggle/{s_id}/{c_id}", method = RequestMethod.PATCH)
 	public ResponseEntity<Map<String, Object>> toggleStatusSiteDetail(@PathVariable("s_id")int s_id, 
 			@PathVariable("c_id")int c_id){
 		Map<String, Object> map = new HashMap<String, Object>();
