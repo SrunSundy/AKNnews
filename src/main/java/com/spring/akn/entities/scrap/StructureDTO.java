@@ -14,6 +14,7 @@ public class StructureDTO {
 	private String titleSelector;
 	private String descriptionSelector;
 	private String contentSelector;
+	private String logo;
 	
 	public int getId() {
 		return id;
@@ -98,6 +99,12 @@ public class StructureDTO {
 	}
 	public void setSaved(boolean isSaved) {
 		this.isSaved = isSaved;
+	}
+	public String getLogo() {
+		return logo;
+	}
+	public void setLogo(String logo) {
+		this.logo = logo;
 	}
 	
 }
