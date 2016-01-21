@@ -203,6 +203,29 @@ public class NewsRestController {
 		
 	}
 	
+	@ApiIgnore
+	@RequestMapping(value="/detail/{newsid}",method=RequestMethod.GET)
+	public ResponseEntity<Map<String,Object>> getANews(@PathVariable("newsid") int newsid){
+		
+		
+		NewsDTO news= newsservice.listAData(newsid);
+		System.err.println(news);
+		Map<String, Object> map = new HashMap<String,Object>();
+		if(news == null){
+			map.put("STATUS", HttpStatus.NOT_FOUND.value());
+			map.put("MESSAGE", "NEWS NOT FOUND...");
+			return new ResponseEntity<Map<String,Object>>
+										(map,HttpStatus.OK);
+		}
+		map.put("STATUS", HttpStatus.OK.value());
+		map.put("MESSAGE", "NEWS HAS BEEN FOUND");
+		map.put("RESPONSE_DATA", news);
+		return new ResponseEntity<Map<String,Object>>
+									(map,HttpStatus.OK);	
+	}
+	
+	
+	
 	
 	@RequestMapping(value="/search", method=RequestMethod.POST)
 	public ResponseEntity<Map<String,Object>> searchNews(@RequestBody SearchNewsDTO search){

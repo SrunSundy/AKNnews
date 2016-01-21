@@ -26,6 +26,8 @@ public interface NewsRepositories {
 	
 	public List<NewsDTO> getPopularNews(int userid);
 	
+	public NewsDTO listAData(int newsid);
+	
 	public int getNewsTotalPage(String key,int row,int categoryid,int siteid,int userid); 
 	
 	public int getNewsTotalRecords(String key,int categoryid,int siteid,int userid);

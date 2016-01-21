@@ -45,10 +45,14 @@ public class NewsRepositriesImpl implements NewsRepositories {
 	@Override
 	public int insertNews(NewsDTO news) {
 		
+		int newsid=getCurSequence()+1;
+		System.err.println(newsid);
+		String url="news.khmeracademy.com/"+newsid;
+		
 		String sql="INSERT INTO tbnews(news_title,news_description,news_img,news_url,category_id,source_id,news_content) "
 				+ "VALUES(?,?,?,?,?,?,?)";
-		return jdbcTemplate.update(sql,news.getTitle(),news.getDescription(),news.getImage(),"news.khmeracademy.com",6,
-				news.getCategory().getId(),news.getContent());
+		return jdbcTemplate.update(sql,news.getTitle(),news.getDescription(),news.getImage(),url,
+				news.getCategory().getId(),6,news.getContent());
 	}
 
 	@Override
@@ -82,6 +86,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 	}
 
 
+	
 	/*@Override
 	public NewsDTO listNewsData(int newsid, int userid) {
 		
@@ -491,6 +496,20 @@ public class NewsRepositriesImpl implements NewsRepositories {
 	}*/
 	//END LIST NEWS DETAIL
 	
+	
+	public int getCurSequence(){
+		String sql="SELECT last_value FROM tbnews_news_id_seq;";
+		return jdbcTemplate.queryForObject(sql, Integer.class);
+	}
+
+	@Override
+	public NewsDTO listAData(int newsid) {
+		// TODO Auto-generated method stub
+		String sql="SELECT news_title,news_description,news_img,news_url,category_id,news_content,news_status FROM tbnews WHERE news_id=?";
+		return jdbcTemplate.queryForObject(sql, new Object[]{newsid},new GetAnNewsMapper());
+	}
+	
+	
 	private static final class GetNewsWithUserIDMapper implements RowMapper<NewsDTO>{		
 		public NewsDTO mapRow(ResultSet rs, int row) throws SQLException {
 			NewsDTO news = new NewsDTO();
@@ -549,6 +568,26 @@ public class NewsRepositriesImpl implements NewsRepositories {
 			return news;
 		}
 	}
+
+	private static final class GetAnNewsMapper implements RowMapper<NewsDTO>{		
+		public NewsDTO mapRow(ResultSet rs, int row) throws SQLException {
+			NewsDTO news = new NewsDTO();
+			
+			news.setTitle(rs.getString("news_title"));
+			news.setDescription(rs.getString("news_description"));
+			news.setImage(rs.getString("news_img"));
+			news.setStatus(rs.getBoolean("news_status"));
+			news.setContent(rs.getString("news_content"));
+			news.setUrl(rs.getString("news_url"));
+			
+			CategoryDTO category=new CategoryDTO();
+			category.setId(rs.getInt("category_id"));
+		
+			news.setCategory(category);
+			return news;
+		}
+	}
+	
 
 	
 

@@ -23,6 +23,8 @@ public interface NewsService {
 	
 	public List<NewsDTO> searchNews(SearchNewsDTO search);
 	
+	public NewsDTO listAData(int newsid);
+	
 	public int getNewsTotalPage(String key,int row,int categoryid,int siteid,int userid);
 	
 	public int getNewsTotalRecords(String key,int categoryid,int siteid,int userid);

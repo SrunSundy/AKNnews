@@ -100,6 +100,12 @@ public class NewsServiceImpl implements NewsService{
 		return newsrepository.updateView(newsid);
 	}
 
+	@Override
+	public NewsDTO listAData(int newsid) {
+		// TODO Auto-generated method stub
+		return newsrepository.listAData(newsid);
+	}
+
 	
 
 }
