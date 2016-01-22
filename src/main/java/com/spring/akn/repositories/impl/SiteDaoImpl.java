@@ -96,6 +96,8 @@ public class SiteDaoImpl implements SiteDAO {
 	
 	public boolean isUUID(String filename){
 		//String filename = "4a6978a5-ec94-484f-88c1-51f3ee52221e.png"; //define it!
+		if ( filename == null)
+			return false;
 		String[] fn = filename.split("\\.");
 		System.out.println(fn[0]);		
 		if (fn[0].matches("[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}")) {
@@ -117,7 +119,7 @@ public class SiteDaoImpl implements SiteDAO {
 	            String randowFileName = null;
 	            
 	            
-				if (!isUUID(getLogoName(s_id))){
+				if (!isUUID(getLogoName(s_id)) ){
 		            //for random file name
 		            randowFileName=uuid+"."+extension;
 				}else{
