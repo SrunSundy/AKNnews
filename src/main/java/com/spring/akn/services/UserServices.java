@@ -15,8 +15,10 @@ public interface UserServices {
 	public int updateUser(FrmUserUpdate user);
 	public User getUser(int id);
 	public int changePassword(FrmUserChangePwd user);
-    public List<User> listUser(String key,int page);
+    public List<User> listUser(String key,int page,int row);
     public String getCurrentImage(int id);
     public int updateUserImage(String imagename,int id);
-    public int addUserRole(int uid,int rid);
+    public User findUserByUserName(String username);
+	public int getUserTotalPage(String key,int row); 
+	public int getUserTotalRecords(String key);
 }
