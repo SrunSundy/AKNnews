@@ -50,8 +50,8 @@ public class UserServicesImpl implements UserServices{
 
 
 	@Override
-	public List<User> listUser(String key, int page) {
-		return userRespositories.listUser(key, page);
+	public List<User> listUser(String key, int page,int row) {
+		return userRespositories.listUser(key, page,row);
 	}
 
 
@@ -65,9 +65,24 @@ public class UserServicesImpl implements UserServices{
 	public int updateUserImage(String imagename, int id) {
 		return userRespositories.updateUserImage(imagename, id);
 	}
-	
+
+
 	@Override
-	public int addUserRole(int uid, int rid) {
-		return userRespositories.addUserRole(uid, rid);
+	public User findUserByUserName(String username) {
+		return userRespositories.findUserByUserName(username);
+	}
+
+
+	@Override
+	public int getUserTotalPage(String key, int row) {
+		
+		return userRespositories.getUserTotalPage(key, row);
+	}
+
+
+	@Override
+	public int getUserTotalRecords(String key) {
+	
+		return userRespositories.getUserTotalRecords(key);
 	}
 }
