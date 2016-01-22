@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.spring.akn.entities.frmApiDoc.FrmLogin;
 import com.spring.akn.entities.frmApiDoc.FrmUserAdd;
 import com.spring.akn.entities.frmApiDoc.FrmUserChangePwd;
 import com.spring.akn.entities.frmApiDoc.FrmUserLogin;
@@ -77,21 +78,21 @@ public class UserRestController {
 		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 	}
 
-	
-	 //User Status process
-	 
-	  @RequestMapping(value="toggle/{id}",method=RequestMethod.PATCH) public
-	  ResponseEntity<Map<String,Object>> toggleStatus(@PathVariable("id") int
-	  id) { Map<String,Object> map=new HashMap<String, Object>();
-	  if(userServices.enableUser(id)==0){ map.put("STATUS",
-	  HttpStatus.NOT_FOUND.value()); map.put("MESSAGE",
-	  "FAILD TO UPDTE USERT STATUS"); return new
-	  ResponseEntity<Map<String,Object>>(map,HttpStatus.OK); }
-	  
-	  map.put("STATUS", HttpStatus.FOUND.value()); map.put("MESSAGE",
-	  "SUCCESS TO UPDTE USERT STATUS"); return new
-	  ResponseEntity<Map<String,Object>>(map,HttpStatus.OK); }
-	 
+	// User Status process
+
+	@RequestMapping(value = "toggle/{id}", method = RequestMethod.PATCH)
+	public ResponseEntity<Map<String, Object>> toggleStatus(@PathVariable("id") int id) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		if (userServices.enableUser(id) == 0) {
+			map.put("STATUS", HttpStatus.NOT_FOUND.value());
+			map.put("MESSAGE", "FAILD TO UPDTE USERT STATUS");
+			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+		}
+
+		map.put("STATUS", HttpStatus.FOUND.value());
+		map.put("MESSAGE", "SUCCESS TO UPDTE USERT STATUS");
+		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+	}
 
 	// change password process
 	@RequestMapping(value = "/changepwd", method = RequestMethod.PUT)
@@ -135,16 +136,18 @@ public class UserRestController {
 	}
 
 	// list user
-	@RequestMapping(value = "/{page}/{key}", method = RequestMethod.GET)
-	public ResponseEntity<Map<String, Object>> listUser(@PathVariable("page") int page,
+	@RequestMapping(value = "/{page}/{row}/{key}", method = RequestMethod.GET)
+	public ResponseEntity<Map<String, Object>> listUser(@PathVariable("page") int page,@PathVariable("row") int row,
 			@PathVariable("key") String key) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		if (userServices.listUser(key, page) == null) {
+		if (userServices.listUser(key, page,row) == null) {
 			map.put("STATUS", HttpStatus.NOT_FOUND.value());
 			map.put("MESSAGE", "USER NOT FOUND");
 			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 		}
-		map.put("DATA", userServices.listUser(key, page));
+		map.put("DATA", userServices.listUser(key, page,row));
+		map.put("TOTALPAGE", userServices.getUserTotalPage(key, row));
+		map.put("TOTALRECORD", userServices.getUserTotalRecords(key));
 		map.put("STATUS", HttpStatus.FOUND.value());
 		map.put("MESSAGE", "USER FOUND");
 		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
@@ -197,13 +200,13 @@ public class UserRestController {
 				String originalFilename = file.getOriginalFilename();
 				String extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
 
-				if (userServices.getCurrentImage(id).equals("user.jpg")) {
-					// for random file name
-					String randowFileName = uuid + "." + extension;
-					userServices.updateUserImage(randowFileName, id);
-				}
 				if (extension.equals("jpg") || extension.equals("png") || extension.equals("jpeg")
 						|| extension.equals("gif")) {
+					if (userServices.getCurrentImage(id).equals("user.jpg")) {
+						// for random file name
+						String randowFileName = uuid + "." + extension;
+						userServices.updateUserImage(randowFileName, id);
+					}
 					// for random file name
 					String randowFileName = userServices.getCurrentImage(id);
 					String filename = randowFileName;
@@ -242,4 +245,22 @@ public class UserRestController {
 		}
 		return null;
 	}
+	
+	// web user login 
+	@RequestMapping(value = "/weblogin", method = RequestMethod.POST)
+	public ResponseEntity<Map<String, Object>> webLogin(@RequestBody FrmLogin frmLogin) {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		if (userServices.findUserByUserName(frmLogin.getEmail())==null) {
+			map.put("STATUS", HttpStatus.NOT_FOUND.value());
+			map.put("MESSAGE", "USER NOT FOUND");
+			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+		}
+		map.put("DATA", userServices.findUserByUserName(frmLogin.getEmail()));
+		map.put("STATUS", HttpStatus.FOUND.value());
+		map.put("MESSAGE", "USER FOUND");
+		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+	}
+   
+
 }
