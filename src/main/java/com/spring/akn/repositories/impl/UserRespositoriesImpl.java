@@ -10,6 +10,7 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -36,10 +37,14 @@ public class UserRespositoriesImpl implements UserRespositories {
 	}
 
 	public int userRegister(FrmUserAdd user) {
-		String sql = "INSERT INTO tbuser(user_name, user_email, user_password, user_image) VALUES(?,?,?,?)";
-		user.setImage("user.jpg");
-		Object[] obj = { user.getUsername(), user.getEmail(), user.getPassword(), user.getImage() };
-		return jdbcTemplate.update(sql, obj);
+		try {
+			String sql = "INSERT INTO tbuser(user_name, user_email, user_password, user_image) VALUES(?,?,?,?)";
+			user.setImage("user.jpg");
+			Object[] obj = { user.getUsername(), user.getEmail(), user.getPassword(), user.getImage() };
+			return jdbcTemplate.update(sql, obj);
+		} catch (DuplicateKeyException ex) {
+			return 0;
+		}
 	}
 
 	public User userLogin(FrmUserLogin user) {
@@ -62,11 +67,10 @@ public class UserRespositoriesImpl implements UserRespositories {
 		}
 	}
 
-	
-	  public int enableUser(int id) { String sql=
-	  "UPDATE tbuser SET enabled=(SELECT CASE WHEN enabled =false THEN true ELSE false END FROM tbuser WHERE user_id=?) WHERE user_id=?"; 
-	  return jdbcTemplate.update(sql,id,id); }
-	 
+	public int enableUser(int id) {
+		String sql = "UPDATE tbuser SET enabled=(SELECT CASE WHEN enabled =false THEN true ELSE false END FROM tbuser WHERE user_id=?) WHERE user_id=?";
+		return jdbcTemplate.update(sql, id, id);
+	}
 
 	public int updateUser(FrmUserUpdate user) {
 		String sql = "UPDATE tbuser SET user_name=? WHERE user_id=?";
@@ -97,19 +101,13 @@ public class UserRespositoriesImpl implements UserRespositories {
 	}
 
 	@Override
-	public List<User> listUser(String key, int page) {
-		int offset = (page * 10) - 10;
-		if ((page == 0 && key.equals("*")) || page == 0) {
-			if (page == 0 && key.equals("*"))
-				key = "%";
-			return jdbcTemplate.query(
-					"SELECT  user_id, user_name, user_email, user_image, enabled FROM tbuser WHERE UPPER(user_name) LIKE UPPER(?) ORDER BY user_id DESC",
-					new Object[] { "%" + key + "%" }, new UserMapper());
-		} else if ((page != 0 && key.equals("*")))
-			key = "%";
+	public List<User> listUser(String key, int page,int row) {
+		if(row<=15){row=15;}
+		int offset = (page * row) - row;
+	    if ((page != 0 && key.equals("*"))){key = "%";}
 		return jdbcTemplate.query(
-				"SELECT user_id, user_name, user_email, user_image, enabled FROM tbuser WHERE UPPER(user_name) LIKE UPPER(?) ORDER BY user_id DESC LIMIT 10 OFFSET ?",
-				new Object[] { "%" + key + "%", offset }, new UserMapper());
+				"SELECT user_id, user_name, user_email, user_image, enabled FROM tbuser WHERE UPPER(user_name) LIKE UPPER(?) ORDER BY user_id DESC LIMIT ? OFFSET ?",
+				new Object[] { "%" + key + "%",row,offset }, new UserMapper());
 	}
 
 	// cLass user for wrapper user information
@@ -136,14 +134,15 @@ public class UserRespositoriesImpl implements UserRespositories {
 		}
 	}
 
-	public int updateUserImage(String imagename,int id) {
+	public int updateUserImage(String imagename, int id) {
 		String sql = "UPDATE tbuser SET user_image=? WHERE user_id=?";
-		return jdbcTemplate.update(sql, new Object[] { imagename,id});
+		return jdbcTemplate.update(sql, new Object[] { imagename, id });
 	};
 
 	@Override
 	public User findUserByUserName(String username) {
-		String sql = "SELECT user_id, user_name, user_email, user_password, enabled FROM tbuser WHERE user_name = ?";
+		
+		String sql = "SELECT user_id, user_name, user_email, user_password, enabled FROM tbuser WHERE user_email = ?";
 		try (Connection cnn = dataSource.getConnection(); PreparedStatement ps = cnn.prepareStatement(sql);) {
 			ps.setString(1, username);
 			ResultSet rs = ps.executeQuery();
@@ -165,6 +164,7 @@ public class UserRespositoriesImpl implements UserRespositories {
 	}
 
 	public List<Role> findUserRoleByUserId(int id) {
+		
 		List<Role> roles = new ArrayList<Role>();
 		String sql = "SELECT tbrole.role_id, tbrole.role_name FROM tbuser "
 				+ "LEFT JOIN tbuser_role ON tbuser.user_id = tbuser_role.user_id "
@@ -185,9 +185,20 @@ public class UserRespositoriesImpl implements UserRespositories {
 	}
 
 	@Override
-	public int addUserRole(int uid, int rid) {
-		String sql = "INSERT INTO tbuser_role(role_id, user_id) VALUES(?,?)";
-		Object[] obj = { rid,uid };
-		return jdbcTemplate.update(sql, obj);
+	public int getUserTotalPage(String key, int row) {
+		if(row <=0 ) row=10;
+		if (key.equals("*")){key = "%";}
+			String sql="SELECT CASE WHEN COUNT(*)% ? !=0 THEN COUNT(*)/ ? +1 "
+					+ "ELSE COUNT(*)/? END user_page FROM tbuser "
+					+ "WHERE user_name LIKE ?";
+			return jdbcTemplate.queryForObject(sql, new Object[]{row,row,row,"%"+key+"%"} ,Integer.class);
+		
+	}
+
+	@Override
+	public int getUserTotalRecords(String key) {
+		if (key.equals("*")){key = "%";}
+		String sql="SELECT COUNT(*) FROM tbuser WHERE user_name LIKE ?";
+		return jdbcTemplate.queryForObject(sql, new Object[]{"%"+key+"%"} ,Integer.class);	
 	}
 }
