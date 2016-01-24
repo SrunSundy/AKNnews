@@ -61,14 +61,14 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		return 0;
 	}
 
-	@Override
+	/*@Override
 	public int updateNews(NewsDTO news) {
 		// TODO Auto-generated method stub
-		String sql="UPDATE tbnews SET  news_title= ?,news_description= ?,news_img =?,news_url =? "
-				+ ",category_id =? ,source_id =?,news_content=? ";
-		return jdbcTemplate.update(sql,news.getTitle(),news.getDescription(),news.getImage(),news.getUrl(),
-				news.getCategory().getId(),news.getSite().getId(),news.getContent());
-	}
+		String sql="UPDATE tbnews SET  news_title= ?,news_description= ?,news_url =? "
+				+ ",category_id =? ,source_id =?,news_content=? WHERE news_id=?";
+		return jdbcTemplate.update(sql,news.getTitle(),news.getDescription(),news.getUrl(),
+				news.getCategory().getId(),news.getSite().getId(),news.getContent(),news.getId());
+	}*/
 
 	@Override
 	public int toggleNews(int newsid) {
@@ -587,11 +587,79 @@ public class NewsRepositriesImpl implements NewsRepositories {
 			return news;
 		}
 	}
-	
+	//get news info
+	@Override
+	public String getNewsTitle(int newsid) {
+		// TODO Auto-generated method stub
+		String sql="SELECT news_title FROM tbnews WHERE news_id=?";
+		return jdbcTemplate.queryForObject(sql, new Object[]{newsid},String.class);
+	}
+
+	@Override
+	public String getNewsDescription(int newsid) {
+		// TODO Auto-generated method stub
+		String sql="SELECT news_description FROM tbnews WHERE news_id=?";
+		return jdbcTemplate.queryForObject(sql, new Object[]{newsid},String.class);
+	}
+
+	@Override
+	public String getNewsThumbnail(int newsid) {
+		// TODO Auto-generated method stub
+		String sql="SELECT news_img FROM tbnews WHERE news_id=?";
+		return jdbcTemplate.queryForObject(sql, new Object[]{newsid},String.class);
+	}
+
+	@Override
+	public String getNewsContent(int newsid) {
+		// TODO Auto-generated method stub
+		String sql="SELECT news_content FROM tbnews WHERE news_id=?";
+		return jdbcTemplate.queryForObject(sql, new Object[]{newsid},String.class);
+	}
 
 	
+	//update news info
+	/*s
+	 * (non-Javadoc)
+	 * @see com.spring.akn.repositories.NewsRepositories#updateNewsTitle(int, java.lang.String)
+	 */
+	
+	@Override
+	public int updateNewsTitle(NewsDTO news) {
+		// TODO Auto-generated method stub
+		String sql="UPDATE tbnews SET  news_title= ? WHERE news_id=?";
+		return jdbcTemplate.update(sql,news.getTitle(),news.getId());
+	}
 
+	@Override
+	public int updateNewsCategory(NewsDTO news) {
+		// TODO Auto-generated method stub
+		String sql="UPDATE tbnews SET category_id =?  WHERE news_id=?";
+		return jdbcTemplate.update(sql,news.getCategory().getId(),news.getId());
+	}
 
+	@Override
+	public int updateNewsDescription(NewsDTO news) {
+		// TODO Auto-generated method stub
+		String sql="UPDATE tbnews SET  news_description= ? WHERE news_id=?";
+		return jdbcTemplate.update(sql,news.getDescription(),news.getId());
+		
+	}
+
+	@Override
+	public int updateNewsThumbnail(NewsDTO news) {
+		// TODO Auto-generated method stub
+		String sql="UPDATE tbnews SET  news_img=? WHERE news_id=?";
+		return jdbcTemplate.update(sql,news.getImage(),news.getId());
+	}
+
+	@Override
+	public int updateNewsContent(NewsDTO news) {
+		// TODO Auto-generated method stub
+		String sql="UPDATE tbnews SET news_content=? WHERE news_id=?";
+		return jdbcTemplate.update(sql,news.getContent(),news.getId());
+	}
+
+	
 
 
 }

@@ -16,7 +16,7 @@ public interface NewsRepositories {
 	
 	public int deleteNews(int newsid);
 	
-	public int updateNews(NewsDTO news);
+	//public int updateNews(NewsDTO news);
 	
 	public int updateView(int newsid);
 	
@@ -27,6 +27,24 @@ public interface NewsRepositories {
 	public List<NewsDTO> getPopularNews(int userid);
 	
 	public NewsDTO listAData(int newsid);
+	
+	public String getNewsTitle(int newsid);
+	
+	public String getNewsDescription(int newsid);
+	
+	public String getNewsThumbnail(int newsid);
+	
+	public String getNewsContent(int newsid);
+	
+	public int updateNewsTitle(NewsDTO news);
+	
+	public int updateNewsCategory(NewsDTO news);
+	
+	public int updateNewsDescription(NewsDTO news);
+	
+	public int updateNewsThumbnail(NewsDTO news);
+	
+	public int updateNewsContent(NewsDTO news);
 	
 	public int getNewsTotalPage(String key,int row,int categoryid,int siteid,int userid); 
 	

@@ -40,11 +40,11 @@ public class NewsServiceImpl implements NewsService{
 		return 0;
 	}
 
-	@Override
+	/*@Override
 	public int updateNews(NewsDTO news) {
 		// TODO Auto-generated method stub
 		return newsrepository.updateNews(news);
-	}
+	}*/
 
 	@Override
 	public int toggleNews(int newsid) {
@@ -105,6 +105,61 @@ public class NewsServiceImpl implements NewsService{
 		// TODO Auto-generated method stub
 		return newsrepository.listAData(newsid);
 	}
+
+	@Override
+	public String getNewsTitle(int newsid) {
+		// TODO Auto-generated method stub
+		return newsrepository.getNewsTitle(newsid);
+	}
+
+	@Override
+	public String getNewsDescription(int newsid) {
+		// TODO Auto-generated method stub
+		return newsrepository.getNewsDescription(newsid);
+	}
+
+	@Override
+	public String getNewsThumbnail(int newsid) {
+		// TODO Auto-generated method stub
+		return newsrepository.getNewsThumbnail(newsid);
+	}
+
+	@Override
+	public String getNewsContent(int newsid) {
+		// TODO Auto-generated method stub
+		return newsrepository.getNewsContent(newsid);
+	}
+
+	@Override
+	public int updateNewsTitle(NewsDTO news) {
+		// TODO Auto-generated method stub
+		return newsrepository.updateNewsTitle(news);
+	}
+
+	@Override
+	public int updateNewsCategory(NewsDTO news) {
+		// TODO Auto-generated method stub
+		return newsrepository.updateNewsCategory(news);
+	}
+
+	@Override
+	public int updateNewsDescription(NewsDTO news) {
+		// TODO Auto-generated method stub
+		return newsrepository.updateNewsDescription(news);
+	}
+
+	@Override
+	public int updateNewsThumbnail(NewsDTO news) {
+		// TODO Auto-generated method stub
+		return newsrepository.updateNewsThumbnail(news);
+	}
+
+	@Override
+	public int updateNewsContent(NewsDTO news) {
+		// TODO Auto-generated method stub
+		return newsrepository.updateNewsContent(news);
+	}
+
 
 	
 
