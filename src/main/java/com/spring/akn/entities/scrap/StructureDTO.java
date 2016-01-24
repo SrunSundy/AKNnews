@@ -1,5 +1,8 @@
 package com.spring.akn.entities.scrap;
 
+import java.sql.Timestamp;
+
+
 public class StructureDTO {
 	private int id;
 	private String url;
@@ -15,6 +18,7 @@ public class StructureDTO {
 	private String descriptionSelector;
 	private String contentSelector;
 	private String logo;
+	private Timestamp date;
 	
 	public int getId() {
 		return id;
@@ -105,6 +109,12 @@ public class StructureDTO {
 	}
 	public void setLogo(String logo) {
 		this.logo = logo;
+	}
+	public Timestamp getDate() {
+		return date;
+	}
+	public void setDate(Timestamp date) {
+		this.date = date;
 	}
 	
 }
