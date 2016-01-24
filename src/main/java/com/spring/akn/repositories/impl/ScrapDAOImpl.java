@@ -179,7 +179,7 @@ public class ScrapDAOImpl implements ScrapDAO {
 	private StructureDTO getSelector(String url, int user_id){
 		
 		String sql = "SELECT (CASE WHEN n.news_id IN (SELECT news_id FROM tbsavelist WHERE user_id=? ) THEN TRUE ELSE FALSE END) AS issaved, " +
-					 "content_selector, n.news_title, n.news_content, n.news_hit, n.news_img, tbsite.s_logo " +
+					 "content_selector, n.news_id, n.news_date, n.news_title, n.news_content, n.news_hit, n.news_img, tbsite.s_logo " +
 				     "FROM tbsite INNER JOIN tbstructure ON tbstructure.id=tbsite.s_id " + 
 					 "INNER JOIN tbnews n ON n.source_id=tbsite.s_id " +
 					 "WHERE ? LIKE '%'|| s_url ||'%' AND n.news_url=?";
@@ -190,6 +190,7 @@ public class ScrapDAOImpl implements ScrapDAO {
 				public StructureDTO mapRow(ResultSet rs, int rowNumber) throws SQLException {
 					StructureDTO structure = new StructureDTO();
 					
+					structure.setId(rs.getInt("news_id"));
 					structure.setSaved(rs.getBoolean("issaved"));
 					structure.setContentSelector(rs.getString("content_selector"));
 					structure.setTitleSelector(rs.getString("news_title"));
@@ -197,6 +198,7 @@ public class ScrapDAOImpl implements ScrapDAO {
 					structure.setContent(rs.getString("news_content"));
 					structure.setImageSelector(rs.getString("news_img"));
 					structure.setLogo(rs.getString("s_logo"));
+					structure.setDate(rs.getTimestamp("news_date"));
 					
 					return structure;
 				}
@@ -210,7 +212,7 @@ public class ScrapDAOImpl implements ScrapDAO {
 	private NewsDTO readAKNNews(int id, int user_id){
 		
 		String sql = "SELECT (CASE WHEN n.news_id IN (SELECT news_id FROM tbsavelist WHERE user_id=?) THEN TRUE ELSE FALSE END) AS issaved, " +
-					 "n.news_title, n.news_content, n.news_hit, n.news_img " + 
+					 "n.news_id, n.news_title, n.news_content, n.news_hit, n.news_img, n.news_date " + 
 					 "FROM tbnews n WHERE n.news_id=? ";
 		try{
 			return jdbcTemplate.queryForObject(sql, new Object[]{user_id, id}, new RowMapper<NewsDTO>() {
@@ -218,11 +220,13 @@ public class ScrapDAOImpl implements ScrapDAO {
 				@Override
 				public NewsDTO mapRow(ResultSet rs, int rowNumber) throws SQLException {
 					NewsDTO news = new NewsDTO();
+					news.setId(rs.getInt("news_id"));
 					news.setContent(rs.getString("news_content"));
 					news.setTitle(rs.getString("news_title"));
 					news.setHit(rs.getInt("news_hit"));
 					news.setSaved(rs.getBoolean("issaved"));
 					news.setImage(rs.getString("news_img"));
+					news.setDate(rs.getTimestamp("news_date"));
 					return news;
 				}
 			});
@@ -248,12 +252,13 @@ public class ScrapDAOImpl implements ScrapDAO {
 			for(Element element : elements){
 				content += element.text() + "\n";
 			}
-			
+			news.setId(st.getId());
 			news.setContent(content);
 			news.setTitle(st.getTitleSelector());
 			news.setHit(st.getHit());
 			news.setSaved(st.isSaved());
 			news.setImage(st.getImageSelector());
+			news.setDate(st.getDate());
 			
 			SiteDTO site = new SiteDTO();
 			site.setLogo(st.getLogo());
@@ -318,8 +323,65 @@ public class ScrapDAOImpl implements ScrapDAO {
 				return selectors;
 			}
 		});
-		
 	}
 
+	@Override
+	public ArrayList<NewsDTO> testScrap(StructureDTO selector) {
+		return this.testScrapURL(selector);
+	}
+	
+	private ArrayList<NewsDTO> testScrapURL(StructureDTO selector){
+		
+		ArrayList<NewsDTO> news = new ArrayList<NewsDTO>();
+		
+		try {
+			Document doc = Jsoup.connect(selector.getUrl()).timeout(30000).get();
+			
+			Elements elements = doc.select(selector.getRowsSelector());
+			for(Element e:elements){
+				
+				String title = e.select(selector.getTitleSelector()).text();
+				String image = e.select(selector.getImageSelector()).attr("src");
+				String link = e.select(selector.getLinkSelector()).attr("href");
+				System.out.println(title+" "+ image + " " + link);
+				
+				NewsDTO n = new NewsDTO();
+				n.setUrl(link);
+				n.setImage(image);
+				n.setTitle(title);
+		
+				news.add(n);
+			}
+			
+		} catch (IOException e) {
+			System.err.println("IOException Occurr + " + e.toString());
+			
+		} catch (Exception e){
+			System.err.println("Exception Occurr + " + e.toString());
+		}
+		
+		return news;
+	}
+
+	@Override
+	public String testScrapContent(StructureDTO selector){
+		
+		String content = "";
+		try{
+			Document doc = Jsoup.connect(selector.getUrl()).timeout(30000).get();
+			Elements elements = doc.select(selector.getContentSelector());
+			
+			for(Element element : elements){
+				content += element.text() + "\n";
+			}
+						
+		} catch (IOException e) {
+			System.err.println("IOException Occurr + " + e.toString());
+			
+		} catch (Exception e){
+			System.err.println("Exception Occurr + " + e.toString());
+		}
+		return content;
+	}
 	
 }
