@@ -1,5 +1,6 @@
 package com.spring.akn.controller.restcontroller;
 
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.gson.Gson;
 import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.spring.akn.entities.NewsDTO;
 import com.spring.akn.entities.SearchNewsDTO;
@@ -92,31 +94,12 @@ public class NewsRestController {
 	
 	
 	@ApiIgnore
-	@RequestMapping(value="/",method=RequestMethod.POST)
-	public ResponseEntity<Map<String,Object>> insertNews(@RequestBody NewsDTO news){
-	
+	@RequestMapping(value="/", method= RequestMethod.POST )
+	public ResponseEntity<Map<String,Object>> insertNews(@RequestParam("json") String data, @RequestParam("file") MultipartFile file, HttpServletRequest request){
 		Map<String, Object> map  = new HashMap<String, Object>();
-		System.err.println("save news");
-		if(newsservice.insertNews(news)>0){
-			
-			map.put("MESSAGE","NEWS HAS BEEN INSERTED.");
-			map.put("STATUS", HttpStatus.OK.value());
-			return new ResponseEntity<Map<String,Object>>
-								(map, HttpStatus.OK);
-		}else{
-			map.put("MESSAGE","INSERT FAILS.");
-			map.put("STATUS", HttpStatus.NOT_FOUND.value());
-			return new ResponseEntity<Map<String,Object>>
-								(map, HttpStatus.OK);
-		}
-		
-	}
-	
-	@ApiIgnore
-	@RequestMapping(value="/insertupload", method= RequestMethod.POST )
-	public ResponseEntity<Map<String,Object>> uploadImage( @RequestParam("file") MultipartFile file, HttpServletRequest request){
-		Map<String, Object> map  = new HashMap<String, Object>();
-		System.err.println("HELLO");
+		Gson g = new Gson();
+		NewsDTO news = g.fromJson(data, NewsDTO.class);
+
 		if(!file.isEmpty()){
 			try{
 				
@@ -144,13 +127,21 @@ public class NewsRestController {
 				
 				System.out.println(serverFile.getAbsolutePath());
 				System.out.println("You are successfully uploaded file " + filename);
-				map.put("MESSAGE","UPLOAD IMAGE SUCCESS");
-				map.put("STATUS", HttpStatus.OK.value());
-				map.put("IMAGE", request.getContextPath() + "/images/" + filename);
-				map.put("IMAGENAME", filename);
 				
-				return new ResponseEntity<Map<String,Object>>
-									(map, HttpStatus.OK);
+				System.err.println("save news");
+				news.setImage(filename);
+				if(newsservice.insertNews(news)>0){
+					
+					map.put("MESSAGE","NEWS HAS BEEN INSERTED.");
+					map.put("STATUS", HttpStatus.OK.value());
+					return new ResponseEntity<Map<String,Object>>
+										(map, HttpStatus.OK);
+				}else{
+					map.put("MESSAGE","INSERT FAILS.");
+					map.put("STATUS", HttpStatus.NOT_FOUND.value());
+					return new ResponseEntity<Map<String,Object>>
+										(map, HttpStatus.OK);
+				}
 			}catch(Exception e){
 				System.out.println("You are failed to upload  => " + e.getMessage());
 			}
@@ -160,14 +151,12 @@ public class NewsRestController {
 		return null;
 	}
 	
-	
 	@ApiIgnore
-	@RequestMapping(value="/",method=RequestMethod.PUT)
-	public ResponseEntity<Map<String,Object>> updateNews(@RequestBody NewsDTO news){
-		
+	@RequestMapping()
+	public ResponseEntity<Map<String,Object>> test(){
 		Map<String, Object> map  = new HashMap<String, Object>();
-		
-		if(newsservice.updateNews(news)>0){
+		System.err.println("update news");
+		/*if(newsservice.updateNews(news)>0){
 			
 			map.put("MESSAGE","NEWS HAS BEEN UPDATED.");
 			map.put("STATUS", HttpStatus.OK.value());
@@ -178,7 +167,51 @@ public class NewsRestController {
 			map.put("STATUS", HttpStatus.NOT_FOUND.value());
 			return new ResponseEntity<Map<String,Object>>
 								(map, HttpStatus.OK);
+		}*/
+		return null;
+	}
+	
+	@ApiIgnore
+	@RequestMapping(value="/updateupload",method=RequestMethod.POST)
+	public ResponseEntity<Map<String,Object>> updateNews( @RequestParam("file") MultipartFile file, HttpServletRequest request){
+	
+
+		if(!file.isEmpty()){
+			try{
+				
+	            String originalFilename = file.getOriginalFilename(); 
+	            String extension = originalFilename.substring(originalFilename.lastIndexOf(".")+1);
+	            
+	            String filename =UUID.randomUUID()+"."+extension;
+	            System.out.println("Filename : " + filename);
+				
+	            byte[] bytes = file.getBytes();
+
+				// creating the directory to store file
+				String savePath = request.getSession().getServletContext().getRealPath("/resources/images/");
+				System.out.println(savePath);
+				File path = new File(savePath);
+				if(!path.exists()){
+					path.mkdir();
+				}
+				
+				// creating the file on server
+				File serverFile = new File(savePath + File.separator + filename );
+				BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
+				stream.write(bytes);
+				stream.close();
+				
+				System.out.println(serverFile.getAbsolutePath());
+				System.out.println("You are successfully uploaded file " + filename);
+				
+				
+			}catch(Exception e){
+				System.out.println("You are failed to upload  => " + e.getMessage());
+			}
+		}else{
+			System.err.println("File not found");
 		}
+		return null;
 		
 	}
 	
@@ -219,6 +252,90 @@ public class NewsRestController {
 		}
 		map.put("STATUS", HttpStatus.OK.value());
 		map.put("MESSAGE", "NEWS HAS BEEN FOUND");
+		map.put("RESPONSE_DATA", news);
+		return new ResponseEntity<Map<String,Object>>
+									(map,HttpStatus.OK);	
+	}
+	
+	@ApiIgnore
+	@RequestMapping(value="/title/{newsid}",method=RequestMethod.GET)
+	public ResponseEntity<Map<String,Object>> getNewsTitle(@PathVariable("newsid") int newsid){
+		
+		
+		String news= newsservice.getNewsTitle(newsid);
+		System.err.println(news);
+		Map<String, Object> map = new HashMap<String,Object>();
+		if(news == null){
+			map.put("STATUS", HttpStatus.NOT_FOUND.value());
+			map.put("MESSAGE", "NEWS TITLE NOT FOUND...");
+			return new ResponseEntity<Map<String,Object>>
+										(map,HttpStatus.OK);
+		}
+		map.put("STATUS", HttpStatus.OK.value());
+		map.put("MESSAGE", "NEWS TITLE HAS BEEN FOUND");
+		map.put("RESPONSE_DATA", news);
+		return new ResponseEntity<Map<String,Object>>
+									(map,HttpStatus.OK);	
+	}
+	
+	@ApiIgnore
+	@RequestMapping(value="/description/{newsid}",method=RequestMethod.GET)
+	public ResponseEntity<Map<String,Object>> getNewsDescription(@PathVariable("newsid") int newsid){
+		
+		
+		String news= newsservice.getNewsDescription(newsid);
+		System.err.println(news);
+		Map<String, Object> map = new HashMap<String,Object>();
+		if(news == null){
+			map.put("STATUS", HttpStatus.NOT_FOUND.value());
+			map.put("MESSAGE", "NEWS DESCRIPTION NOT FOUND...");
+			return new ResponseEntity<Map<String,Object>>
+										(map,HttpStatus.OK);
+		}
+		map.put("STATUS", HttpStatus.OK.value());
+		map.put("MESSAGE", "NEWS DESCRIPTION HAS BEEN FOUND");
+		map.put("RESPONSE_DATA", news);
+		return new ResponseEntity<Map<String,Object>>
+									(map,HttpStatus.OK);	
+	}
+	
+	@ApiIgnore
+	@RequestMapping(value="/image/{newsid}",method=RequestMethod.GET)
+	public ResponseEntity<Map<String,Object>> getNewsThumbnail(@PathVariable("newsid") int newsid){
+		
+		
+		String news= newsservice.getNewsThumbnail(newsid);
+		System.err.println(news);
+		Map<String, Object> map = new HashMap<String,Object>();
+		if(news == null){
+			map.put("STATUS", HttpStatus.NOT_FOUND.value());
+			map.put("MESSAGE", "NEWS THUMBNAIL NOT FOUND...");
+			return new ResponseEntity<Map<String,Object>>
+										(map,HttpStatus.OK);
+		}
+		map.put("STATUS", HttpStatus.OK.value());
+		map.put("MESSAGE", "NEWS THUMBNAIL HAS BEEN FOUND");
+		map.put("RESPONSE_DATA", news);
+		return new ResponseEntity<Map<String,Object>>
+									(map,HttpStatus.OK);	
+	}
+	
+	@ApiIgnore
+	@RequestMapping(value="/content/{newsid}",method=RequestMethod.GET)
+	public ResponseEntity<Map<String,Object>> getNewsContent(@PathVariable("newsid") int newsid){
+		
+		
+		String news= newsservice.getNewsContent(newsid);
+		System.err.println(news);
+		Map<String, Object> map = new HashMap<String,Object>();
+		if(news == null){
+			map.put("STATUS", HttpStatus.NOT_FOUND.value());
+			map.put("MESSAGE", "NEWS CONTENT NOT FOUND...");
+			return new ResponseEntity<Map<String,Object>>
+										(map,HttpStatus.OK);
+		}
+		map.put("STATUS", HttpStatus.OK.value());
+		map.put("MESSAGE", "NEWS CONTENT HAS BEEN FOUND");
 		map.put("RESPONSE_DATA", news);
 		return new ResponseEntity<Map<String,Object>>
 									(map,HttpStatus.OK);	
