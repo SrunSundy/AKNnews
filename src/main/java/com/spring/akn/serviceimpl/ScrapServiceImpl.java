@@ -1,9 +1,12 @@
 package com.spring.akn.serviceimpl;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring.akn.entities.NewsDTO;
+import com.spring.akn.entities.scrap.StructureDTO;
 import com.spring.akn.repositories.ScrapDAO;
 import com.spring.akn.services.ScrapService;
 
@@ -44,6 +47,16 @@ public class ScrapServiceImpl implements ScrapService{
 				affected++;
 		
 		return affected;
+	}
+
+	@Override
+	public ArrayList<NewsDTO> testScrap(StructureDTO selector) {
+		return scrapDAO.testScrap(selector);
+	}
+
+	@Override
+	public String testScrapContent(StructureDTO selector) {
+		return scrapDAO.testScrapContent(selector);
 	}
 
 }
