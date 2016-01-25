@@ -47,7 +47,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		
 		int newsid=getCurSequence()+1;
 		System.err.println(newsid);
-		String url="news.khmeracademy.com/"+newsid;
+		String url="detail/"+newsid;
 		
 		String sql="INSERT INTO tbnews(news_title,news_description,news_img,news_url,category_id,source_id,news_content) "
 				+ "VALUES(?,?,?,?,?,?,?)";
@@ -502,13 +502,13 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		return jdbcTemplate.queryForObject(sql, Integer.class);
 	}
 
-	@Override
+	/*@Override
 	public NewsDTO listAData(int newsid) {
 		// TODO Auto-generated method stub
 		String sql="SELECT news_title,news_description,news_img,news_url,category_id,news_content,news_status FROM tbnews WHERE news_id=?";
 		return jdbcTemplate.queryForObject(sql, new Object[]{newsid},new GetAnNewsMapper());
 	}
-	
+	*/
 	
 	private static final class GetNewsWithUserIDMapper implements RowMapper<NewsDTO>{		
 		public NewsDTO mapRow(ResultSet rs, int row) throws SQLException {
@@ -569,7 +569,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		}
 	}
 
-	private static final class GetAnNewsMapper implements RowMapper<NewsDTO>{		
+/*	private static final class GetAnNewsMapper implements RowMapper<NewsDTO>{		
 		public NewsDTO mapRow(ResultSet rs, int row) throws SQLException {
 			NewsDTO news = new NewsDTO();
 			
@@ -586,7 +586,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 			news.setCategory(category);
 			return news;
 		}
-	}
+	}*/
 	//get news info
 	@Override
 	public String getNewsTitle(int newsid) {
@@ -645,12 +645,12 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		
 	}
 
-	@Override
+	/*@Override
 	public int updateNewsThumbnail(NewsDTO news) {
 		// TODO Auto-generated method stub
 		String sql="UPDATE tbnews SET  news_img=? WHERE news_id=?";
 		return jdbcTemplate.update(sql,news.getImage(),news.getId());
-	}
+	}*/
 
 	@Override
 	public int updateNewsContent(NewsDTO news) {

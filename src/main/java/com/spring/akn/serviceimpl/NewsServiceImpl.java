@@ -100,11 +100,11 @@ public class NewsServiceImpl implements NewsService{
 		return newsrepository.updateView(newsid);
 	}
 
-	@Override
+	/*@Override
 	public NewsDTO listAData(int newsid) {
 		// TODO Auto-generated method stub
 		return newsrepository.listAData(newsid);
-	}
+	}*/
 
 	@Override
 	public String getNewsTitle(int newsid) {
@@ -148,11 +148,11 @@ public class NewsServiceImpl implements NewsService{
 		return newsrepository.updateNewsDescription(news);
 	}
 
-	@Override
+	/*@Override
 	public int updateNewsThumbnail(NewsDTO news) {
 		// TODO Auto-generated method stub
 		return newsrepository.updateNewsThumbnail(news);
-	}
+	}*/
 
 	@Override
 	public int updateNewsContent(NewsDTO news) {

@@ -23,7 +23,7 @@ public interface NewsService {
 	
 	public List<NewsDTO> searchNews(SearchNewsDTO search);
 	
-	public NewsDTO listAData(int newsid);
+	/*public NewsDTO listAData(int newsid);*/
 	
 	public String getNewsTitle(int newsid);
 	
@@ -39,7 +39,7 @@ public interface NewsService {
 	
 	public int updateNewsDescription(NewsDTO news);
 	
-	public int updateNewsThumbnail(NewsDTO news);
+	/*public int updateNewsThumbnail(NewsDTO news);*/
 	
 	public int updateNewsContent(NewsDTO news);
 	
