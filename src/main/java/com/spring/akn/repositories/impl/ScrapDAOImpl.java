@@ -22,6 +22,7 @@ import com.spring.akn.entities.CategoryDTO;
 import com.spring.akn.entities.NewsDTO;
 import com.spring.akn.entities.SiteDTO;
 import com.spring.akn.entities.scrap.StructureDTO;
+import com.spring.akn.entities.scrap.TestScrapDTO;
 import com.spring.akn.repositories.ScrapDAO;
 
 @Repository
@@ -326,13 +327,13 @@ public class ScrapDAOImpl implements ScrapDAO {
 	}
 
 	@Override
-	public ArrayList<NewsDTO> testScrap(StructureDTO selector) {
+	public ArrayList<TestScrapDTO> testScrap(StructureDTO selector) {
 		return this.testScrapURL(selector);
 	}
 	
-	private ArrayList<NewsDTO> testScrapURL(StructureDTO selector){
+	private ArrayList<TestScrapDTO> testScrapURL(StructureDTO selector){
 		
-		ArrayList<NewsDTO> news = new ArrayList<NewsDTO>();
+		ArrayList<TestScrapDTO> news = new ArrayList<TestScrapDTO>();
 		
 		try {
 			Document doc = Jsoup.connect(selector.getUrl()).timeout(30000).get();
@@ -345,8 +346,8 @@ public class ScrapDAOImpl implements ScrapDAO {
 				String link = e.select(selector.getLinkSelector()).attr("href");
 				System.out.println(title+" "+ image + " " + link);
 				
-				NewsDTO n = new NewsDTO();
-				n.setUrl(link);
+				TestScrapDTO n = new TestScrapDTO();
+				n.setLink(link);
 				n.setImage(image);
 				n.setTitle(title);
 		

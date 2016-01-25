@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.spring.akn.entities.NewsDTO;
 import com.spring.akn.entities.scrap.StructureDTO;
+import com.spring.akn.entities.scrap.TestScrapDTO;
 import com.spring.akn.repositories.ScrapDAO;
 import com.spring.akn.services.ScrapService;
 
@@ -50,7 +51,7 @@ public class ScrapServiceImpl implements ScrapService{
 	}
 
 	@Override
-	public ArrayList<NewsDTO> testScrap(StructureDTO selector) {
+	public ArrayList<TestScrapDTO> testScrap(StructureDTO selector) {
 		return scrapDAO.testScrap(selector);
 	}
 

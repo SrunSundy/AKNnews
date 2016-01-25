@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.spring.akn.entities.NewsDTO;
 import com.spring.akn.entities.scrap.StructureDTO;
+import com.spring.akn.entities.scrap.TestScrapDTO;
 
 public interface ScrapDAO {
 	
@@ -27,7 +28,7 @@ public interface ScrapDAO {
 		 * use for test scraping if right or wrong
 		 * return news object
 		 */
-		public ArrayList<NewsDTO> testScrap(StructureDTO selector);
+		public ArrayList<TestScrapDTO> testScrap(StructureDTO selector);
 		
 		/***
 		 * use for scraping news content

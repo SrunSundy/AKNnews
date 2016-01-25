@@ -16,7 +16,7 @@ public class ScrapingController {
 	
 	private static int i = 0;	
 	
-	@Scheduled(initialDelay=500000, fixedDelay=6000000)
+	@Scheduled(initialDelay=1000000, fixedDelay=2000000)
 	public void autoScrap(){
 		
 		/* this method execute twice because of spring security, so i decided to do like that !!!*/
