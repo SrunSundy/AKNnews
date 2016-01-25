@@ -142,7 +142,7 @@ public class UserRespositoriesImpl implements UserRespositories {
 	@Override
 	public User findUserByUserName(String username) {
 		
-		String sql = "SELECT user_id, user_name, user_email, user_password, enabled FROM tbuser WHERE user_email = ?";
+		String sql = "SELECT user_id, user_name, user_email,user_image, user_password, enabled FROM tbuser WHERE user_email = ?";
 		try (Connection cnn = dataSource.getConnection(); PreparedStatement ps = cnn.prepareStatement(sql);) {
 			ps.setString(1, username);
 			ResultSet rs = ps.executeQuery();
@@ -151,6 +151,7 @@ public class UserRespositoriesImpl implements UserRespositories {
 				user.setId(rs.getInt("user_id"));
 				user.setUsername(rs.getString("user_name"));
 				user.setPassword(rs.getString("user_password"));
+				user.setImage(rs.getString("user_image"));
 				user.setEmail(rs.getString("user_email"));
 				user.setEnabled(rs.getBoolean("enabled"));
 				user.setRoles(this.findUserRoleByUserId(user.getId()));
