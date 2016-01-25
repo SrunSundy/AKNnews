@@ -119,7 +119,7 @@
 <div id='header'>
   <div class="swagger-ui-wrap">
     <a id="logo" style="float:left">AKN api-docs</a>
-    <a style="float:right;text-decoration: none;color: #fff;font-size: 15px;" href="${pageContext.request.contextPath}/login?logout">Logout</a>
+    <a style="float:right;text-decoration: none;color: #fff;font-size: 15px;" href="${pageContext.request.contextPath}/logout">Logout</a>
     <form id='api_selector'>
       <div class='input'><input placeholder="http://example.com/api"  id="input_baseUrl" name="baseUrl" type="hidden" value="${pageContext.request.contextPath}/api-docs"/></div>
       <div class='input'><input placeholder="api_key" id="input_apiKey" name="apiKey" type="hidden" value="Basic YXBpOmFrbm5ld3M=" /></div>
