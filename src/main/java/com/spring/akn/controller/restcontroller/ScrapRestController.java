@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -47,6 +48,20 @@ public class ScrapRestController {
 		map.put("CONTENT", content);
 
 		return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);	
+	}//scrapSite
+	
+	@RequestMapping(value="/site/{id}", method=RequestMethod.GET)
+	public ResponseEntity<Map<String,Object>> scrapSource(@PathVariable("id")int id){
+		
+		int effect = scrapService.scrapSite(id);
+		Map<String, Object> map = new HashMap<String,Object>();
+		map.put("STATUS", HttpStatus.OK.value());
+		map.put("MESSAGE", "SOURCE HAS BEEN EFFECT");
+		map.put("CONTENT", effect);
+
+		return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);	
 	}
+	
+	
 	
 }
