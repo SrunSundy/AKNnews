@@ -541,6 +541,25 @@ public class NewsRestController {
 									(map,HttpStatus.OK);	
 	}
 	
+	@RequestMapping(value="/savelist/{userid}", method=RequestMethod.GET)
+	public ResponseEntity<Map<String,Object>> listSavedNews(@PathVariable("userid") int userid){
+		List<NewsDTO> news = newsservice.listSavedNews(userid, 10, 1);
+		Map<String, Object> map = new HashMap<String,Object>();
+		if(news.isEmpty()){
+			map.put("STATUS", HttpStatus.OK.value());
+			map.put("MESSAGE", "NO SAVED NEWS...");
+			map.put("RESPONSE_DATA",news);
+			return new ResponseEntity<Map<String,Object>>
+							(map,HttpStatus.OK);
+
+		}	
+		map.put("STATUS", HttpStatus.OK.value());
+		map.put("MESSAGE", "NEWS HAS BEEN FOUND");
+		map.put("RESPONSE_DATA",news);
+		return new ResponseEntity<Map<String,Object>>
+									(map,HttpStatus.OK);	
+	}
+	
 	@RequestMapping(value="/savelist/{newsid}/{userid}", method=RequestMethod.DELETE)
 	public ResponseEntity<Map<String,Object>> deleteSavedNews(@PathVariable("newsid") int id,@PathVariable("userid") int uid ){
 		System.err.println("delete Saved news");
