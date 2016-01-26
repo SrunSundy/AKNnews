@@ -5,7 +5,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
@@ -78,5 +80,28 @@ public class SiteDetailDAOImpl implements SiteDetailDAO{
 			return siteDetailDTO;
 		}
 		
+	}
+	
+	public static final class SiteDetailResultSetExstractor implements ResultSetExtractor<SiteDetailDTO>{
+
+		@Override
+		public SiteDetailDTO extractData(ResultSet rs) throws SQLException, DataAccessException {
+			if ( rs.next() ){
+				SiteDetailDTO siteDetailDTO = new SiteDetailDTO();
+				siteDetailDTO.setC_id(rs.getInt("category_id"));
+				siteDetailDTO.setS_id(rs.getInt("site_id"));
+				siteDetailDTO.setUrl(rs.getString("url"));
+				siteDetailDTO.setStatus(rs.getBoolean("status"));
+				return siteDetailDTO;
+			}
+			return null;
+		}
+		
+	}
+
+	@Override
+	public SiteDetailDTO findSiteAndCategoryById(int s_id, int c_id) {
+		String sql="SELECT * FROM tbsite_detail WHERE site_id = ? AND category_id = ? ";
+		return getJdbcTemplate().query(sql, new Object[]{s_id, c_id},new SiteDetailResultSetExstractor());
 	}
 }

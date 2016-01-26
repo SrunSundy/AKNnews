@@ -38,6 +38,11 @@ public class SiteDetailServiceImpl implements SiteDetailServices{
 	public List<SiteDetailDTO> listSiteDetail() {
 		return siteDetailDAO.listSiteDetail();
 	}
+
+	@Override
+	public SiteDetailDTO findSiteAndCategoryById(int s_id, int c_id) {
+		return siteDetailDAO.findSiteAndCategoryById(s_id, c_id);
+	}
 	
 	
 }

@@ -10,4 +10,5 @@ public interface SiteDetailServices {
 	public boolean isDeleteSiteDetail(int s_id,int c_id );
 	public boolean isToggleStatusSiteDetail(int s_id, int c_id);
 	public List<SiteDetailDTO> listSiteDetail();
+	public SiteDetailDTO findSiteAndCategoryById(int s_id, int c_id);
 }

@@ -37,17 +37,23 @@ public class SiteDetailRestController {
 	public ResponseEntity<Map<String, Object>> insertSiteDetail(@RequestBody SiteDetailDTO siteDetail){
 		Map<String, Object> map = new HashMap<String, Object>();
 		System.out.println("site Detai "+ siteDetail);
-		if (siteDetailServices.isInsertSiteDetail( siteDetail )) {
-			map.put("STATUS", HttpStatus.OK.value());
-			map.put("MESSAGE", "SITE DETAIL INSERT SUCCESS!");
-			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+		if ( siteDetailServices.findSiteAndCategoryById(siteDetail.getS_id(), siteDetail.getC_id()) == null ){
+			if (siteDetailServices.isInsertSiteDetail( siteDetail )) {
+				map.put("STATUS", HttpStatus.OK.value());
+				map.put("MESSAGE", "SITE DETAIL INSERT SUCCESS!");
+				return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+			}
 		}
-
 		map.put("STATUS", HttpStatus.NOT_FOUND.value());
-		map.put("MESSAGE", "SITEDETAIL INSERT FAIL!");
+		map.put("MESSAGE", "SITE DETAIL INSERT FAIL!");
 		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 	}
 	
+	/**
+	 * Get all site detail
+	 * @return
+	 * @throws ParseException
+	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ResponseEntity<Map<String, Object>> listSiteDetail() throws ParseException {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -101,6 +107,26 @@ public class SiteDetailRestController {
 		}
 		map.put("STATUS", HttpStatus.NOT_FOUND.value());
 		map.put("MESSAGE", "SITEDETAIL DELETE FAIL!");
+		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+	}
+	/**
+	 * find object site detail
+	 * @param s_id
+	 * @param c_id
+	 * @return
+	 */
+	@RequestMapping(value = "/{s_id}/{c_id}", method = RequestMethod.GET)
+	public ResponseEntity<Map<String, Object>> findSiteAndCategoryById(@PathVariable("s_id") int s_id,
+			@PathVariable("c_id") int c_id) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		if (siteDetailServices.findSiteAndCategoryById(s_id, c_id) != null) {
+			map.put("STATUS", HttpStatus.OK.value());
+			map.put("MESSAGE", "SITE DETAIL GET SUCCESS!");
+			map.put("DATA", siteDetailServices.findSiteAndCategoryById(s_id, c_id));
+			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+		}
+		map.put("STATUS", HttpStatus.NOT_FOUND.value());
+		map.put("MESSAGE", "SITE DETAIL GET FAIL!");
 		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 	}
 	
