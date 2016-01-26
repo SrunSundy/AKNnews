@@ -180,7 +180,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 	}
 	
 	@Override
-	public List<NewsDTO> getPopularNews(int userid) {
+	public List<NewsDTO> getPopularNews(int userid,int time,int row) {
 		String sql="";
 		if(userid!=0){
 			sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,"
@@ -189,16 +189,16 @@ public class NewsRepositriesImpl implements NewsRepositories {
 					+ "FROM tbnews n INNER JOIN tbsite s "
 					+ "ON s.s_id=n.source_id "
 					+ "INNER JOIN tbcategory c ON c.c_id=n.category_id "
-					+ "WHERE n.news_status=true AND n.news_date  >= CURRENT_DATE -INTERVAL '1 day' ORDER BY news_hit DESC LIMIT 10";
-			return jdbcTemplate.query(sql, new Object[]{userid},new GetNewsWithUserIDMapper());
+					+ "WHERE n.news_status=true AND n.news_date  >= CURRENT_DATE - ( ? || ' days')::interval ORDER BY news_hit DESC LIMIT ?";
+			return jdbcTemplate.query(sql, new Object[]{userid,time,row},new GetNewsWithUserIDMapper());
 		}
 		sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,"
 				+ "n.news_date,n.news_hit,n.news_url,s.s_id,s.s_name,s.s_logo,n.news_status,c.c_id,c.c_name "
 				+ "FROM tbnews n INNER JOIN tbsite s ON s.s_id=n.source_id "
 				+ "INNER JOIN tbcategory c ON c.c_id=n.category_id "
-				+ "WHERE n.news_status=true AND n.news_date  >= CURRENT_DATE -INTERVAL '1 day' "
-				+ "ORDER BY n.news_hit DESC LIMIT 10";
-		return jdbcTemplate.query(sql, new GetNewsWithNoUserIDMapper());
+				+ "WHERE n.news_status=true AND n.news_date  >= CURRENT_DATE - ( ? || ' days')::interval "
+				+ "ORDER BY n.news_hit DESC LIMIT ?";
+		return jdbcTemplate.query(sql,new Object[]{time,row}, new GetNewsWithNoUserIDMapper());
 	}
 	
 	@Override

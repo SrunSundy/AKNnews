@@ -70,6 +70,30 @@ public class NewsRestController {
 									(map,HttpStatus.OK);	
 	}
 	
+	@RequestMapping(value="/record/{categoryid}/{sourceid}/{userid}/", method=RequestMethod.GET)
+	public  ResponseEntity<Map<String,Object>>  getNewsTotalRecord(@PathVariable("categoryid") int cid
+			,@PathVariable("sourceid") int sid,@PathVariable("userid") int uid){
+		Map<String, Object> map = new HashMap<String,Object>();
+		
+		int total = newsservice.getNewsTotalRecords("",cid ,sid,uid);
+		if(total <=0){
+			
+			map.put("STATUS", HttpStatus.OK.value());
+			map.put("MESSAGE", "NEWS NOT FOUND...");
+			map.put("TOTAL_RECORDS", total);
+			return new ResponseEntity<Map<String,Object>>
+							(map,HttpStatus.OK);
+		}	
+	
+		map.put("STATUS", HttpStatus.OK.value());
+		map.put("MESSAGE", "NEWS HAS BEEN FOUND");
+		map.put("TOTAL_RECORDS", total);
+	
+		
+		return new ResponseEntity<Map<String,Object>>
+									(map,HttpStatus.OK);	
+	}
+	
 	
 	
 	@RequestMapping(value="/{newsid}/{userid}", method=RequestMethod.GET)
@@ -461,10 +485,11 @@ public class NewsRestController {
 	}
 	
 	
-	@RequestMapping(value="/popular/{userid}", method=RequestMethod.GET)
-	public ResponseEntity<Map<String,Object>> getPopNews(@PathVariable("userid") int uid){
-		List<NewsDTO> news = newsservice.getPopularNews(uid);
-		
+	@RequestMapping(value="/popular/{userid}/{time}/{row}", method=RequestMethod.GET)
+	public ResponseEntity<Map<String,Object>> getPopNews(@PathVariable("userid") int uid,
+			@PathVariable("time") int time,@PathVariable("row") int row){
+		List<NewsDTO> news = newsservice.getPopularNews(uid,time,row);
+		System.err.println("POP NEWS--> "+news);
 		Map<String, Object> map = new HashMap<String,Object>();
 		if(news.isEmpty()){
 			map.put("STATUS", HttpStatus.OK.value());

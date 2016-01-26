@@ -47,7 +47,7 @@ public interface NewsService {
 	
 	public int getNewsTotalRecords(String key,int categoryid,int siteid,int userid);
 	
-	public List<NewsDTO> getPopularNews(int userid);
+	public List<NewsDTO> getPopularNews(int userid,int time,int row);
 	
 	public int saveNews(FrmSaveListAdd savenews);
 	
