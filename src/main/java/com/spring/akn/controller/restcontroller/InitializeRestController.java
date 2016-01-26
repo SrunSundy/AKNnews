@@ -36,12 +36,12 @@ public class InitializeRestController {
 	@Autowired
 	ScrapService scrapService;
 	
-	@RequestMapping(value="/{row}/{uid}/", method=RequestMethod.GET)
-	public ResponseEntity<Map<String,Object>> initialize(@PathVariable("row") int row, @PathVariable("uid") int uid){
+	@RequestMapping(value="/{row}/{cid}/{uid}", method=RequestMethod.GET)
+	public ResponseEntity<Map<String,Object>> initialize(@PathVariable("row") int row, @PathVariable int cid, @PathVariable("uid") int uid){
 		
 		Map<String, Object> map = new HashMap<String,Object>();
 		
-		List<NewsDTO> news = newsService.listNewsDatas(1,row, 0, 0, uid);
+		List<NewsDTO> news = newsService.listNewsDatas(1,row, cid, 0, uid);
 		List<CategoryDTO> categories = categoryService.listCategoryHaveNews();
 		List<SiteDTO> sites = siteService.listSite();
 		List<NewsDTO> populars = newsService.getPopularNews(uid);
