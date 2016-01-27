@@ -116,6 +116,30 @@ public class NewsRestController {
 									(map,HttpStatus.OK);	
 	}
 	
+	@RequestMapping(value="/statistic/{categoryid}/{siteid}/{day}/{row}", method=RequestMethod.GET)
+	public ResponseEntity<Map<String,Object>> listNewsStatistic(@PathVariable("categoryid") int cid,@PathVariable("siteid") int sid,
+			@PathVariable("day") int day, @PathVariable("row") int row){
+			Map<String, Object> map = new HashMap<String,Object>();
+			
+			List<NewsDTO> newsstatistic = newsservice.listNewsStatistic(cid, sid, day, row);
+			System.err.println("NEWS STATISTIC --> "+newsstatistic);
+			if(newsstatistic.isEmpty()){
+				map.put("STATUS", HttpStatus.OK.value());
+				map.put("MESSAGE", "NEWS NOT FOUND...");
+				map.put("RESPONSE_DATA",newsstatistic);
+				
+				return new ResponseEntity<Map<String,Object>>
+								(map,HttpStatus.OK);
+			}
+			map.put("STATUS", HttpStatus.OK.value());
+			map.put("MESSAGE", "NEWS HAS BEEN FOUND");
+			map.put("RESPONSE_DATA",newsstatistic);
+			
+			return new ResponseEntity<Map<String,Object>>
+										(map,HttpStatus.OK);	
+		
+	}
+	
 	
 	@ApiIgnore
 	@RequestMapping(value="/", method= RequestMethod.POST )
@@ -175,25 +199,6 @@ public class NewsRestController {
 		return null;
 	}
 	
-	@ApiIgnore
-	@RequestMapping()
-	public ResponseEntity<Map<String,Object>> test(){
-		Map<String, Object> map  = new HashMap<String, Object>();
-		System.err.println("update news");
-		/*if(newsservice.updateNews(news)>0){
-			
-			map.put("MESSAGE","NEWS HAS BEEN UPDATED.");
-			map.put("STATUS", HttpStatus.OK.value());
-			return new ResponseEntity<Map<String,Object>>
-								(map, HttpStatus.OK);
-		}else{
-			map.put("MESSAGE","UPDATE FAILS.");
-			map.put("STATUS", HttpStatus.NOT_FOUND.value());
-			return new ResponseEntity<Map<String,Object>>
-								(map, HttpStatus.OK);
-		}*/
-		return null;
-	}
 	
 	
 	
@@ -218,27 +223,7 @@ public class NewsRestController {
 		
 	}
 	
-	/*@ApiIgnore
-	@RequestMapping(value="/detail/{newsid}",method=RequestMethod.GET)
-	public ResponseEntity<Map<String,Object>> getANews(@PathVariable("newsid") int newsid){
-		
-		
-		NewsDTO news= newsservice.listAData(newsid);
-		System.err.println(news);
-		Map<String, Object> map = new HashMap<String,Object>();
-		if(news == null){
-			map.put("STATUS", HttpStatus.NOT_FOUND.value());
-			map.put("MESSAGE", "NEWS NOT FOUND...");
-			return new ResponseEntity<Map<String,Object>>
-										(map,HttpStatus.OK);
-		}
-		map.put("STATUS", HttpStatus.OK.value());
-		map.put("MESSAGE", "NEWS HAS BEEN FOUND");
-		map.put("RESPONSE_DATA", news);
-		return new ResponseEntity<Map<String,Object>>
-									(map,HttpStatus.OK);	
-	}*/
-	
+
 	@ApiIgnore
 	@RequestMapping(value="/title/{newsid}",method=RequestMethod.GET)
 	public ResponseEntity<Map<String,Object>> getNewsTitle(@PathVariable("newsid") int newsid){
@@ -351,14 +336,7 @@ public class NewsRestController {
 		
 		if(!file.isEmpty()){
 			try{
-			/*	String originalFilename = file.getOriginalFilename(); 
-		        String extension = originalFilename.substring(originalFilename.lastIndexOf(".")+1);
-	            
-		        String originalimage = news.getImage();
-		        String image= originalimage.substring(originalimage.lastIndexOf("."));
-		        System.err.println(image);*/
-	         /*   String filename =image+"."+extension;
-	          * */
+			
 				String filename=news.getImage();
 	            System.out.println("Filename : " + filename);
 				
@@ -485,10 +463,10 @@ public class NewsRestController {
 	}
 	
 	
-	@RequestMapping(value="/popular/{userid}/{time}/{row}", method=RequestMethod.GET)
+	@RequestMapping(value="/popular/{userid}/{day}/{row}", method=RequestMethod.GET)
 	public ResponseEntity<Map<String,Object>> getPopNews(@PathVariable("userid") int uid,
-			@PathVariable("time") int time,@PathVariable("row") int row){
-		List<NewsDTO> news = newsservice.getPopularNews(uid,time,row);
+			@PathVariable("day") int day,@PathVariable("row") int row){
+		List<NewsDTO> news = newsservice.getPopularNews(uid,day,row);
 		System.err.println("POP NEWS--> "+news);
 		Map<String, Object> map = new HashMap<String,Object>();
 		if(news.isEmpty()){
