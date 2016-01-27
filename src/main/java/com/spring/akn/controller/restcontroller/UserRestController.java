@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -198,6 +199,24 @@ public class UserRestController {
 			map.put("MESSAGE", "USER FOUND");
 			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 		}
+		
+     
+/*		//get user infor for update session
+				@RequestMapping(value="/getuser/{id}",method=RequestMethod.GET)
+				public ResponseEntity<Map<String, Object>> getUserInfo(@PathVariable("id") int id) {
+					Map<String, Object> map = new HashMap<String, Object>();
+					if (userServices.getUser(id)==null) {
+						map.put("STATUS", HttpStatus.NOT_FOUND.value());
+						map.put("MESSAGE", "USER NOT FOUND");
+						return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+					}
+					 
+			        
+					map.put("STATUS", HttpStatus.FOUND.value());
+					map.put("MESSAGE", "USER FOUND");
+					return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+				}*/
+		
 	// upload image
 	/*
 	 * @RequestMapping(value="/upload", method= RequestMethod.POST ) public
