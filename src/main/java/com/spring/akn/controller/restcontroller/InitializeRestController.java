@@ -44,7 +44,7 @@ public class InitializeRestController {
 		List<NewsDTO> news = newsService.listNewsDatas(1,row, cid, 0, uid);
 		List<CategoryDTO> categories = categoryService.listCategoryHaveNews();
 		List<SiteDTO> sites = siteService.listSite();
-		List<NewsDTO> populars = newsService.getPopularNews(uid);
+		List<NewsDTO> populars = newsService.getPopularNews(uid,1,10);
 		
 		map.put("STATUS", HttpStatus.OK.value());
 		map.put("MESSAGE", "INITIALIZE SUCCESSFULLY.");
@@ -63,7 +63,7 @@ public class InitializeRestController {
 		
 		List<CategoryDTO> categories = categoryService.listCategoryHaveNews();
 		List<SiteDTO> sites = siteService.listSite();
-		List<NewsDTO> populars = newsService.getPopularNews(0);
+		List<NewsDTO> populars = newsService.getPopularNews(0,7,7);
 		
 		NewsDTO news= scrapService.scrapNews(nid, uid);
 		
