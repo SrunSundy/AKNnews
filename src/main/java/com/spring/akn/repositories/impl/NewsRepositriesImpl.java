@@ -18,19 +18,38 @@ import com.spring.akn.entities.SiteDTO;
 import com.spring.akn.entities.frmApiDoc.FrmSaveListAdd;
 import com.spring.akn.repositories.NewsRepositories;
 
+
+/**
+ * @author Dy
+ */
 @Repository
 public class NewsRepositriesImpl implements NewsRepositories {
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
+	/**
+	 * is used for listing all news from the DB.
+	 * we can filter through 
+	 * News's category which is used categoryid 
+	 * News's site which is used siteid.
+	 * row and page are used for pagination.
+	 * userid is used to verify the news is saved by 
+	 * the specific user.
+	 * 
+	 * NOTE:
+	 * if row is submitted with 0 value 
+	 * it will automatically change the row value from 0 to 10
+	 * 
+	 * if page is submitted with 0 value
+	 * it will return null
+	 * 	
+	 */
 	@Override
 	public List<NewsDTO> listNewsDatas(int page,int row, int categoryid, int siteid, int userid) {
 		if(page <= 0) return new ArrayList<NewsDTO>();
 		if(row <=0 ) row=10;
-		
 		int offset = ( page * row ) - row;
-		
 		if(categoryid !=0 && siteid!=0) 
 			return listNewsBySiteAndCategory(userid, siteid, categoryid, row, offset);
 		if(categoryid!=0) 
@@ -42,6 +61,9 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		
 	}
 	
+	/**
+	 * is used for inserting AKN news
+	 */
 	@Override
 	public int insertNews(NewsDTO news) {
 		
@@ -61,15 +83,10 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		return 0;
 	}
 
-	/*@Override
-	public int updateNews(NewsDTO news) {
-		// TODO Auto-generated method stub
-		String sql="UPDATE tbnews SET  news_title= ?,news_description= ?,news_url =? "
-				+ ",category_id =? ,source_id =?,news_content=? WHERE news_id=?";
-		return jdbcTemplate.update(sql,news.getTitle(),news.getDescription(),news.getUrl(),
-				news.getCategory().getId(),news.getSite().getId(),news.getContent(),news.getId());
-	}*/
-
+	/**
+	 * is used for changing news status to false or true
+	 * which newsid is needed to change the status.
+	 */
 	@Override
 	public int toggleNews(int newsid) {
 		// TODO Auto-generated method stub
@@ -78,6 +95,10 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		return jdbcTemplate.update(sql,newsid,newsid);
 	}
 	
+	/**
+	 * is used for counting view which
+	 * newsid is needed to update view counting
+	 */
 	@Override
 	public int updateView(int newsid) {
 		// TODO Auto-generated method stub
@@ -86,13 +107,22 @@ public class NewsRepositriesImpl implements NewsRepositories {
 	}
 
 
-	
-	/*@Override
-	public NewsDTO listNewsData(int newsid, int userid) {
-		
-		if(userid != 0) return listDetailWithUserId(userid, newsid);
-		return listDetailWithNoUserId(newsid);
-	}*/
+	/**
+	 * is used to search all news from DB.
+	 * we use SearchNewsDTO class to wrap the searching fields like
+	 * row and page are used for pagination.
+	 * categoryid and siteid are used for filtering News's list
+	 * userid is used to verify the news is saved by 
+	 * the specific user
+	 * 
+	 * 
+	 *NOTE:
+	 * if row is submitted with 0 value 
+	 * it will automatically change the row value from 0 to 10
+	 * 
+	 * if page is submitted with 0 value
+	 * it will return null
+	 */
 	@Override
 	public List<NewsDTO> searchNews(SearchNewsDTO search) {
 		int row=search.getRow();
@@ -115,6 +145,15 @@ public class NewsRepositriesImpl implements NewsRepositories {
 
 	}
 	
+	
+	/**
+	 * is used for counting News's page which is
+	 * depended on row
+	 * key,categoryid and siteid are used for filtering News's page
+	 *  
+	 * userid is used for verifying the method is used by admin or user
+	 * if it is used by admin News will be listed even its status false 
+	 */
 	@Override
 	public int getNewsTotalPage(String key,int row,int categoryid,int siteid,int userid) {
 		
@@ -152,6 +191,11 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		return jdbcTemplate.queryForObject(sql, new Object[]{row,row,row,status1,status2,"%"+key+"%"} ,Integer.class);	
 	}
 	
+	/**
+	 * is used for counting records of News
+	 * userid is used for verifying the method is used by admin or user
+	 * if it is used by admin News will be listed even its status false 
+	 */
 	@Override
 	public int getNewsTotalRecords(String key,int categoryid,int siteid,int userid){
 		
@@ -179,6 +223,11 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		return jdbcTemplate.queryForObject(sql, new Object[]{status1,status2,"%"+key+"%"} ,Integer.class);	
 	}
 	
+	/**
+	 * is used for listing popular news which
+	 * userid is used for verifying the news is saved by
+	 * the specific user.
+	 */
 	@Override
 	public List<NewsDTO> getPopularNews(int userid,int day,int row) {
 		String sql="";
@@ -202,6 +251,10 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		return jdbcTemplate.query(sql,new Object[]{day,row}, new GetNewsWithNoUserIDMapper());
 	}
 	
+	
+	/**
+	 * listing the News's statistic from all the Website
+	 */
 	@Override
 	public List<NewsDTO> listNewsStatistic(int categoryid, int siteid, int day, int row) {
 		// TODO Auto-generated method stub
@@ -247,12 +300,18 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		return jdbcTemplate.query(sql, new Object[]{day,row}, new GetNewsWithNoUserIDMapper());
 	}
 	
+	/**
+	 * is used for saving news by specific user
+	 */
 	@Override
 	public int saveNews(FrmSaveListAdd savenews) {
 		String sql="INSERT INTO tbsavelist(news_id,user_id) VALUES(?,?)";
-		return jdbcTemplate.update(sql,savenews.getNewsid(),savenews.getUserid());
+ 		return jdbcTemplate.update(sql,savenews.getNewsid(),savenews.getUserid());
 	}
 
+	/**
+	 * is used for deleting news by specific user
+	 */
 	@Override
 	public int deleteSavedNews(int newsid,int userid) {
 		String sql="DELETE FROM tbsavelist WHERE news_id=? AND user_id=?";
@@ -260,7 +319,9 @@ public class NewsRepositriesImpl implements NewsRepositories {
 	}
 
 	
-
+	/**
+	 * is used for listing all saved news by specific user
+	 */
 	@Override
 	public List<NewsDTO> listSavedNews(int userid,int row, int page) {
 		
@@ -277,16 +338,16 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		return jdbcTemplate.query(sql, new Object[]{userid,row,offset},new GetNewsWithNoUserIDMapper());
 	}
 	
+	
 	/**
-	 * ADDITIONAL FUNCTION
-	 * 
+	 * separated  function which is used in searchNews()
 	 * @param key
 	 * @param categoryid
 	 * @param userid
+	 * @param row
 	 * @param offset
 	 * @return
 	 */
-	
 	//SEARCHING FUNCTION 
 	public List<NewsDTO> searchByCategory(String key,int categoryid, int userid,int row,int offset){
 		boolean status1=true;
@@ -314,6 +375,16 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		
 	}
 	
+	/**
+	 * separated  function which is used in searchNews()
+	 * @param key
+	 * @param siteid
+	 * @param userid
+	 * @param row
+	 * @param offset
+	 * @return
+	 */
+	
 	public List<NewsDTO> searchBySite(String key,int siteid,int userid,int row,int offset){
 		
 		boolean status1=true;
@@ -338,6 +409,17 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		return jdbcTemplate.query(sql, new Object[]{status1,status2,siteid,"%"+key+"%",row,offset},new GetNewsWithNoUserIDMapper());
 	}
 	
+	/**
+	 * separated  function which is used in searchNews()
+	 * @param key
+	 * @param siteid
+	 * @param categoryid
+	 * @param userid
+	 * @param row
+	 * @param offset
+	 * @return
+	 */
+	
 	public List<NewsDTO> searchBySiteAndCategory(String key,int siteid,int categoryid,int userid,int row,int offset){
 		
 		boolean status1=true;
@@ -361,6 +443,14 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		return jdbcTemplate.query(sql, new Object[]{status1,status2,"%"+key+"%",siteid,categoryid,row,offset},new GetNewsWithNoUserIDMapper());
 	}
 	
+	/**
+	 * separated  function which is used in searchNews()
+	 * @param key
+	 * @param userid
+	 * @param row
+	 * @param offset
+	 * @return
+	 */
 	public List<NewsDTO> searchAll(String key, int userid,int row,int offset){
 		
 		
@@ -394,7 +484,14 @@ public class NewsRepositriesImpl implements NewsRepositories {
 	
 
 	//LIST NEWS FUNCTION 
-		
+	/**
+	 * separated  function which is used in listNewsDatas()
+	 * @param userid
+	 * @param categoryid
+	 * @param row
+	 * @param offset
+	 * @return
+	 */
 	public List<NewsDTO> listNewsByCategory(int userid,int categoryid,int row,int offset){
 		
 		
@@ -424,6 +521,14 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		
 	}
 	
+	/**
+	 * separated  function which is used in listNewsDatas()
+	 * @param userid
+	 * @param siteid
+	 * @param row
+	 * @param offset
+	 * @return
+	 */
 	public List<NewsDTO> listNewsBySite(int userid,int siteid,int row,int offset){
 		
 		boolean status1=true;
@@ -446,6 +551,15 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		return jdbcTemplate.query(sql,new Object[]{ status1,status2,siteid ,row,offset } ,new GetNewsWithNoUserIDMapper());
 	}
 	
+	/**
+	 * separated  function which is used in listNewsDatas()
+	 * @param userid
+	 * @param siteid
+	 * @param categoryid
+	 * @param row
+	 * @param offset
+	 * @return
+	 */
 	public List<NewsDTO> listNewsBySiteAndCategory(int userid,int siteid,int categoryid,int row,int offset){
 		
 		boolean status1=true;
@@ -469,6 +583,14 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		return jdbcTemplate.query(sql,new Object[]{ status1,status2,siteid,categoryid,row ,offset } ,new GetNewsWithNoUserIDMapper());
 		
 	}
+	
+	/**
+	 * separated  function which is used in listNewsDatas()
+	 * @param userid
+	 * @param row
+	 * @param offset
+	 * @return
+	 */
 	public List<NewsDTO> listAllNews(int userid,int row,int offset){
 		
 		boolean status1=true;
@@ -494,73 +616,18 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		return jdbcTemplate.query(sql,new Object[]{status1,status2,row, offset } , new GetNewsWithNoUserIDMapper());
 	}
 	//END LIST NEWS FUNCTION 
+
+
 	
-	
-	
-	
-	//LIST NEWS DETAIL
-/*	
-	public NewsDTO listDetailWithUserId(int userid,int newsid){
-		try{
-			String sql="SELECT n.news_id,n.news_title,n.news_date,"
-					+ " (CASE WHEN n.news_id IN (SELECT news_id FROM tbsavelist WHERE user_id=? ) THEN TRUE ELSE FALSE END) AS news_issave"
-					+ " FROM tbnews n "
-					+ "WHERE n.news_status=true AND n.news_id=? ";
-			return jdbcTemplate.queryForObject(sql,new Object[]{ userid,newsid } , new RowMapper<NewsDTO>(){
-				@Override
-				public NewsDTO mapRow(ResultSet rs, int row) throws SQLException {
-					NewsDTO news = new NewsDTO();
-					
-					news.setId(rs.getInt("news_id"));
-					news.setTitle(rs.getString("news_title"));
-					news.setDate(rs.getDate("news_date"));
-					news.setSaved(rs.getBoolean("news_issave"));
-					return news;
-				}
-				
-			});
-		}catch(IncorrectResultSizeDataAccessException ex){
-			return null;
-		}
-		
-	}
-	public NewsDTO listDetailWithNoUserId(int newsid){
-		try{
-			String sql="SELECT n.news_id,n.news_title,n.news_date"
-					+ " FROM tbnews n "
-					+ "WHERE n.news_status=true AND n.news_id=? ";
-			return jdbcTemplate.queryForObject(sql,new Object[]{newsid } , new RowMapper<NewsDTO>(){
-				@Override
-				public NewsDTO mapRow(ResultSet rs, int row) throws SQLException {
-					NewsDTO news = new NewsDTO();
-					
-					news.setId(rs.getInt("news_id"));
-					news.setTitle(rs.getString("news_title"));
-					news.setDate(rs.getDate("news_date"));
-					return news;
-				}
-				
-			});
-		}catch(IncorrectResultSizeDataAccessException ex){
-			return null;
-		}
-		
-	}*/
-	//END LIST NEWS DETAIL
-	
-	
+	/**
+	 * is used for get last news id
+	 * @return
+	 */
 	public int getCurSequence(){
 		String sql="SELECT last_value FROM tbnews_news_id_seq;";
 		return jdbcTemplate.queryForObject(sql, Integer.class);
 	}
 
-	/*@Override
-	public NewsDTO listAData(int newsid) {
-		// TODO Auto-generated method stub
-		String sql="SELECT news_title,news_description,news_img,news_url,category_id,news_content,news_status FROM tbnews WHERE news_id=?";
-		return jdbcTemplate.queryForObject(sql, new Object[]{newsid},new GetAnNewsMapper());
-	}
-	*/
 	
 	private static final class GetNewsWithUserIDMapper implements RowMapper<NewsDTO>{		
 		public NewsDTO mapRow(ResultSet rs, int row) throws SQLException {
@@ -621,25 +688,10 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		}
 	}
 
-/*	private static final class GetAnNewsMapper implements RowMapper<NewsDTO>{		
-		public NewsDTO mapRow(ResultSet rs, int row) throws SQLException {
-			NewsDTO news = new NewsDTO();
-			
-			news.setTitle(rs.getString("news_title"));
-			news.setDescription(rs.getString("news_description"));
-			news.setImage(rs.getString("news_img"));
-			news.setStatus(rs.getBoolean("news_status"));
-			news.setContent(rs.getString("news_content"));
-			news.setUrl(rs.getString("news_url"));
-			
-			CategoryDTO category=new CategoryDTO();
-			category.setId(rs.getInt("category_id"));
-		
-			news.setCategory(category);
-			return news;
-		}
-	}*/
 	//get news info
+	/**
+	 * get news's title to show
+	 */
 	@Override
 	public String getNewsTitle(int newsid) {
 		// TODO Auto-generated method stub
@@ -647,20 +699,27 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		return jdbcTemplate.queryForObject(sql, new Object[]{newsid},String.class);
 	}
 
+	/**
+	 * get news's description to show
+	 */
 	@Override
 	public String getNewsDescription(int newsid) {
 		// TODO Auto-generated method stub
 		String sql="SELECT news_description FROM tbnews WHERE news_id=?";
 		return jdbcTemplate.queryForObject(sql, new Object[]{newsid},String.class);
 	}
-
+	/**
+	 * get thumbnail to show
+	 */
 	@Override
 	public String getNewsThumbnail(int newsid) {
 		// TODO Auto-generated method stub
 		String sql="SELECT news_img FROM tbnews WHERE news_id=?";
 		return jdbcTemplate.queryForObject(sql, new Object[]{newsid},String.class);
 	}
-
+	/**
+	 * get content to show
+	 */
 	@Override
 	public String getNewsContent(int newsid) {
 		// TODO Auto-generated method stub
@@ -674,14 +733,18 @@ public class NewsRepositriesImpl implements NewsRepositories {
 	 * (non-Javadoc)
 	 * @see com.spring.akn.repositories.NewsRepositories#updateNewsTitle(int, java.lang.String)
 	 */
-	
+	/**
+	 * for updating news's title
+	 */
 	@Override
 	public int updateNewsTitle(NewsDTO news) {
 		// TODO Auto-generated method stub
 		String sql="UPDATE tbnews SET  news_title= ? WHERE news_id=?";
 		return jdbcTemplate.update(sql,news.getTitle(),news.getId());
 	}
-
+	/**
+	 * for updating news's category
+	 */
 	@Override
 	public int updateNewsCategory(NewsDTO news) {
 		// TODO Auto-generated method stub
@@ -689,6 +752,9 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		return jdbcTemplate.update(sql,news.getCategory().getId(),news.getId());
 	}
 
+	/**
+	 * for updating news's description
+	 */
 	@Override
 	public int updateNewsDescription(NewsDTO news) {
 		// TODO Auto-generated method stub
@@ -697,13 +763,10 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		
 	}
 
-	/*@Override
-	public int updateNewsThumbnail(NewsDTO news) {
-		// TODO Auto-generated method stub
-		String sql="UPDATE tbnews SET  news_img=? WHERE news_id=?";
-		return jdbcTemplate.update(sql,news.getImage(),news.getId());
-	}*/
 
+	/**
+	 * for updating news's content
+	 */
 	@Override
 	public int updateNewsContent(NewsDTO news) {
 		// TODO Auto-generated method stub
