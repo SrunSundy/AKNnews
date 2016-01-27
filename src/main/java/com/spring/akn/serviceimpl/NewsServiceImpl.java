@@ -160,6 +160,12 @@ public class NewsServiceImpl implements NewsService{
 		return newsrepository.updateNewsContent(news);
 	}
 
+	@Override
+	public List<NewsDTO> listNewsStatistic(int categoryid, int siteid, int day, int row) {
+		// TODO Auto-generated method stub
+		return newsrepository.listNewsStatistic(categoryid, siteid, day, row);
+	}
+
 
 	
 

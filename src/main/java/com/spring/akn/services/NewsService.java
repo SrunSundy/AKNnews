@@ -55,4 +55,6 @@ public interface NewsService {
 	
 	public List<NewsDTO> listSavedNews(int userid,int row,int page);
 	
+	public List<NewsDTO> listNewsStatistic(int categoryid,int siteid,int day,int row);
+	
 }

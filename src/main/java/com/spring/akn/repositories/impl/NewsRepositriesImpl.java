@@ -75,7 +75,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		// TODO Auto-generated method stub
 		String sql="UPDATE tbnews set news_status=(select CASE WHEN news_status = true THEN false ELSE true END from tbnews"
 				+ " WHERE news_id=?) WHERE news_id=?";
-		return jdbcTemplate.update(sql,newsid);
+		return jdbcTemplate.update(sql,newsid,newsid);
 	}
 	
 	@Override
@@ -182,6 +182,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 	@Override
 	public List<NewsDTO> getPopularNews(int userid,int day,int row) {
 		String sql="";
+		if(day<=0)day=1;
 		if(userid!=0){
 			sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,"
 					+ "n.news_date,n.news_hit,n.news_url,s.s_id,s.s_name,s.s_logo,n.news_status,c.c_id,c.c_name,"
@@ -199,6 +200,51 @@ public class NewsRepositriesImpl implements NewsRepositories {
 				+ "WHERE n.news_status=true AND n.news_date  >= CURRENT_DATE - ( ? || ' days')::interval "
 				+ "ORDER BY n.news_hit DESC LIMIT ?";
 		return jdbcTemplate.query(sql,new Object[]{day,row}, new GetNewsWithNoUserIDMapper());
+	}
+	
+	@Override
+	public List<NewsDTO> listNewsStatistic(int categoryid, int siteid, int day, int row) {
+		// TODO Auto-generated method stub
+		if(row<=0) row=10;
+		if(day<=0) day=1;
+		if(categoryid !=0 && siteid !=0){
+			String sql="SELECT n.news_id,n.news_title,n.news_description"
+					+ ",n.news_img,n.news_date,n.news_url,n.news_hit,s.s_id,s.s_name,s.s_logo,n.news_status,c.c_id,c.c_name "
+					+ "FROM tbnews n INNER JOIN tbcategory c ON c.c_id=n.category_id "
+					+ "INNER JOIN tbsite s ON s.s_id=n.source_id "
+					+ "WHERE n.news_status=true AND n.category_id=? AND n.source_id=? "
+					+ "AND n.news_date  >= CURRENT_DATE - ( ? || ' days')::interval "
+					+ "ORDER BY n.news_hit DESC LIMIT ?";
+			return jdbcTemplate.query(sql, new Object[]{categoryid,siteid,day,row}, new GetNewsWithNoUserIDMapper());
+		}
+		if(categoryid != 0){
+			String sql="SELECT n.news_id,n.news_title,n.news_description"
+					+ ",n.news_img,n.news_date,n.news_url,n.news_hit,s.s_id,s.s_name,s.s_logo,n.news_status,c.c_id,c.c_name "
+					+ "FROM tbnews n INNER JOIN tbcategory c ON c.c_id=n.category_id "
+					+ "INNER JOIN tbsite s ON s.s_id=n.source_id "
+					+ "WHERE n.news_status=true AND n.category_id=? "
+					+ "AND n.news_date  >= CURRENT_DATE - ( ? || ' days')::interval "
+					+ "ORDER BY n.news_hit DESC LIMIT ?";
+			return jdbcTemplate.query(sql, new Object[]{categoryid,day,row}, new GetNewsWithNoUserIDMapper());
+		}
+		if(siteid != 0){
+			String sql="SELECT n.news_id,n.news_title,n.news_description"
+					+ ",n.news_img,n.news_date,n.news_url,n.news_hit,s.s_id,s.s_name,s.s_logo,n.news_status,c.c_id,c.c_name "
+					+ "FROM tbnews n INNER JOIN tbcategory c ON c.c_id=n.category_id "
+					+ "INNER JOIN tbsite s ON s.s_id=n.source_id "
+					+ "WHERE n.news_status=true AND n.source_id=? "
+					+ "AND n.news_date  >= CURRENT_DATE - ( ? || ' days')::interval "
+					+ "ORDER BY n.news_hit DESC LIMIT ?";
+			return jdbcTemplate.query(sql, new Object[]{siteid,day,row}, new GetNewsWithNoUserIDMapper());
+		}
+		String sql="SELECT n.news_id,n.news_title,n.news_description"
+				+ ",n.news_img,n.news_date,n.news_url,n.news_hit,s.s_id,s.s_name,s.s_logo,n.news_status,c.c_id,c.c_name "
+				+ "FROM tbnews n INNER JOIN tbcategory c ON c.c_id=n.category_id "
+				+ "INNER JOIN tbsite s ON s.s_id=n.source_id "
+				+ "WHERE n.news_status=true "
+				+ "AND n.news_date  >= CURRENT_DATE - ( ? || ' days')::interval "
+				+ "ORDER BY n.news_hit DESC LIMIT ?";
+		return jdbcTemplate.query(sql, new Object[]{day,row}, new GetNewsWithNoUserIDMapper());
 	}
 	
 	@Override
@@ -664,6 +710,8 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		String sql="UPDATE tbnews SET news_content=? WHERE news_id=?";
 		return jdbcTemplate.update(sql,news.getContent(),news.getId());
 	}
+
+
 
 	
 
