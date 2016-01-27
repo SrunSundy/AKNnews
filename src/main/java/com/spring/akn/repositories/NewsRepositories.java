@@ -24,7 +24,7 @@ public interface NewsRepositories {
 	
 	public List<NewsDTO> searchNews(SearchNewsDTO search);
 	
-	public List<NewsDTO> getPopularNews(int userid,int time,int row);
+	public List<NewsDTO> getPopularNews(int userid,int day,int row);
 	
 	/*public NewsDTO listAData(int newsid);*/
 	

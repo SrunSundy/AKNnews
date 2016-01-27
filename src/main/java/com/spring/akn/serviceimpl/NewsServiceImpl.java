@@ -77,9 +77,9 @@ public class NewsServiceImpl implements NewsService{
 	}
 
 	@Override
-	public List<NewsDTO> getPopularNews(int userid,int time,int row) {
+	public List<NewsDTO> getPopularNews(int userid,int day,int row) {
 		// TODO Auto-generated method stub
-		return newsrepository.getPopularNews(userid,time,row);
+		return newsrepository.getPopularNews(userid,day,row);
 	}
 
 	@Override
