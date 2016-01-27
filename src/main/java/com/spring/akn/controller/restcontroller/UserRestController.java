@@ -213,7 +213,7 @@ public class UserRestController {
 					byte[] bytes = file.getBytes();
 
 					// creating the directory to store file
-					String savePath = request.getSession().getServletContext().getRealPath("/resources/images/");
+					String savePath = request.getSession().getServletContext().getRealPath("/resources/images/user");
 					System.out.println(savePath);
 					File path = new File(savePath);
 					if (!path.exists()) {
