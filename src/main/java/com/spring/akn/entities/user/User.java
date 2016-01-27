@@ -1,6 +1,7 @@
 package com.spring.akn.entities.user;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -19,7 +20,9 @@ public class User implements UserDetails {
 	private String password;
 	private String image;
 	private boolean enabled;
+	private Date register_date;
 	
+
 	//customize user detail service filed
 	private List<Role> roles;
 	private boolean accountNonExpired = true;
@@ -89,5 +92,11 @@ public class User implements UserDetails {
 		// TODO Auto-generated method stub
 		return credentialsNonExpired;
 	}
-
+    
+	public Date getRegister_date() {
+		return register_date;
+	}
+	public void setRegister_date(Date register_date) {
+		this.register_date = register_date;
+	}
 }

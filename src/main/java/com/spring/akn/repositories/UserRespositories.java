@@ -21,4 +21,6 @@ public interface UserRespositories {
     public int updateUserImage(String imagename,int id);
 	public int getUserTotalPage(String key,int row); 
 	public int getUserTotalRecords(String key);
+    public List<User> listNewUser();
+    public List<User> listNewAdmin();
 }

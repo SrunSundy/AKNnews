@@ -105,8 +105,8 @@ public class UserRespositoriesImpl implements UserRespositories {
 		if(row<=15){row=15;}
 		int offset = (page * row) - row;
 	    if ((page != 0 && key.equals("*"))){key = "%";}
-		return jdbcTemplate.query(
-				"SELECT user_id, user_name, user_email, user_image, enabled FROM tbuser WHERE UPPER(user_name) LIKE UPPER(?) ORDER BY user_id DESC LIMIT ? OFFSET ?",
+		return jdbcTemplate.query("SELECT tbuser.user_id, tbuser.user_name, tbuser.user_email, tbuser.user_image, tbuser.enabled,tbuser.register_date FROM tbuser"
+				+ " INNER JOIN tbuser_role ON tbuser_role.user_id=tbuser.user_id WHERE tbuser_role.role_id <> 2 AND tbuser_role.role_id <> 1  AND UPPER(user_name) LIKE UPPER(?) ORDER BY user_id DESC LIMIT ? OFFSET ?;",
 				new Object[] { "%" + key + "%",row,offset }, new UserMapper());
 	}
 
@@ -119,6 +119,7 @@ public class UserRespositoriesImpl implements UserRespositories {
 			user.setEmail(rs.getString("user_email"));
 			user.setImage(rs.getString("user_image"));
 			user.setEnabled(rs.getBoolean("enabled"));
+			user.setRegister_date(rs.getDate("register_date"));
 			return user;
 		}
 	}
@@ -191,7 +192,8 @@ public class UserRespositoriesImpl implements UserRespositories {
 		if (key.equals("*")){key = "%";}
 			String sql="SELECT CASE WHEN COUNT(*)% ? !=0 THEN COUNT(*)/ ? +1 "
 					+ "ELSE COUNT(*)/? END user_page FROM tbuser "
-					+ "WHERE user_name LIKE ?";
+					+ "INNER JOIN tbuser_role ON tbuser_role.user_id=tbuser.user_id WHERE tbuser_role.role_id <> 2 AND tbuser_role.role_id <> 1"
+					+ "AND tbuser.user_name LIKE ?";
 			return jdbcTemplate.queryForObject(sql, new Object[]{row,row,row,"%"+key+"%"} ,Integer.class);
 		
 	}
@@ -199,7 +201,19 @@ public class UserRespositoriesImpl implements UserRespositories {
 	@Override
 	public int getUserTotalRecords(String key) {
 		if (key.equals("*")){key = "%";}
-		String sql="SELECT COUNT(*) FROM tbuser WHERE user_name LIKE ?";
+		String sql="SELECT COUNT(*) FROM tbuser "
+				+ "INNER JOIN tbuser_role ON tbuser_role.user_id=tbuser.user_id WHERE tbuser_role.role_id <> 2 AND tbuser_role.role_id <> 1"
+				+ " AND tbuser.user_name LIKE ?";
 		return jdbcTemplate.queryForObject(sql, new Object[]{"%"+key+"%"} ,Integer.class);	
+	}
+
+	@Override
+	public List<User> listNewUser() {	
+		return jdbcTemplate.query("SELECT tbuser.user_id, tbuser.user_name, tbuser.user_email, tbuser.user_image, tbuser.enabled, tbuser.register_date FROM tbuser INNER JOIN tbuser_role  ON tbuser_role.user_id = tbuser.user_id WHERE tbuser_role.role_id = 3 ORDER BY register_date DESC LIMIT 8", new UserMapper());
+	}
+
+	@Override
+	public List<User> listNewAdmin() {
+		return jdbcTemplate.query("SELECT tbuser.user_id, tbuser.user_name, tbuser.user_email, tbuser.user_image, tbuser.enabled, tbuser.register_date FROM tbuser INNER JOIN tbuser_role  ON tbuser_role.user_id = tbuser.user_id WHERE tbuser_role.role_id = 2 ORDER BY register_date DESC LIMIT 8", new UserMapper());
 	}
 }

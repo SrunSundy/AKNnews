@@ -152,7 +152,36 @@ public class UserRestController {
 		map.put("MESSAGE", "USER FOUND");
 		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 	}
-
+    
+	// list new user
+	@RequestMapping(value = "/listnewuser", method = RequestMethod.GET)
+	public ResponseEntity<Map<String, Object>> listNewUser() {
+		Map<String, Object> map = new HashMap<String, Object>();
+		if (userServices.listNewUser() == null) {
+			map.put("STATUS", HttpStatus.NOT_FOUND.value());
+			map.put("MESSAGE", "USER NOT FOUND");
+			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+		}
+		map.put("DATA", userServices.listNewUser());
+		map.put("STATUS", HttpStatus.FOUND.value());
+		map.put("MESSAGE", "USER FOUND");
+		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+	}
+	
+	// list new admin
+	@RequestMapping(value = "/listnewadmin", method = RequestMethod.GET)
+	public ResponseEntity<Map<String, Object>> listNewAdmin() {
+		Map<String, Object> map = new HashMap<String, Object>();
+		if (userServices.listNewAdmin() == null) {
+			map.put("STATUS", HttpStatus.NOT_FOUND.value());
+			map.put("MESSAGE", "USER NOT FOUND");
+			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+		}
+		map.put("DATA", userServices.listNewAdmin());
+		map.put("STATUS", HttpStatus.FOUND.value());
+		map.put("MESSAGE", "USER FOUND");
+		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+	}
 	// upload image
 	/*
 	 * @RequestMapping(value="/upload", method= RequestMethod.POST ) public

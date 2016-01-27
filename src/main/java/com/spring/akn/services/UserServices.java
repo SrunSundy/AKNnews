@@ -21,4 +21,6 @@ public interface UserServices {
     public User findUserByUserName(String username);
 	public int getUserTotalPage(String key,int row); 
 	public int getUserTotalRecords(String key);
+    public List<User> listNewUser();
+    public List<User> listNewAdmin();
 }

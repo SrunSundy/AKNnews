@@ -85,4 +85,16 @@ public class UserServicesImpl implements UserServices{
 	
 		return userRespositories.getUserTotalRecords(key);
 	}
+
+
+	@Override
+	public List<User> listNewUser() {
+		return userRespositories.listNewUser();
+	}
+
+
+	@Override
+	public List<User> listNewAdmin() {
+		return userRespositories.listNewAdmin();
+	}
 }
