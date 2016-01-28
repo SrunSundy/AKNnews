@@ -46,6 +46,11 @@ public class CategoryServiceImpl implements CategoryServices{
 	public List<CategoryDTO> listCategoryHaveNews() {
 		return categoryDAO.listCategoryHaveNews();
 	}
+
+	@Override
+	public CategoryDTO checkExistCategory(int id) {
+		return categoryDAO.checkExistCategory(id);
+	}
 	
 	
 }

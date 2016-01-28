@@ -12,7 +12,9 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.spring.akn.entities.CategoryDTO;
+import com.spring.akn.entities.SiteDTO;
 import com.spring.akn.repositories.CategoryDAO;
+import com.spring.akn.repositories.impl.SiteDaoImpl.SiteResultSetExtractorExist;
 
 @Repository
 public class CategoryDaoImpl implements CategoryDAO{
@@ -133,6 +135,24 @@ public class CategoryDaoImpl implements CategoryDAO{
 			return null;
 		}
 		
+	}
+	public static final class CategoryResultSetExtractorExist implements ResultSetExtractor<CategoryDTO>{
+		@Override
+		public CategoryDTO extractData(ResultSet rs) throws SQLException, DataAccessException {
+			while(rs.next()){
+				CategoryDTO dto = new CategoryDTO();
+				dto.setId(rs.getInt("c_id"));
+				return dto;
+			}
+			return null;
+		}
+	}
+	
+	
+	@Override
+	public CategoryDTO checkExistCategory(int id) {
+		String sql = "SELECT DISTINCT tbnews.category_id as c_id FROM tbnews WHERE category_id = ?";
+		return getJdbcTemplate().query(sql , new Object[]{id} , new CategoryResultSetExtractorExist());
 	}
 
 

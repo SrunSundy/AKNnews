@@ -13,4 +13,5 @@ public interface CategoryServices {
 	public boolean isMenuToggle(int id);
 	public int countCategoryRecord();
 	public List<CategoryDTO> listCategoryHaveNews();
+	public CategoryDTO checkExistCategory(int id);
 }

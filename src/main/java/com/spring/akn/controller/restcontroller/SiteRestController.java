@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.lucene.analysis.miscellaneous.StemmerOverrideFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -77,10 +78,13 @@ public class SiteRestController {
 	@RequestMapping(value="/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Map<String, Object>> deleteSiteById(@PathVariable("id") int id){
 		Map<String, Object> map = new HashMap<String,Object>();
-		if ( siteServices.isDeleteSiteById(id) ){
-			map.put("STATUS", HttpStatus.OK.value());
-			map.put("MESSAGE", "SITE ID "+id+" DELETE SUCCESS!");
-			return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
+		
+		if ( siteServices.checkExistSite(id) == null ){
+			if ( siteServices.isDeleteSiteById(id) ){
+				map.put("STATUS", HttpStatus.OK.value());
+				map.put("MESSAGE", "SITE ID "+id+" DELETE SUCCESS!");
+				return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
+			}
 		}
 		map.put("STATUS", HttpStatus.NOT_FOUND.value());
 		map.put("MESSAGE", "SITE ID "+id+" DELETE FAIL!");
@@ -99,10 +103,12 @@ public class SiteRestController {
 		if ( siteServices.isInsertSite(siteDTO) ){
 			map.put("STATUS", HttpStatus.OK.value());
 			map.put("MESSAGE", "SITE INSERT SUCCESS!");
+		//	map.put("SITE_ID", siteServices.getSiteSequence());
 			return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
 		}
 		map.put("STATUS", HttpStatus.NOT_FOUND.value());
 		map.put("MESSAGE", "SITE INSERT FAIL!");
+		//map.put("SITE_ID", siteServices.getSiteSequence());
 		return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
 	}
 	
@@ -167,6 +173,19 @@ public class SiteRestController {
 		map.put("STATUS", HttpStatus.NOT_FOUND.value());
 		map.put("MESSAGE", "SITE UPDATE FAIL!");
 		return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/ex", method = RequestMethod.GET)
+	public ResponseEntity<Map<String, Object>> ext(){
+		Map<String, Object> map = new HashMap<String, Object>();
+		if (siteServices.checkExistSite(100) != null) {
+			map.put("STATUS", HttpStatus.OK.value());
+			map.put("MESSAGE", "SITE not null SUCCESS!");
+			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+		}
+		map.put("STATUS", HttpStatus.NOT_FOUND.value());
+		map.put("MESSAGE", "SITE null FAIL!");
+		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);		
 	}
 	
 	

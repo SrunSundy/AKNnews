@@ -97,13 +97,15 @@ public class CategoryRestController {
 	@RequestMapping(value="/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Map<String, Object>> deleteCategoryById(@PathVariable("id") int id){
 		Map<String, Object> map = new HashMap<String,Object>();
-		if ( categoryServices.isDeleteCategoryById(id) ){
-			map.put("STATUS", HttpStatus.OK.value());
-			map.put("MESSAGE", "CATEGORY ID "+id+" DELETE SUCCESS!");
-			return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
+		if ( categoryServices.checkExistCategory(id) == null){
+			if ( categoryServices.isDeleteCategoryById(id) ){
+				map.put("STATUS", HttpStatus.OK.value());
+				map.put("MESSAGE", "CATEGORY ID "+id+" DELETE SUCCESS!");
+				return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
+			}
 		}
 		map.put("STATUS", HttpStatus.NOT_FOUND.value());
-		map.put("MESSAGE", "CATEGORY ID "+id+" DELETE FAIL!");
+		map.put("MESSAGE", "CATEGORY ID "+id+" DELETE FAIL CATEGORY EXIST NEWS!");
 		return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
 	}
 	

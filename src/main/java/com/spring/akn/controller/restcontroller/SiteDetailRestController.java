@@ -149,5 +149,7 @@ public class SiteDetailRestController {
 		map.put("MESSAGE", "SITE DETAIL CHANGE STATUS FAIL!");
 		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);		
 	}
+	
+
 
 }

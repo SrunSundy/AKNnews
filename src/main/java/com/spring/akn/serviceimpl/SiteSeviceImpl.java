@@ -71,6 +71,16 @@ public class SiteSeviceImpl implements SiteServices{
 	public boolean updateSiteBasePath(int id, String basePath) {
 		return siteDAO.updateSiteBasePath(id, basePath);
 	}
+
+	@Override
+	public SiteDTO checkExistSite(int id) {
+		return siteDAO.checkExistSite(id);
+	}
+
+	@Override
+	public int getSiteSequence() {
+		return siteDAO.getSiteSequence();
+	}
 	
 	
 

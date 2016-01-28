@@ -3,6 +3,7 @@ package com.spring.akn.repositories;
 import java.util.List;
 
 import com.spring.akn.entities.CategoryDTO;
+import com.spring.akn.entities.SiteDTO;
 
 public interface CategoryDAO {
 	
@@ -14,5 +15,5 @@ public interface CategoryDAO {
 	public boolean isMenuToggle(int id);
 	public int countCategoryRecord();
 	public List<CategoryDTO> listCategoryHaveNews();
-	
+	public CategoryDTO checkExistCategory(int id);
 }

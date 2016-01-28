@@ -19,4 +19,6 @@ public interface SiteDAO {
 	public int editLogoName(int s_id, String name);
 	public String getLogoName(int s_id);
 	public boolean updateSiteBasePath(int id, String basePath);
+	public SiteDTO checkExistSite(int id);
+	public int getSiteSequence();
 }

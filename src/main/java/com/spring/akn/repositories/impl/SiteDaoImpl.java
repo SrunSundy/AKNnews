@@ -203,7 +203,30 @@ public class SiteDaoImpl implements SiteDAO {
 			}
 			return null;
 		}
-		
+	}
+
+	public static final class SiteResultSetExtractorExist implements ResultSetExtractor<SiteDTO>{
+		@Override
+		public SiteDTO extractData(ResultSet rs) throws SQLException, DataAccessException {
+			while(rs.next()){
+				SiteDTO dto = new SiteDTO();
+				dto.setId(rs.getInt("s_id"));
+				return dto;
+			}
+			return null;
+		}
+	}
+	
+	
+	@Override
+	public SiteDTO checkExistSite(int id) {
+		String sql = "SELECT DISTINCT tbnews.source_id as s_id FROM tbnews WHERE source_id = ?";
+		return getJdbcTemplate().query(sql , new Object[]{id} , new SiteResultSetExtractorExist());
+	}
+	@Override
+	public int getSiteSequence() {
+		String sql = "select currval('tbsite_s_id_seq')";
+		return getJdbcTemplate().queryForObject(sql , Integer.class);
 	}
 
 
