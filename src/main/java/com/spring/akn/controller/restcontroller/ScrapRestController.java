@@ -92,7 +92,7 @@ public class ScrapRestController {
 		if(structures.isEmpty() == false){
 			map.put("STATUS", HttpStatus.OK.value());
 			map.put("MESSAGE", "GET STRUCTURE SUCCESSFULLY.");
-			map.put("RESPONSE_DATE", structures);
+			map.put("RESPONSE_DATA", structures);
 			return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);	
 		}
 		
@@ -111,7 +111,7 @@ public class ScrapRestController {
 		if(structure != null){
 			map.put("STATUS", HttpStatus.OK.value());
 			map.put("MESSAGE", "GET STRUCTURE SUCCESSFULLY.");
-			map.put("RESPONSE_DATE", structure);
+			map.put("RESPONSE_DATA", structure);
 			return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);	
 		}
 		
