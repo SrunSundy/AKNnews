@@ -38,9 +38,8 @@ public class UserRespositoriesImpl implements UserRespositories {
 
 	public int userRegister(FrmUserAdd user) {
 		try {
-			String sql = "INSERT INTO tbuser(user_name, user_email, user_password, user_image) VALUES(?,?,?,?)";
-			user.setImage("user.jpg");
-			Object[] obj = { user.getUsername(), user.getEmail(), user.getPassword(), user.getImage() };
+			String sql = "INSERT INTO tbuser(user_name, user_email, user_password) VALUES(?,?,?)";
+			Object[] obj = { user.getUsername(), user.getEmail(), user.getPassword()};
 			return jdbcTemplate.update(sql, obj);
 		} catch (DuplicateKeyException ex) {
 			return 0;
