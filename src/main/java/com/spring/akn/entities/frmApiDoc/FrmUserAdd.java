@@ -19,14 +19,8 @@ public class FrmUserAdd {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getImage() {
-		return image;
-	}
-	public void setImage(String image) {
-		this.image = image;
-	}
+
 	private String username;
 	private String email;
 	private String password;
-	private String image;
 }
