@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -122,7 +123,7 @@ public class ScrapRestController {
 	
 	@RequestMapping(value="/structure", method=RequestMethod.PUT)
 	public ResponseEntity<Map<String,Object>> updateStructure(@RequestBody StructureDTO structure){
-		
+
 		Map<String, Object> map = new HashMap<String,Object>();
 		
 		if(structureService.updateStructure(structure)){

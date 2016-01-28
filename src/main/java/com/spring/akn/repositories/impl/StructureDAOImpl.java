@@ -27,7 +27,7 @@ public class StructureDAOImpl implements StructureDAO{
 
 	@Override
 	public int deleteStructure(int id) {
-		return jdbcTemplate.update("DELETE tbStructure WHERE id=?",id);
+		return jdbcTemplate.update("DELETE FROM tbStructure WHERE id=?",id);
 	}
 
 	@Override
