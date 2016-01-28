@@ -121,7 +121,7 @@ public class ScrapRestController {
 	}
 	
 	@RequestMapping(value="/structure", method=RequestMethod.PUT)
-	public ResponseEntity<Map<String,Object>> updateStructure(StructureDTO structure){
+	public ResponseEntity<Map<String,Object>> updateStructure(@RequestBody StructureDTO structure){
 		
 		Map<String, Object> map = new HashMap<String,Object>();
 		
