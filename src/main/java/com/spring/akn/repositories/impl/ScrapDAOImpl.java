@@ -116,10 +116,11 @@ public class ScrapDAOImpl implements ScrapDAO {
 			Document doc = Jsoup.connect(selector.getUrl()).timeout(30000).get();
 			
 			Elements elements = doc.select(selector.getRowsSelector());
+			System.err.println("ROW : " +selector.getRowsSelector());
 			for(Element e:elements){
 				
 				String title = e.select(selector.getTitleSelector()).text();
-				String description = e.select(selector.getDescriptionSelector()).text();
+				/*String description = e.select(selector.getDescriptionSelector()).text();*/
 				
 				String image = e.select(selector.getImageSelector()).attr("src");
 				String link = e.select(selector.getLinkSelector()).attr("href");
@@ -128,7 +129,7 @@ public class ScrapDAOImpl implements ScrapDAO {
 				n.setUrl(link);
 				n.setImage(image);
 				n.setTitle(title);
-				n.setDescription(description);
+				/*n.setDescription(description);*/
 				
 				CategoryDTO category = new CategoryDTO();
 				category.setId(selector.getCategoryId());
