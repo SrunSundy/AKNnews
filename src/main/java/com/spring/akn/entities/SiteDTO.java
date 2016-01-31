@@ -7,6 +7,8 @@ public class SiteDTO {
 	private String logo;
 	private String basepath;
 	private String prefixImg;
+	private String prefixLink;
+	
 	public int getId() {
 		return id;
 	}
@@ -59,6 +61,14 @@ public class SiteDTO {
 
 	public void setPrefixImg(String prefixImg) {
 		this.prefixImg = prefixImg;
+	}
+
+	public String getPrefixLink() {
+		return prefixLink;
+	}
+
+	public void setPrefixLink(String prefixLink) {
+		this.prefixLink = prefixLink;
 	}
 
 
