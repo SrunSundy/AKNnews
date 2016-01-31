@@ -82,7 +82,7 @@ public class ScrapDAOImpl implements ScrapDAO {
 	
 	private List<StructureDTO> getAllSelectors(){
 		
-		String sql = "SELECT sd.url, link_selector, rows_selector, image_selector, title_selector, desc_selector, site_id, category_id " +  
+		String sql = "SELECT sd.url, link_selector, rows_selector, image_selector, title_selector, site_id, category_id, s.s_prefix_img " +  
 					 "FROM tbsite_detail sd INNER JOIN tbsite s ON sd.site_id=s.s_id " + 
 					 "INNER JOIN tbstructure st ON st.id=s.s_id " + 
 					 "WHERE sd.status=true";
@@ -100,8 +100,8 @@ public class ScrapDAOImpl implements ScrapDAO {
 				selectors.setLinkSelector(rs.getString("link_selector"));
 				selectors.setTitleSelector(rs.getString("title_selector"));
 				selectors.setImageSelector(rs.getString("image_selector"));
-				selectors.setDescriptionSelector(rs.getString("desc_selector"));
-				
+				selectors.setPrefixImg(rs.getString("s_prefix_img"));
+				System.err.println("Prefix IMAGE : " + selectors.getPrefixImg());
 				return selectors;
 			}
 		});
@@ -120,16 +120,15 @@ public class ScrapDAOImpl implements ScrapDAO {
 			for(Element e:elements){
 				
 				String title = e.select(selector.getTitleSelector()).text();
-				/*String description = e.select(selector.getDescriptionSelector()).text();*/
 				
-				String image = e.select(selector.getImageSelector()).attr("src");
+				String image = e.select(selector.getImageSelector()).attr(selector.getPrefixImg()+"src");
+				
 				String link = e.select(selector.getLinkSelector()).attr("href");
 				
 				NewsDTO n = new NewsDTO();
 				n.setUrl(link);
 				n.setImage(image);
 				n.setTitle(title);
-				/*n.setDescription(description);*/
 				
 				CategoryDTO category = new CategoryDTO();
 				category.setId(selector.getCategoryId());
@@ -302,7 +301,7 @@ public class ScrapDAOImpl implements ScrapDAO {
 	
 	private List<StructureDTO> getAllSelectors(int site_id){
 		
-		String sql = "SELECT sd.url, link_selector, rows_selector, image_selector, title_selector, desc_selector, site_id, category_id " +  
+		String sql = "SELECT sd.url, link_selector, rows_selector, image_selector, title_selector, site_id, category_id, s.s_prefix_img " +  
 					 "FROM tbsite_detail sd INNER JOIN tbsite s ON sd.site_id=s.s_id " + 
 					 "INNER JOIN tbstructure st ON st.id=s.s_id " + 
 					 "WHERE sd.status=true AND site_id=?";
@@ -320,8 +319,7 @@ public class ScrapDAOImpl implements ScrapDAO {
 				selectors.setLinkSelector(rs.getString("link_selector"));
 				selectors.setTitleSelector(rs.getString("title_selector"));
 				selectors.setImageSelector(rs.getString("image_selector"));
-				selectors.setDescriptionSelector(rs.getString("desc_selector"));
-				
+				selectors.setPrefixImg(rs.getString("s_prefix_img"));
 				return selectors;
 			}
 		});
@@ -343,8 +341,11 @@ public class ScrapDAOImpl implements ScrapDAO {
 			for(Element e:elements){
 				
 				String title = e.select(selector.getTitleSelector()).text();
-				String image = e.select(selector.getImageSelector()).attr("src");
+				
+				String image = e.select(selector.getImageSelector()).attr(selector.getPrefixImg()+"src");
+				
 				String link = e.select(selector.getLinkSelector()).attr("href");
+				
 				System.out.println(title+" "+ image + " " + link);
 				
 				TestScrapDTO n = new TestScrapDTO();
