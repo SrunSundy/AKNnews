@@ -6,7 +6,7 @@ public class SiteDTO {
 	private String url;
 	private String logo;
 	private String basepath;
-
+	private String prefixImg;
 	public int getId() {
 		return id;
 	}
@@ -51,6 +51,14 @@ public class SiteDTO {
 	public String toString() {
 		return "SiteDTO [id=" + id + ", name=" + name + ", url=" + url + ", logo=" + logo + ", basepath=" + basepath
 				+ "]";
+	}
+
+	public String getPrefixImg() {
+		return prefixImg;
+	}
+
+	public void setPrefixImg(String prefixImg) {
+		this.prefixImg = prefixImg;
 	}
 
 
