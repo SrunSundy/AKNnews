@@ -113,7 +113,7 @@ public class ScrapDAOImpl implements ScrapDAO {
 		ArrayList<NewsDTO> news = new ArrayList<NewsDTO>();
 		
 		try {
-			Document doc = Jsoup.connect(selector.getUrl()).timeout(30000).get();
+			Document doc = Jsoup.connect(selector.getUrl()).timeout(30000).userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.120 Safari/535.2").get();
 			
 			Elements elements = doc.select(selector.getRowsSelector());
 			System.err.println("ROW : " +selector.getRowsSelector());
@@ -335,7 +335,7 @@ public class ScrapDAOImpl implements ScrapDAO {
 		ArrayList<TestScrapDTO> news = new ArrayList<TestScrapDTO>();
 		
 		try {
-			Document doc = Jsoup.connect(selector.getUrl()).timeout(30000).get();
+			Document doc = Jsoup.connect(selector.getUrl()).timeout(30000).userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.120 Safari/535.2").get();
 			
 			Elements elements = doc.select(selector.getRowsSelector());
 			for(Element e:elements){
@@ -371,7 +371,8 @@ public class ScrapDAOImpl implements ScrapDAO {
 		
 		String content = "";
 		try{
-			Document doc = Jsoup.connect(selector.getUrl()).timeout(30000).get();
+			Document doc = Jsoup.connect(selector.getUrl()).timeout(30000).userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.120 Safari/535.2").get();
+					
 			Elements elements = doc.select(selector.getContentSelector());
 			
 			for(Element element : elements){
