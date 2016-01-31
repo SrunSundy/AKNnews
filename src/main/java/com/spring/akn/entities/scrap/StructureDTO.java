@@ -19,6 +19,7 @@ public class StructureDTO {
 	private String contentSelector;
 	private String logo;
 	private Timestamp date;
+	private String prefixImg;
 	
 	public int getId() {
 		return id;
@@ -115,6 +116,12 @@ public class StructureDTO {
 	}
 	public void setDate(Timestamp date) {
 		this.date = date;
+	}
+	public String getPrefixImg() {
+		return prefixImg;
+	}
+	public void setPrefixImg(String prefixImg) {
+		this.prefixImg = prefixImg;
 	}
 	
 }
