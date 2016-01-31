@@ -42,13 +42,13 @@ public class SiteDaoImpl implements SiteDAO {
 
 	@Override
 	public List<SiteDTO> listSite() {
-		String sql = "SELECT s_id, s_name, s_url, s_logo,s_basepath, s_prefix_img FROM tbsite ORDER BY s_id ASC;";
+		String sql = "SELECT s_id, s_name, s_url, s_logo,s_basepath, s_prefix_img, s_prefix_link FROM tbsite ORDER BY s_id ASC;";
 		return getJdbcTemplate().query(sql , new SiteRowMapper() );
 	}
 
 	@Override
 	public SiteDTO findSiteById(int id) {
-		String sql = "SELECT s_id, s_name, s_url , s_logo, s_basepath, s_prefix_img FROM tbsite WHERE s_id = ?;";
+		String sql = "SELECT s_id, s_name, s_url , s_logo, s_basepath, s_prefix_img, s_prefix_link FROM tbsite WHERE s_id = ?;";
 		return getJdbcTemplate().query(sql , new Object[]{id} , new SiteResultSetExtractor());
 	}
 
@@ -63,8 +63,8 @@ public class SiteDaoImpl implements SiteDAO {
 
 	@Override
 	public boolean isInsertSite(SiteDTO siteDTO) {
-		String sql = "INSERT INTO tbsite(s_name, s_url, s_basepath, s_prefix_img) VALUES(?,?,?,?)";
-		int result = getJdbcTemplate().update(sql , new Object[]{siteDTO.getName(), siteDTO.getUrl(),siteDTO.getBasepath(), siteDTO.getPrefixImg()});
+		String sql = "INSERT INTO tbsite(s_name, s_url, s_basepath, s_prefix_img, s_prefix_link) VALUES(?,?,?,?,?)";
+		int result = getJdbcTemplate().update(sql , new Object[]{siteDTO.getName(), siteDTO.getUrl(),siteDTO.getBasepath(), siteDTO.getPrefixImg(), siteDTO.getPrefixLink()});
 		if (result > 0)
 			return true;
 		return false;
@@ -72,8 +72,8 @@ public class SiteDaoImpl implements SiteDAO {
 
 	@Override
 	public boolean isUpdateSite(SiteDTO siteDTO) {
-		String sql = "UPDATE tbsite SET s_name=?, s_url=? ,s_basepath=?, s_prefix_img=? WHERE s_id = ?";
-		int result = getJdbcTemplate().update(sql , new Object[]{siteDTO.getName(), siteDTO.getUrl(), siteDTO.getBasepath(), siteDTO.getPrefixImg(), siteDTO.getId()});
+		String sql = "UPDATE tbsite SET s_name=?, s_url=? ,s_basepath=?, s_prefix_img=?, s_prefix_link=? WHERE s_id = ?";
+		int result = getJdbcTemplate().update(sql , new Object[]{siteDTO.getName(), siteDTO.getUrl(), siteDTO.getBasepath(), siteDTO.getPrefixImg(), siteDTO.getPrefixLink(), siteDTO.getId()});
 		if (result > 0)
 			return true;
 		return false;
@@ -186,6 +186,7 @@ public class SiteDaoImpl implements SiteDAO {
 			dto.setLogo(rs.getString("s_logo"));
 			dto.setBasepath(rs.getString("s_basepath"));
 			dto.setPrefixImg(rs.getString("s_prefix_img"));
+			dto.setPrefixLink(rs.getString("s_prefix_link"));
 			return dto;
 		}		
 	}
@@ -201,6 +202,7 @@ public class SiteDaoImpl implements SiteDAO {
 				dto.setLogo(rs.getString("s_logo"));
 				dto.setBasepath(rs.getString("s_basepath"));
 				dto.setPrefixImg(rs.getString("s_prefix_img"));
+				dto.setPrefixLink(rs.getString("s_prefix_link"));
 				return dto;
 			}
 			return null;
