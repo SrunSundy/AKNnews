@@ -334,7 +334,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 				+ "INNER JOIN tbuser u ON u.user_id=sl.user_id "
 				+ "INNER JOIN tbsite s ON s.s_id =n.source_id "
 				+ "INNER JOIN tbcategory c ON c.c_id=n.category_id "
-				+ "WHERE  n.news_status=true AND n.news_date  >= CURRENT_DATE -INTERVAL '1day' AND u.user_id=? LIMIT ? OFFSET ?";
+				+ "WHERE  n.news_status=true  AND u.user_id=? LIMIT ? OFFSET ?";
 		return jdbcTemplate.query(sql, new Object[]{userid,row,offset},new GetNewsWithNoUserIDMapper());
 	}
 	
