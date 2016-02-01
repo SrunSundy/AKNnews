@@ -510,9 +510,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 					+ "LIMIT ? OFFSET ?";
 			return jdbcTemplate.query(sql,new Object[]{ userid,categoryid,row ,offset }, new GetNewsWithUserIDMapper());
 		}
-
-		if(userid<0){status2=false;System.err.println("yes");}
-		System.err.println(userid);
+		if(userid<0)status2=false;
 			String sql="SELECT n.news_id,n.news_title,n.news_description"
 					+ ",n.news_img,n.news_date,n.news_url,n.news_hit,s.s_id,s.s_name,s.s_logo,n.news_status,c.c_id,c.c_name "
 					+ "FROM tbnews n INNER JOIN tbcategory c ON c.c_id=n.category_id "
