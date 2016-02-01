@@ -15,6 +15,13 @@ public class NewsDTO {
 	private String content;
 	private boolean isSaved;
 
+	private SavedNewsDTO savenews;
+	public SavedNewsDTO getSavenews() {
+		return savenews;
+	}
+	public void setSavenews(SavedNewsDTO savenews) {
+		this.savenews = savenews;
+	}
 	private SiteDTO site;
 	private CategoryDTO category;
 
@@ -96,8 +103,9 @@ public class NewsDTO {
 	public String toString() {
 		return "NewsDTO [id=" + id + ", title=" + title + ", description=" + description + ", image=" + image
 				+ ", date=" + date + ", hit=" + hit + ", url=" + url + ", status=" + status + ", content=" + content
-				+ ", isSaved=" + isSaved + ", site=" + site + ", category=" + category + "]";
+				+ ", isSaved=" + isSaved + ", savenews=" + savenews + ", site=" + site + ", category=" + category + "]";
 	}
+	
 	
 
 	
