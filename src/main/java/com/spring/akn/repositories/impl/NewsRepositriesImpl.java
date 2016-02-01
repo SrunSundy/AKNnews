@@ -162,6 +162,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		boolean status2=true;
 		if(row <=0 ) row=10;
 		
+		if(userid<-1){status1=false;status2=false;}
 		if(userid<0) status2=false;
 		
 		if(categoryid != 0 && siteid != 0){
@@ -202,7 +203,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		
 		boolean status1=true;
 		boolean status2=true;
-		
+		if(userid<-1){status1=false;status2=false;}
 		if(userid<0) status2=false;
 		if(categoryid !=0 && siteid !=0){
 			String sql="SELECT COUNT(*) FROM tbnews WHERE (news_status=? OR news_status=?) "
@@ -364,6 +365,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 					+ "LIMIT ? OFFSET ?";
 			return jdbcTemplate.query(sql, new Object[]{userid,categoryid,"%"+key+"%",row,offset},new GetNewsWithUserIDMapper());
 		}
+		if(userid<-1){status1=false;status2=false;}
 		if(userid<0)status2=false;
 		String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_id,s.s_name,s.s_logo,n.news_status,c.c_id,c.c_name "
 				+ "FROM tbnews n INNER JOIN tbsite s "
@@ -400,6 +402,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 					+ "LIMIT ? OFFSET ?";
 			return jdbcTemplate.query(sql, new Object[]{userid,siteid,"%"+key+"%",row,offset},new GetNewsWithUserIDMapper());
 		}
+		if(userid<-1){status1=false;status2=false;}
 		if(userid<0) status2=false;
 		String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_id,s.s_name,s.s_logo,n.news_status,c.c_id,c.c_name "
 				+ "FROM tbnews n INNER JOIN tbsite s "
@@ -434,6 +437,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 					+ "WHERE n.news_status=true AND n.news_title LIKE ? AND n.source_id=? AND c.c_id=? ORDER BY n.news_id DESC LIMIT ? OFFSET ? ";
 			return jdbcTemplate.query(sql, new Object[]{userid,"%"+key+"%",siteid,categoryid,row,offset},new GetNewsWithUserIDMapper());
 		}
+		if(userid<-1){status1=false;status2=false;}
 		if(userid<0) status2=false;
 		String sql="SELECT n.news_id,n.news_title,n.news_description,"
 				+ "n.news_img,n.news_date,n.news_url,n.news_hit,"
@@ -468,6 +472,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 			return jdbcTemplate.query(sql, new Object[]{userid,"%"+key+"%",row,offset},new GetNewsWithUserIDMapper());
 
 		}
+		if(userid<-1){status1=false;status2=false;}
 		if(userid<0) status2=false;
 	
 		String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_hit,n.news_url,s.s_id,s.s_name,s.s_logo,n.news_status,c.c_id,c.c_name  "
@@ -510,6 +515,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 					+ "LIMIT ? OFFSET ?";
 			return jdbcTemplate.query(sql,new Object[]{ userid,categoryid,row ,offset }, new GetNewsWithUserIDMapper());
 		}
+		if(userid<-1){status1=false;status2=false;}
 		if(userid<0)status2=false;
 			String sql="SELECT n.news_id,n.news_title,n.news_description"
 					+ ",n.news_img,n.news_date,n.news_url,n.news_hit,s.s_id,s.s_name,s.s_logo,n.news_status,c.c_id,c.c_name "
@@ -541,6 +547,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 					+ "WHERE n.news_status=true AND n.source_id=? ORDER BY n.news_id DESC LIMIT ? OFFSET ? ";
 			return jdbcTemplate.query(sql,new Object[]{ userid,siteid,row ,offset } ,new GetNewsWithUserIDMapper());
 		}
+		if(userid<-1){status1=false;status2=false;}
 		if(userid<0){status2=false;}
 		String sql="SELECT n.news_id,n.news_title,n.news_description"
 				+ ",n.news_img,n.news_date,n.news_url,n.news_hit,s.s_id,s.s_name,s.s_logo,n.news_status,c.c_id,c.c_name "
@@ -572,6 +579,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 					+ "WHERE n.news_status=true AND n.source_id=? AND c.c_id=? ORDER BY n.news_id DESC  LIMIT ? OFFSET ?";
 			return jdbcTemplate.query(sql,new Object[]{ userid,siteid,categoryid,row ,offset } ,new GetNewsWithUserIDMapper());
 		}
+		if(userid<-1){status1=false;status2=false;}
 		if(userid<0){status2=false;}
 		String sql="SELECT n.news_id,n.news_title,n.news_description"
 				+ ",n.news_img,n.news_date,n.news_url,n.news_hit,"
@@ -605,6 +613,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 					+ "WHERE n.news_status=true ORDER BY n.news_id DESC LIMIT ? OFFSET ?";
 			return jdbcTemplate.query(sql,new Object[]{ userid,row,offset } , new GetNewsWithUserIDMapper());
 		}
+		if(userid<-1){status1=false;status2=false;}
 		if(userid<0){status2=false;}
 		String sql="SELECT n.news_id,n.news_title,n.news_description"
 				+ ",n.news_img,n.news_date,n.news_url,n.news_hit,s.s_id,s.s_name,s.s_logo,n.news_status,c.c_id,c.c_name "
