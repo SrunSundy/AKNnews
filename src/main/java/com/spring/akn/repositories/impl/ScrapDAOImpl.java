@@ -54,9 +54,15 @@ public class ScrapDAOImpl implements ScrapDAO {
 	
 	private int[] scrapNewsToDatabase(final ArrayList<NewsDTO> news){
 		
-		String sql = "INSERT INTO tbnews(news_title, news_description, news_img, news_url, category_id, source_id) "+
-			  "SELECT ?, ?, (SELECT DISTINCT s_basepath || ? FROM tbsite INNER JOIN tbnews ON tbsite.s_id=tbnews.source_id WHERE source_id=?), ?, ?, ? " +
-			  "WHERE NOT EXISTS(SELECT news_url FROM tbnews WHERE news_url=?)";
+		/*String sql = "INSERT INTO tbnews(news_title, news_description, news_img, news_url, category_id, source_id) "+
+			  "SELECT ?, ?, (SELECT DISTINCT s_basepath || ? FROM tbsite INNER JOIN tbnews ON tbsite.s_id=tbnews.source_id WHERE source_id=?), (SELECT DISTINCT s_prefix_link || ? FROM tbsite INNER JOIN tbnews ON tbsite.s_id=tbnews.source_id WHERE source_id=?), ?, ? " +
+			  "WHERE NOT EXISTS(SELECT news_url FROM tbnews WHERE news_url=?)";*/
+		
+		
+		String sql = "INSERT INTO tbnews(news_title, news_description, news_img, news_url, category_id, source_id) " +
+				     "SELECT ?, ?, (SELECT DISTINCT s_basepath || ? FROM tbsite INNER JOIN tbnews ON tbsite.s_id=tbnews.source_id WHERE source_id=?), " + 
+				     "(SELECT DISTINCT s_prefix_link || ? FROM tbsite INNER JOIN tbnews ON tbsite.s_id=tbnews.source_id WHERE source_id=?), ?, ? " +
+				     "WHERE NOT EXISTS(SELECT news_url FROM tbnews WHERE news_url=(SELECT DISTINCT s_prefix_link || ? FROM tbsite INNER JOIN tbnews ON tbsite.s_id=tbnews.source_id WHERE source_id=?))";
 		
 		return jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
 			
@@ -68,9 +74,11 @@ public class ScrapDAOImpl implements ScrapDAO {
 						ps.setString(3, n.getImage());
 						ps.setInt(4, n.getSite().getId());
 						ps.setString(5, n.getUrl());
-						ps.setInt(6, n.getCategory().getId());
-						ps.setInt(7, n.getSite().getId());
-						ps.setString(8, n.getUrl());
+						ps.setInt(6, n.getSite().getId());
+						ps.setInt(7, n.getCategory().getId());
+						ps.setInt(8, n.getSite().getId());
+						ps.setString(9, n.getUrl());
+						ps.setInt(10, n.getSite().getId());
 			}
 			
 			@Override
