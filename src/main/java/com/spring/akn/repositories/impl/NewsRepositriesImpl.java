@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import com.spring.akn.entities.CategoryDTO;
 import com.spring.akn.entities.NewsDTO;
+import com.spring.akn.entities.SavedNewsDTO;
 import com.spring.akn.entities.SearchNewsDTO;
 import com.spring.akn.entities.SiteDTO;
 import com.spring.akn.entities.frmApiDoc.FrmSaveListAdd;
@@ -328,14 +329,14 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		if(page <= 0) return new ArrayList<NewsDTO>();
 		if(row <=0 ) row=10;
 		int offset = ( page * row ) - row;
-		String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_url,n.news_hit,s.s_id,s.s_name,s.s_logo,n.news_status,c.c_id,c.c_name "
+		String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_url,n.news_hit,s.s_id,s.s_name,s.s_logo,n.news_status,c.c_id,c.c_name,sl.save_date "
 				+ "FROM tbsavelist sl "
 				+ "INNER JOIN tbnews n ON sl.news_id=n.news_id "
 				+ "INNER JOIN tbuser u ON u.user_id=sl.user_id "
 				+ "INNER JOIN tbsite s ON s.s_id =n.source_id "
 				+ "INNER JOIN tbcategory c ON c.c_id=n.category_id "
-				+ "WHERE  n.news_status=true  AND u.user_id=? LIMIT ? OFFSET ?";
-		return jdbcTemplate.query(sql, new Object[]{userid,row,offset},new GetNewsWithNoUserIDMapper());
+				+ "WHERE  n.news_status=true  AND u.user_id=? ORDER BY sl.id DESC LIMIT ? OFFSET ?";
+		return jdbcTemplate.query(sql, new Object[]{userid,row,offset},new GetSavedNewsWithNoUserIDMapper());
 	}
 	
 	
@@ -684,6 +685,39 @@ public class NewsRepositriesImpl implements NewsRepositories {
 			
 			news.setSite(site);
 			news.setCategory(category);
+			return news;
+		}
+	}
+	
+	private static final class GetSavedNewsWithNoUserIDMapper implements RowMapper<NewsDTO>{		
+		public NewsDTO mapRow(ResultSet rs, int row) throws SQLException {
+			NewsDTO news = new NewsDTO();
+			
+			news.setId(rs.getInt("news_id"));
+			news.setTitle(rs.getString("news_title"));
+			news.setDescription(rs.getString("news_description"));
+			news.setImage(rs.getString("news_img"));
+			news.setDate(rs.getTimestamp("news_date"));
+			news.setHit(rs.getInt("news_hit"));
+			news.setStatus(rs.getBoolean("news_status"));
+			news.setUrl(rs.getString("news_url"));
+		
+			
+			SiteDTO site=new SiteDTO();
+			site.setId(rs.getInt("s_id"));
+			site.setName(rs.getString("s_name"));
+			site.setLogo(rs.getString("s_logo"));
+			
+			CategoryDTO category=new CategoryDTO();
+			category.setId(rs.getInt("c_id"));
+			category.setName(rs.getString("c_name"));
+			
+			SavedNewsDTO savenews=new SavedNewsDTO();
+			savenews.setSaveddate(rs.getTimestamp("save_date"));
+			
+			news.setSite(site);
+			news.setCategory(category);
+			news.setSavenews(savenews);
 			return news;
 		}
 	}
