@@ -42,19 +42,19 @@ public class SiteDaoImpl implements SiteDAO {
 
 	@Override
 	public List<SiteDTO> listSite() {
-		String sql = "SELECT s_id, s_name, s_url, s_logo,s_basepath, s_prefix_img, s_prefix_link FROM tbsite ORDER BY s_id ASC;";
+		String sql = "SELECT s_id, s_name, s_url, s_logo,s_basepath, s_prefix_img, s_prefix_link FROM news.tbsite ORDER BY s_id ASC;";
 		return getJdbcTemplate().query(sql , new SiteRowMapper() );
 	}
 
 	@Override
 	public SiteDTO findSiteById(int id) {
-		String sql = "SELECT s_id, s_name, s_url , s_logo, s_basepath, s_prefix_img, s_prefix_link FROM tbsite WHERE s_id = ?;";
+		String sql = "SELECT s_id, s_name, s_url , s_logo, s_basepath, s_prefix_img, s_prefix_link FROM news.tbsite WHERE s_id = ?;";
 		return getJdbcTemplate().query(sql , new Object[]{id} , new SiteResultSetExtractor());
 	}
 
 	@Override
 	public boolean isDeleteSiteById(int id) {
-		String sql = "DELETE FROM tbsite WHERE s_id = ? AND (SELECT source_id FROM tbnews WHERE tbnews.source_id = ?) ISNULL ;";
+		String sql = "DELETE FROM news.tbsite WHERE s_id = ? AND (SELECT source_id FROM news.tbnews WHERE news.tbnews.source_id = ?) ISNULL ;";
 		int result = getJdbcTemplate().update(sql , new Object[]{id,id});
 		if (result > 0)
 			return true;
@@ -63,7 +63,7 @@ public class SiteDaoImpl implements SiteDAO {
 
 	@Override
 	public boolean isInsertSite(SiteDTO siteDTO) {
-		String sql = "INSERT INTO tbsite(s_name, s_url, s_basepath, s_prefix_img, s_prefix_link) VALUES(?,?,?,?,?)";
+		String sql = "INSERT INTO news.tbsite(s_name, s_url, s_basepath, s_prefix_img, s_prefix_link) VALUES(?,?,?,?,?)";
 		int result = getJdbcTemplate().update(sql , new Object[]{siteDTO.getName(), siteDTO.getUrl(),siteDTO.getBasepath(), siteDTO.getPrefixImg(), siteDTO.getPrefixLink()});
 		if (result > 0)
 			return true;
@@ -72,7 +72,7 @@ public class SiteDaoImpl implements SiteDAO {
 
 	@Override
 	public boolean isUpdateSite(SiteDTO siteDTO) {
-		String sql = "UPDATE tbsite SET s_name=?, s_url=? ,s_basepath=?, s_prefix_img=?, s_prefix_link=? WHERE s_id = ?";
+		String sql = "UPDATE news.tbsite SET s_name=?, s_url=? ,s_basepath=?, s_prefix_img=?, s_prefix_link=? WHERE s_id = ?";
 		int result = getJdbcTemplate().update(sql , new Object[]{siteDTO.getName(), siteDTO.getUrl(), siteDTO.getBasepath(), siteDTO.getPrefixImg(), siteDTO.getPrefixLink(), siteDTO.getId()});
 		if (result > 0)
 			return true;
@@ -81,13 +81,13 @@ public class SiteDaoImpl implements SiteDAO {
 
 	@Override
 	public int countSiteRecord() {		
-		String sql = "SELECT COUNT(*) FROM tbsite;";
+		String sql = "SELECT COUNT(*) FROM news.tbsite;";
 		return getJdbcTemplate().queryForObject(sql , Integer.class);
 	}
 	
 	@Override
 	public boolean updateSiteBasePath(int id,String basePath) {
-		String sql = "UPDATE tbsite SET s_basepath= ? WHERE s_id = ?";
+		String sql = "UPDATE news.tbsite SET s_basepath= ? WHERE s_id = ?";
 		int result = getJdbcTemplate().update(sql, new Object[]{basePath, id});
 		if (result > 0)
 			return true;
@@ -166,12 +166,12 @@ public class SiteDaoImpl implements SiteDAO {
 	}
 	@Override
 	public int editLogoName(int s_id, String name){
-		String sql = "UPDATE tbsite SET s_logo = ? WHERE s_id = ?;";
+		String sql = "UPDATE news.tbsite SET s_logo = ? WHERE s_id = ?;";
 		return getJdbcTemplate().update(sql , new Object[]{name , s_id});
 	}
 	@Override
 	public String getLogoName(int s_id){
-		String sql = "SELECT s_logo FROM tbsite WHERE (s_id = ?);";
+		String sql = "SELECT s_logo FROM news.tbsite WHERE (s_id = ?);";
 		return getJdbcTemplate().queryForObject(sql, new Object[]{ s_id }, String.class);
 	}
 	
@@ -224,12 +224,12 @@ public class SiteDaoImpl implements SiteDAO {
 	
 	@Override
 	public SiteDTO checkExistSite(int id) {
-		String sql = "SELECT DISTINCT tbnews.source_id as s_id FROM tbnews WHERE source_id = ?";
+		String sql = "SELECT DISTINCT news.tbnews.source_id as s_id FROM news.tbnews WHERE source_id = ?";
 		return getJdbcTemplate().query(sql , new Object[]{id} , new SiteResultSetExtractorExist());
 	}
 	@Override
 	public int getSiteSequence() {
-		String sql = "select currval('tbsite_s_id_seq')";
+		String sql = "select currval('news.tbsite_s_id_seq')";
 		return getJdbcTemplate().queryForObject(sql , Integer.class);
 	}
 
