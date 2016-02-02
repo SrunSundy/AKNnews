@@ -1,6 +1,7 @@
 package com.spring.akn.controller.restcontroller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.json.simple.JSONObject;
@@ -70,6 +71,33 @@ public class SiteDetailRestController {
 		map.put("DATA", siteDetailServices.listSiteDetail() );
 		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 	}
+	
+	/**
+	 * List crap url with page
+	 * @param limit
+	 * @param page
+	 * @return
+	 * @throws ParseException
+	 */
+	@RequestMapping(value = "/page/{limit}/{page}/{site_id}/{category_id}", method = RequestMethod.GET)
+	public ResponseEntity<Map<String, Object>> listSiteDetailPage(@PathVariable("limit")int limit ,@PathVariable("page") int page,
+			@PathVariable("site_id")int s_id, @PathVariable("category_id")int c_id ) throws ParseException {
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<SiteDetailDTO> lst = siteDetailServices.listSiteDetailPage(limit, page ,s_id, c_id);
+		if (!lst.isEmpty()) {
+			map.put("STATUS", HttpStatus.OK.value());
+			map.put("MESSAGE", "SITE DETAIL LIST DATA SUCCESS!");
+			map.put("DATA", lst );
+			map.put("TOTALRECORD", siteDetailServices.countRecord());
+			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+		}
+
+		map.put("STATUS", HttpStatus.NOT_FOUND.value());
+		map.put("MESSAGE", "SITED ETAIL LIST DATA  FAIL!");
+		map.put("DATA", lst );
+		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+	}
+
 
 	/**
 	 * Update sitedetail data

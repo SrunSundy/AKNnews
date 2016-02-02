@@ -43,6 +43,16 @@ public class SiteDetailServiceImpl implements SiteDetailServices{
 	public SiteDetailDTO findSiteAndCategoryById(int s_id, int c_id) {
 		return siteDetailDAO.findSiteAndCategoryById(s_id, c_id);
 	}
+
+	@Override
+	public List<SiteDetailDTO> listSiteDetailPage(int limit, int offet ,int s_id, int c_id) {
+		return siteDetailDAO.listSiteDetailPage( limit,  offet , s_id,  c_id);
+	}
+
+	@Override
+	public int countRecord() {
+		return siteDetailDAO.countRecord();
+	}
 	
 	
 }

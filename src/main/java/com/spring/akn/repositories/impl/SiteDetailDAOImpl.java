@@ -104,4 +104,82 @@ public class SiteDetailDAOImpl implements SiteDetailDAO{
 		String sql="SELECT * FROM tbsite_detail WHERE site_id = ? AND category_id = ? ";
 		return getJdbcTemplate().query(sql, new Object[]{s_id, c_id},new SiteDetailResultSetExstractor());
 	}
+	
+	@Override
+	public int countRecord() {
+		String sql = "SELECT COUNT(*) FROM tbsite_detail;";
+		return getJdbcTemplate().queryForObject(sql , Integer.class);
+	} 
+	
+	@Override
+	public List<SiteDetailDTO> listSiteDetailPage(int limit, int offet ,int s_id, int c_id) {
+		
+		int page = (limit * offet) - limit ;
+		String sql = "";
+		Object[] obj = null;
+		if ( s_id == 0 && c_id == 0 ) {
+			sql = getSiteDetailPage(limit, page);
+			obj = new Object[]{limit ,page};
+		}else if ( s_id == 0 && c_id != 0 ){
+			sql = getSiteDetailPageCategory(limit, page, c_id);
+			obj = new Object[]{c_id,limit ,page};
+		}else if ( s_id != 0 && c_id == 0){
+			sql = getSiteDetailPageSite(limit, page, s_id);
+			obj = new Object[]{s_id, limit ,page};
+		}else {
+			sql = getSiteDetailPageSiteCategory(limit, page, s_id, c_id);
+			obj = new Object[]{s_id, c_id, limit ,page};
+		}
+		return getJdbcTemplate().query(sql , obj , new SiteDetailRowMapper());
+		
+	}
+
+	public String getSiteDetailPage(int limit, int page) {
+		return "SELECT site_id, category_id, url, status FROM tbsite_detail ORDER BY site_id ASC LIMIT ? OFFSET ?";
+	}
+	
+	public String getSiteDetailPageSite(int limit, int page ,int s_id){
+		return "SELECT site_id, category_id, url, status FROM tbsite_detail WHERE site_id = ? ORDER BY site_id ASC LIMIT ? OFFSET ?";
+	}
+	
+	public String getSiteDetailPageCategory(int limit, int page ,int c_id){
+		return "SELECT site_id, category_id, url, status FROM tbsite_detail WHERE category_id = ? ORDER BY site_id ASC LIMIT ? OFFSET ?";
+	}
+	
+	public String getSiteDetailPageSiteCategory(int limit, int page ,int s_id, int c_id ){
+		return "SELECT site_id, category_id, url, status FROM tbsite_detail WHERE site_id = ? AND category_id = ?   ORDER BY site_id ASC LIMIT ? OFFSET ?";
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
