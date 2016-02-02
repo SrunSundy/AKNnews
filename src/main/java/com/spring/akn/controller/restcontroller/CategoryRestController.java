@@ -105,7 +105,7 @@ public class CategoryRestController {
 			}
 		}
 		map.put("STATUS", HttpStatus.NOT_FOUND.value());
-		map.put("MESSAGE", "CATEGORY ID "+id+" DELETE FAIL CATEGORY EXIST NEWS!");
+		map.put("MESSAGE", "CATEGORY ID "+id+" DELETE FAIL CATEGORY EXIST SCRAP URL OR NEWS!");
 		return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
 	}
 	

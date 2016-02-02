@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.spring.akn.entities.scrap.StructureDTO;
 import com.spring.akn.entities.scrap.TestScrapDTO;
 import com.spring.akn.services.ScrapService;
+import com.spring.akn.services.SiteServices;
 import com.spring.akn.services.StructureService;
 
 @RestController
@@ -28,6 +29,9 @@ public class ScrapRestController {
 	
 	@Autowired
 	StructureService structureService;
+	
+	@Autowired
+	SiteServices siteServices;
 	
 	@RequestMapping(value="/test", method=RequestMethod.POST)
 	public ResponseEntity<Map<String,Object>> testScrap(@RequestBody StructureDTO selector){
@@ -141,15 +145,17 @@ public class ScrapRestController {
 	public ResponseEntity<Map<String,Object>> deleteStructure(@PathVariable("id") int id){
 		
 		Map<String, Object> map = new HashMap<String,Object>();
-		
-		if(structureService.deleteStructure(id)){
-			map.put("STATUS", HttpStatus.OK.value());
-			map.put("MESSAGE", "DELETE SUCCESSFULLY.");
-			return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);	
+
+		if ( siteServices.checkExistSite(id) == null ){
+			if(structureService.deleteStructure(id)){
+				map.put("STATUS", HttpStatus.OK.value());
+				map.put("MESSAGE", "DELETE STRUCTURE SUCCESSFULLY.");
+				return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);	
+			}
 		}
-		
+
 		map.put("STATUS", HttpStatus.EXPECTATION_FAILED.value());
-		map.put("MESSAGE", "FAILED TO DELETE STRUCTURE.");
+		map.put("MESSAGE", "FAILED TO DELETE FAIL STRUCTURE.");
 		return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);	
 	}
 	

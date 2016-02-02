@@ -87,7 +87,7 @@ public class SiteRestController {
 			}
 		}
 		map.put("STATUS", HttpStatus.NOT_FOUND.value());
-		map.put("MESSAGE", "SITE ID "+id+" DELETE FAIL!");
+		map.put("MESSAGE", "SITE ID "+id+" DELETE FAIL! SITE EXIST NEWS OR CRAP URL");
 		return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
 	}
 	

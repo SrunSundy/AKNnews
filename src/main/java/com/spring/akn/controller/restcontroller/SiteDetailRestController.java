@@ -134,7 +134,7 @@ public class SiteDetailRestController {
 			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 		}
 		map.put("STATUS", HttpStatus.NOT_FOUND.value());
-		map.put("MESSAGE", "SITEDETAIL DELETE FAIL!");
+		map.put("MESSAGE", "SITEDETAIL DELETE FAIL! BECAUSE STATUS TRUE");
 		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 	}
 	/**
