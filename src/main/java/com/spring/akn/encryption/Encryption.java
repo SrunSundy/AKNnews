@@ -9,8 +9,13 @@ public class Encryption {
 		return decodedId;
 	}
 	
+	public String encode(String code){
+		String decodedId = DatatypeConverter.printBase64Binary(code.getBytes());
+		return decodedId;
+	}
+	
 	public static void main(String[] args) {
-		int id = new Encryption().decode("MQ==");
-		System.out.println("ID : " + id);
+		System.out.println(new Encryption().encode("1"));
+		System.out.println(new Encryption().decode("MQ=="));
 	}
 }
