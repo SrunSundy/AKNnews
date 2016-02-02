@@ -124,8 +124,8 @@ public class SiteDetailRestController {
 	 * @param c_id
 	 * @return
 	 */
-	@RequestMapping(value = "/{s_id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Map<String, Object>> deleteSiteDetail(@PathVariable("s_id") int cid) {
+	@RequestMapping(value = "/{cid}", method = RequestMethod.DELETE)
+	public ResponseEntity<Map<String, Object>> deleteSiteDetail(@PathVariable("cid") int cid) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (siteDetailServices.isDeleteSiteDetail( cid )) {
 			map.put("STATUS", HttpStatus.OK.value());
