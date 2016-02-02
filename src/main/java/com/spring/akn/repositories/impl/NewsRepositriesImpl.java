@@ -336,7 +336,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 					+ "INNER JOIN news.tbsite s ON s.s_id =n.source_id "
 					+ "INNER JOIN news.tbcategory c ON c.c_id=n.category_id "
 					+ "WHERE  n.news_status=true  AND sl.user_id=?  ORDER BY sl.id DESC LIMIT ? OFFSET ?";
-			return jdbcTemplate.query(sql, new Object[]{userid,day,row,offset},new GetSavedNewsWithNoUserIDMapper());	
+			return jdbcTemplate.query(sql, new Object[]{userid,row,offset},new GetSavedNewsWithNoUserIDMapper());	
 		}
 		if(day == 1)//list saved news for today
 		{
