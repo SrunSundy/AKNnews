@@ -53,7 +53,7 @@ public interface NewsService {
 	
 	public int deleteSavedNews(int newsid,int userid);
 	
-	public List<NewsDTO> listSavedNews(int userid,int row,int page);
+	public List<NewsDTO> listSavedNews(int userid,int row,int page,int day);
 	
 	public List<NewsDTO> listNewsStatistic(int categoryid,int siteid,int day,int row);
 	
