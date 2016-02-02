@@ -329,6 +329,15 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		if(page <=0 ) return new ArrayList<NewsDTO>();
 		if(row <= 0) row=10;
 		int offset = (page * row) - row;
+		if(day == 0){
+			String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_url,n.news_hit,s.s_id,s.s_name,s.s_logo,n.news_status,c.c_id,c.c_name,sl.save_date "
+					+ "FROM news.tbsavelist sl "
+					+ "INNER JOIN news.tbnews n ON sl.news_id=n.news_id "
+					+ "INNER JOIN news.tbsite s ON s.s_id =n.source_id "
+					+ "INNER JOIN news.tbcategory c ON c.c_id=n.category_id "
+					+ "WHERE  n.news_status=true  AND sl.user_id=?  ORDER BY sl.id DESC LIMIT ? OFFSET ?";
+			return jdbcTemplate.query(sql, new Object[]{userid,day,row,offset},new GetSavedNewsWithNoUserIDMapper());	
+		}
 		if(day == 1)//list saved news for today
 		{
 			String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_url,n.news_hit,s.s_id,s.s_name,s.s_logo,n.news_status,c.c_id,c.c_name,sl.save_date "
@@ -338,6 +347,14 @@ public class NewsRepositriesImpl implements NewsRepositories {
 					+ "INNER JOIN news.tbcategory c ON c.c_id=n.category_id "
 					+ "WHERE  n.news_status=true  AND sl.user_id=? AND sl.save_date::timestamp::date = (CURRENT_DATE - ( 0 || ' days')::interval)::timestamp::date  ORDER BY sl.id DESC LIMIT ? OFFSET ?";
 			return jdbcTemplate.query(sql, new Object[]{userid,row,offset},new GetSavedNewsWithNoUserIDMapper());
+		}else if(day > 30){
+			String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_url,n.news_hit,s.s_id,s.s_name,s.s_logo,n.news_status,c.c_id,c.c_name,sl.save_date "
+					+ "FROM news.tbsavelist sl "
+					+ "INNER JOIN news.tbnews n ON sl.news_id=n.news_id "
+					+ "INNER JOIN news.tbsite s ON s.s_id =n.source_id "
+					+ "INNER JOIN news.tbcategory c ON c.c_id=n.category_id "
+					+ "WHERE  n.news_status=true  AND sl.user_id=? AND sl.save_date::timestamp::date < (CURRENT_DATE - ( 30 || ' days')::interval)::timestamp::date  ORDER BY sl.id DESC LIMIT ? OFFSET ?";
+			return jdbcTemplate.query(sql, new Object[]{userid,row,offset},new GetSavedNewsWithNoUserIDMapper());
 		}
 		String sql="SELECT n.news_id,n.news_title,n.news_description,n.news_img,n.news_date,n.news_url,n.news_hit,s.s_id,s.s_name,s.s_logo,n.news_status,c.c_id,c.c_name,sl.save_date "
 					+ "FROM news.tbsavelist sl "
@@ -346,6 +363,7 @@ public class NewsRepositriesImpl implements NewsRepositories {
 					+ "INNER JOIN news.tbcategory c ON c.c_id=n.category_id "
 					+ "WHERE  n.news_status=true  AND sl.user_id=? AND sl.save_date  >= CURRENT_DATE - ( ? || ' days')::interval ORDER BY sl.id DESC LIMIT ? OFFSET ?";
 		return jdbcTemplate.query(sql, new Object[]{userid,day,row,offset},new GetSavedNewsWithNoUserIDMapper());	
+	
 	}
 	
 	
