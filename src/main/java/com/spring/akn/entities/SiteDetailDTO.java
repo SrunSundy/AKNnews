@@ -5,6 +5,8 @@ public class SiteDetailDTO {
 	private int s_id;
 	private String url;
 	private boolean status;
+	private int cid;
+	
 	public int getC_id() {
 		return c_id;
 	}
@@ -21,6 +23,12 @@ public class SiteDetailDTO {
 		return url;
 	}
 
+	public int getCid() {
+		return cid;
+	}
+	public void setCid(int cid) {
+		this.cid = cid;
+	}
 	public void setUrl(String url) {
 		this.url = url;
 	}
@@ -33,7 +41,8 @@ public class SiteDetailDTO {
 	
 	@Override
 	public String toString() {
-		return "SiteDetailDTO [c_id=" + c_id + ", s_id=" + s_id + ", url=" + url + ", status=" + status + "]";
+		return "SiteDetailDTO [c_id=" + c_id + ", s_id=" + s_id + ", url=" + url + ", status=" + status + ", cid=" + cid
+				+ "]";
 	}
 	
 	

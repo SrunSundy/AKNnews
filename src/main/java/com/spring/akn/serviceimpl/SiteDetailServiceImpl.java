@@ -25,13 +25,13 @@ public class SiteDetailServiceImpl implements SiteDetailServices{
 	}
 
 	@Override
-	public boolean isDeleteSiteDetail(int s_id, int c_id) {
-		return siteDetailDAO.isDeleteSiteDetail(s_id, c_id);
+	public boolean isDeleteSiteDetail(int s_id) {
+		return siteDetailDAO.isDeleteSiteDetail(s_id);
 	}
 
 	@Override
-	public boolean isToggleStatusSiteDetail(int s_id, int c_id) {
-		return siteDetailDAO.isToggleStatusSiteDetail(s_id, c_id);
+	public boolean isToggleStatusSiteDetail(int s_id) {
+		return siteDetailDAO.isToggleStatusSiteDetail(s_id);
 	}
 
 	@Override
@@ -40,8 +40,8 @@ public class SiteDetailServiceImpl implements SiteDetailServices{
 	}
 
 	@Override
-	public SiteDetailDTO findSiteAndCategoryById(int s_id, int c_id) {
-		return siteDetailDAO.findSiteAndCategoryById(s_id, c_id);
+	public SiteDetailDTO findSiteAndCategoryById(int s_id) {
+		return siteDetailDAO.findSiteAndCategoryById(s_id);
 	}
 
 	@Override

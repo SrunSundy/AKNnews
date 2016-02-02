@@ -37,14 +37,13 @@ public class SiteDetailRestController {
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public ResponseEntity<Map<String, Object>> insertSiteDetail(@RequestBody SiteDetailDTO siteDetail){
 		Map<String, Object> map = new HashMap<String, Object>();
-		System.out.println("site Detai "+ siteDetail);
-		if ( siteDetailServices.findSiteAndCategoryById(siteDetail.getS_id(), siteDetail.getC_id()) == null ){
-			if (siteDetailServices.isInsertSiteDetail( siteDetail )) {
-				map.put("STATUS", HttpStatus.OK.value());
-				map.put("MESSAGE", "SITE DETAIL INSERT SUCCESS!");
-				return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
-			}
+		
+		if (siteDetailServices.isInsertSiteDetail( siteDetail )) {
+			map.put("STATUS", HttpStatus.OK.value());
+			map.put("MESSAGE", "SITE DETAIL INSERT SUCCESS!");
+			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 		}
+		//}
 		map.put("STATUS", HttpStatus.NOT_FOUND.value());
 		map.put("MESSAGE", "SITE DETAIL INSERT FAIL!");
 		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
@@ -107,12 +106,13 @@ public class SiteDetailRestController {
 	@RequestMapping(value = "/", method = RequestMethod.PUT)
 	public ResponseEntity<Map<String, Object>> updateSiteDetail(@RequestBody SiteDetailDTO siteDetail){
 		Map<String, Object> map = new HashMap<String, Object>();
-		System.out.println("site Detai "+ siteDetail);
+
 		if (siteDetailServices.isUpdateSiteDetail( siteDetail )) {
 			map.put("STATUS", HttpStatus.OK.value());
 			map.put("MESSAGE", "SITE DETAIL UPDATE SUCCESS!");
 			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 		}
+		
 		map.put("STATUS", HttpStatus.NOT_FOUND.value());
 		map.put("MESSAGE", "SITEDETAIL UPDATE FAIL!");
 		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
@@ -124,11 +124,10 @@ public class SiteDetailRestController {
 	 * @param c_id
 	 * @return
 	 */
-	@RequestMapping(value = "/{s_id}/{c_id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Map<String, Object>> deleteSiteDetail(@PathVariable("s_id") int s_id,
-			@PathVariable("c_id") int c_id) {
+	@RequestMapping(value = "/{s_id}", method = RequestMethod.DELETE)
+	public ResponseEntity<Map<String, Object>> deleteSiteDetail(@PathVariable("s_id") int cid) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		if (siteDetailServices.isDeleteSiteDetail(s_id, c_id)) {
+		if (siteDetailServices.isDeleteSiteDetail( cid )) {
 			map.put("STATUS", HttpStatus.OK.value());
 			map.put("MESSAGE", "SITE DETAIL DELETE SUCCESS!");
 			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
@@ -143,14 +142,14 @@ public class SiteDetailRestController {
 	 * @param c_id
 	 * @return
 	 */
-	@RequestMapping(value = "/{s_id}/{c_id}", method = RequestMethod.GET)
-	public ResponseEntity<Map<String, Object>> findSiteAndCategoryById(@PathVariable("s_id") int s_id,
-			@PathVariable("c_id") int c_id) {
+	@RequestMapping(value = "/{s_id}", method = RequestMethod.GET)
+	public ResponseEntity<Map<String, Object>> findSiteAndCategoryById(@PathVariable("s_id") int s_id ) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		if (siteDetailServices.findSiteAndCategoryById(s_id, c_id) != null) {
+		
+		if (siteDetailServices.findSiteAndCategoryById ( s_id ) != null) {
 			map.put("STATUS", HttpStatus.OK.value());
 			map.put("MESSAGE", "SITE DETAIL GET SUCCESS!");
-			map.put("DATA", siteDetailServices.findSiteAndCategoryById(s_id, c_id));
+			map.put("DATA", siteDetailServices.findSiteAndCategoryById( s_id ));
 			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 		}
 		map.put("STATUS", HttpStatus.NOT_FOUND.value());
@@ -164,11 +163,10 @@ public class SiteDetailRestController {
 	 * @param c_id
 	 * @return
 	 */
-	@RequestMapping(value="/toggle/{s_id}/{c_id}", method = RequestMethod.PATCH)
-	public ResponseEntity<Map<String, Object>> toggleStatusSiteDetail(@PathVariable("s_id")int s_id, 
-			@PathVariable("c_id")int c_id){
+	@RequestMapping(value="/toggle/{s_id}", method = RequestMethod.PATCH)
+	public ResponseEntity<Map<String, Object>> toggleStatusSiteDetail(@PathVariable("s_id")int cid ){
 		Map<String, Object> map = new HashMap<String, Object>();
-		if (siteDetailServices.isToggleStatusSiteDetail(s_id, c_id)) {
+		if (siteDetailServices.isToggleStatusSiteDetail( cid ) ) {
 			map.put("STATUS", HttpStatus.OK.value());
 			map.put("MESSAGE", "SITE DETAIL CHANGE STATUS SUCCESS!");
 			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);

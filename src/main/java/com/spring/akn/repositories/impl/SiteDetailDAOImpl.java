@@ -37,31 +37,31 @@ public class SiteDetailDAOImpl implements SiteDetailDAO{
 
 	@Override
 	public boolean isUpdateSiteDetail(SiteDetailDTO siteDetailDTO) {
-		String sql = "UPDATE tbsite_detail SET url=? WHERE (site_id = ? AND category_id = ?)";
-		int result = getJdbcTemplate().update(sql , new Object[]{siteDetailDTO.getUrl(), siteDetailDTO.getS_id(),siteDetailDTO.getC_id()});
+		String sql = "UPDATE tbsite_detail SET site_id = ?, category_id=? , url=?  WHERE cid = ? ;"; //AND category_id = ?
+		int result = getJdbcTemplate().update(sql , new Object[]{siteDetailDTO.getS_id(), siteDetailDTO.getC_id(), siteDetailDTO.getUrl(), siteDetailDTO.getCid() });
 		if ( result > 0 )
 			return true;
 		return false;
 	}
 	@Override
-	public boolean isDeleteSiteDetail(int s_id, int c_id) {
-		String sql = "DELETE FROM tbsite_detail WHERE (site_id = ? AND category_id = ?) AND status = false;";
-		int result = getJdbcTemplate().update(sql , new Object[]{s_id,c_id});
+	public boolean isDeleteSiteDetail(int cid) {
+		String sql = "DELETE FROM tbsite_detail WHERE cid = ? AND status = false;";
+		int result = getJdbcTemplate().update(sql , new Object[]{ cid });
 		if ( result > 0 )
 			return true;
 		return false;
 	}
 	@Override
-	public boolean isToggleStatusSiteDetail(int s_id, int c_id) {
-		String sql = "UPDATE tbsite_detail SET status = CASE WHEN status=true THEN  FALSE ELSE TRUE END WHERE (site_id = ? AND category_id = ?)";
-		int result = getJdbcTemplate().update(sql , new Object[]{s_id, c_id});
+	public boolean isToggleStatusSiteDetail(int cid) {
+		String sql = "UPDATE tbsite_detail SET status = CASE WHEN status=true THEN  FALSE ELSE TRUE END WHERE cid = ? ;";
+		int result = getJdbcTemplate().update(sql , new Object[]{ cid });
 		if ( result > 0 )
 			return true;
 		return false;
 	}
 	@Override
 	public List<SiteDetailDTO> listSiteDetail() {
-		String sql = "SELECT site_id, category_id, url, status FROM tbsite_detail ORDER BY site_id ASC";
+		String sql = "SELECT cid, site_id, category_id, url, status FROM tbsite_detail ORDER BY site_id ASC";
 		return getJdbcTemplate().query(sql , new SiteDetailRowMapper());
 	}
 
@@ -76,7 +76,7 @@ public class SiteDetailDAOImpl implements SiteDetailDAO{
 			siteDetailDTO.setS_id(rs.getInt("site_id"));
 			siteDetailDTO.setUrl(rs.getString("url"));
 			siteDetailDTO.setStatus(rs.getBoolean("status"));	
-			
+			siteDetailDTO.setCid(rs.getInt("cid"));
 			return siteDetailDTO;
 		}
 		
@@ -92,6 +92,7 @@ public class SiteDetailDAOImpl implements SiteDetailDAO{
 				siteDetailDTO.setS_id(rs.getInt("site_id"));
 				siteDetailDTO.setUrl(rs.getString("url"));
 				siteDetailDTO.setStatus(rs.getBoolean("status"));
+				siteDetailDTO.setCid(rs.getInt("cid"));
 				return siteDetailDTO;
 			}
 			return null;
@@ -100,9 +101,9 @@ public class SiteDetailDAOImpl implements SiteDetailDAO{
 	}
 
 	@Override
-	public SiteDetailDTO findSiteAndCategoryById(int s_id, int c_id) {
-		String sql="SELECT * FROM tbsite_detail WHERE site_id = ? AND category_id = ? ";
-		return getJdbcTemplate().query(sql, new Object[]{s_id, c_id},new SiteDetailResultSetExstractor());
+	public SiteDetailDTO findSiteAndCategoryById(int cid) {
+		String sql="SELECT * FROM tbsite_detail WHERE cid = ? ";
+		return getJdbcTemplate().query(sql, new Object[]{ cid },new SiteDetailResultSetExstractor());
 	}
 	
 	@Override
@@ -135,19 +136,19 @@ public class SiteDetailDAOImpl implements SiteDetailDAO{
 	}
 
 	public String getSiteDetailPage(int limit, int page) {
-		return "SELECT site_id, category_id, url, status FROM tbsite_detail ORDER BY site_id ASC LIMIT ? OFFSET ?";
+		return "SELECT cid, site_id, category_id, url, status FROM tbsite_detail ORDER BY site_id ASC LIMIT ? OFFSET ?";
 	}
 	
 	public String getSiteDetailPageSite(int limit, int page ,int s_id){
-		return "SELECT site_id, category_id, url, status FROM tbsite_detail WHERE site_id = ? ORDER BY site_id ASC LIMIT ? OFFSET ?";
+		return "SELECT cid, site_id, category_id, url, status FROM tbsite_detail WHERE site_id = ? ORDER BY site_id ASC LIMIT ? OFFSET ?";
 	}
 	
 	public String getSiteDetailPageCategory(int limit, int page ,int c_id){
-		return "SELECT site_id, category_id, url, status FROM tbsite_detail WHERE category_id = ? ORDER BY site_id ASC LIMIT ? OFFSET ?";
+		return "SELECT cid, site_id, category_id, url, status FROM tbsite_detail WHERE category_id = ? ORDER BY site_id ASC LIMIT ? OFFSET ?";
 	}
 	
 	public String getSiteDetailPageSiteCategory(int limit, int page ,int s_id, int c_id ){
-		return "SELECT site_id, category_id, url, status FROM tbsite_detail WHERE site_id = ? AND category_id = ?   ORDER BY site_id ASC LIMIT ? OFFSET ?";
+		return "SELECT cid, site_id, category_id, url, status FROM tbsite_detail WHERE site_id = ? AND category_id = ?   ORDER BY site_id ASC LIMIT ? OFFSET ?";
 	}
 	
 	

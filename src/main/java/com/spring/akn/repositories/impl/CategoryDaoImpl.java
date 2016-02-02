@@ -34,7 +34,7 @@ public class CategoryDaoImpl implements CategoryDAO{
 	 * get all category record
 	 */
 	public List<CategoryDTO> listCategory() {
-		String sql = "SELECT c_id, c_name, c_ismenu FROM tbcategory ORDER BY c_id;";
+		String sql = "SELECT c_index, c_id, c_name, c_ismenu FROM tbcategory ORDER BY c_index;";
 		return getJdbcTemplate().query(sql, new CategoryRowMapper());
 	}
 	
@@ -43,7 +43,7 @@ public class CategoryDaoImpl implements CategoryDAO{
 	 */
 	@Override
 	public List<CategoryDTO> listCategoryHaveNews() {
-		String sql = "SELECT c_id, c_name, c_ismenu FROM tbcategory WHERE c_id in (SELECT DISTINCT category_id FROM tbnews) ORDER BY c_id;";
+		String sql = "SELECT c_index, c_id, c_name, c_ismenu FROM tbcategory WHERE c_id in (SELECT DISTINCT category_id FROM tbnews) ORDER BY c_index;";
 		return getJdbcTemplate().query(sql, new CategoryRowMapper());
 	}
 	
@@ -51,7 +51,7 @@ public class CategoryDaoImpl implements CategoryDAO{
 	 * find unique category by id 
 	 */
 	public CategoryDTO findCategoryById(int id) {
-		String sql = "SELECT c_id, c_name, c_ismenu FROM tbcategory WHERE c_id = ? ;";
+		String sql = "SELECT c_index, c_id, c_name, c_ismenu FROM tbcategory WHERE c_id = ? ;";
 		return getJdbcTemplate().query(sql , new Object[]{id}, new CategoryResultSetExtractor());
 	}
 	
@@ -70,8 +70,8 @@ public class CategoryDaoImpl implements CategoryDAO{
 	 * Insert into category 
 	 */
 	public boolean isInsertCategory(CategoryDTO categoryDTO) {
-		String sql = "INSERT INTO tbcategory(c_name) VALUES(?)";
-		int result = getJdbcTemplate().update(sql, new Object[]{ categoryDTO.getName()} );
+		String sql = "INSERT INTO tbcategory(c_name, c_index) VALUES( ? , ? )";
+		int result = getJdbcTemplate().update(sql, new Object[]{ categoryDTO.getName() ,categoryDTO.getIndex() } );
 		if (result>0)
 			return true;
 		return false;
@@ -81,8 +81,8 @@ public class CategoryDaoImpl implements CategoryDAO{
 	 * Update category data
 	 */
 	public boolean isUpdateCategory(CategoryDTO categoryDTO) {
-		String sql = "UPDATE tbcategory SET c_name=? WHERE c_id=? ";
-		int result = getJdbcTemplate().update(sql, new Object[]{ categoryDTO.getName(), categoryDTO.getId() } );
+		String sql = "UPDATE tbcategory SET c_name=?, c_index =? WHERE c_id=? ";
+		int result = getJdbcTemplate().update(sql, new Object[]{ categoryDTO.getName(), categoryDTO.getIndex(), categoryDTO.getId() } );
 		if (result>0)
 			return true;
 		return false;
@@ -114,6 +114,7 @@ public class CategoryDaoImpl implements CategoryDAO{
 			categoryDTO.setId(rs.getInt("c_id"));
 			categoryDTO.setName(rs.getString("c_name"));
 			categoryDTO.setMenu(rs.getBoolean("c_ismenu"));
+			categoryDTO.setIndex(rs.getInt("c_index"));
 			return categoryDTO;
 		}
 		
@@ -130,6 +131,7 @@ public class CategoryDaoImpl implements CategoryDAO{
 				categoryDTO.setId(rs.getInt("c_id"));
 				categoryDTO.setName(rs.getString("c_name"));
 				categoryDTO.setMenu(rs.getBoolean("c_ismenu"));
+				categoryDTO.setIndex(rs.getInt("c_index"));
 				return categoryDTO;
 			}
 			return null;

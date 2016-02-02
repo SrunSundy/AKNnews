@@ -4,7 +4,13 @@ public class CategoryDTO {
 	private int id;
 	private String name;
 	private boolean isMenu;
-	
+	private int index;
+	public int getIndex() {
+		return index;
+	}
+	public void setIndex(int index) {
+		this.index = index;
+	}
 	public int getId() {
 		return id;
 	}
@@ -26,6 +32,6 @@ public class CategoryDTO {
 	
 	@Override
 	public String toString() {
-		return "CategoryDTO [id=" + id + ", name=" + name + ", isMenu=" + isMenu + "]";
+		return "CategoryDTO [id=" + id + ", name=" + name + ", isMenu=" + isMenu + ", index=" + index + "]";
 	}
 }
