@@ -59,10 +59,10 @@ public class ScrapDAOImpl implements ScrapDAO {
 			  "WHERE NOT EXISTS(SELECT news_url FROM tbnews WHERE news_url=?)";*/
 		
 		
-		String sql = "INSERT INTO tbnews(news_title, news_description, news_img, news_url, category_id, source_id) " +
-				     "SELECT ?, ?, (SELECT DISTINCT s_basepath || ? FROM tbsite INNER JOIN tbnews ON tbsite.s_id=tbnews.source_id WHERE source_id=?), " + 
-				     "(SELECT DISTINCT s_prefix_link || ? FROM tbsite INNER JOIN tbnews ON tbsite.s_id=tbnews.source_id WHERE source_id=?), ?, ? " +
-				     "WHERE NOT EXISTS(SELECT news_url FROM tbnews WHERE news_url=(SELECT DISTINCT s_prefix_link || ? FROM tbsite INNER JOIN tbnews ON tbsite.s_id=tbnews.source_id WHERE source_id=?))";
+		String sql = "INSERT INTO news.tbnews(news_title, news_description, news_img, news_url, category_id, source_id) " +
+				     "SELECT ?, ?, (SELECT DISTINCT s_basepath || ? FROM news.tbsite INNER JOIN news.tbnews ON news.tbsite.s_id=news.tbnews.source_id WHERE source_id=?), " + 
+				     "(SELECT DISTINCT s_prefix_link || ? FROM news.tbsite INNER JOIN news.tbnews ON news.tbsite.s_id=news.tbnews.source_id WHERE source_id=?), ?, ? " +
+				     "WHERE NOT EXISTS(SELECT news_url FROM news.tbnews WHERE news_url=(SELECT DISTINCT s_prefix_link || ? FROM news.tbsite INNER JOIN news.tbnews ON news.tbsite.s_id=news.tbnews.source_id WHERE source_id=?))";
 		
 		return jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
 			
@@ -91,8 +91,8 @@ public class ScrapDAOImpl implements ScrapDAO {
 	private List<StructureDTO> getAllSelectors(){
 		
 		String sql = "SELECT sd.url, link_selector, rows_selector, image_selector, title_selector, site_id, category_id, s.s_prefix_img " +  
-					 "FROM tbsite_detail sd INNER JOIN tbsite s ON sd.site_id=s.s_id " + 
-					 "INNER JOIN tbstructure st ON st.id=s.s_id " + 
+					 "FROM news.tbsite_detail sd INNER JOIN news.tbsite s ON sd.site_id=s.s_id " + 
+					 "INNER JOIN news.tbstructure st ON st.id=s.s_id " + 
 					 "WHERE sd.status=true";
 		
 		return jdbcTemplate.query(sql, new RowMapper<StructureDTO>() {
@@ -175,7 +175,7 @@ public class ScrapDAOImpl implements ScrapDAO {
 	private String getURLNotAKN(int id){
 		try{
 			String sql = "SELECT n.news_url " + 
-						 "FROM tbnews n INNER JOIN tbsite s ON n.source_id=s.s_id " + 
+						 "FROM news.tbnews n INNER JOIN news.tbsite s ON n.source_id=s.s_id " + 
 						 "WHERE n.news_id=? AND s.s_url NOT LIKE '%news.khmeracademy.org%'";
 			
 			return jdbcTemplate.queryForObject(sql , new Object[]{id}, String.class);		
@@ -187,10 +187,10 @@ public class ScrapDAOImpl implements ScrapDAO {
 	
 	private StructureDTO getSelector(String url, int user_id){
 		
-		String sql = "SELECT (CASE WHEN n.news_id IN (SELECT news_id FROM tbsavelist WHERE user_id=? ) THEN TRUE ELSE FALSE END) AS issaved, " +
-					 "content_selector, n.news_id, n.news_date, n.news_title, n.news_content, n.news_hit, n.news_img, tbsite.s_logo " +
-				     "FROM tbsite INNER JOIN tbstructure ON tbstructure.id=tbsite.s_id " + 
-					 "INNER JOIN tbnews n ON n.source_id=tbsite.s_id " +
+		String sql = "SELECT (CASE WHEN n.news_id IN (SELECT news_id FROM news.tbsavelist WHERE user_id=? ) THEN TRUE ELSE FALSE END) AS issaved, " +
+					 "content_selector, n.news_id, n.news_date, n.news_title, n.news_content, n.news_hit, n.news_img, news.tbsite.s_logo " +
+				     "FROM news.tbsite INNER JOIN news.tbstructure ON news.tbstructure.id=news.tbsite.s_id " + 
+					 "INNER JOIN news.tbnews n ON n.source_id=news.tbsite.s_id " +
 					 "WHERE ? LIKE '%'|| s_url ||'%' AND n.news_url=?";
 		try{
 			return jdbcTemplate.queryForObject(sql, new Object[]{user_id, url, url}, new RowMapper<StructureDTO>() {
@@ -220,9 +220,9 @@ public class ScrapDAOImpl implements ScrapDAO {
 	
 	private NewsDTO readAKNNews(int id, int user_id){
 		
-		String sql = "SELECT (CASE WHEN n.news_id IN (SELECT news_id FROM tbsavelist WHERE user_id=?) THEN TRUE ELSE FALSE END) AS issaved, " +
+		String sql = "SELECT (CASE WHEN n.news_id IN (SELECT news_id FROM news.tbsavelist WHERE user_id=?) THEN TRUE ELSE FALSE END) AS issaved, " +
 					 "n.news_id, n.news_title, n.news_content, n.news_hit, n.news_img, n.news_date " + 
-					 "FROM tbnews n WHERE n.news_id=? ";
+					 "FROM news.tbnews n WHERE n.news_id=? ";
 		try{
 			return jdbcTemplate.queryForObject(sql, new Object[]{user_id, id}, new RowMapper<NewsDTO>() {
 
@@ -310,8 +310,8 @@ public class ScrapDAOImpl implements ScrapDAO {
 	private List<StructureDTO> getAllSelectors(int site_id){
 		
 		String sql = "SELECT sd.url, link_selector, rows_selector, image_selector, title_selector, site_id, category_id, s.s_prefix_img " +  
-					 "FROM tbsite_detail sd INNER JOIN tbsite s ON sd.site_id=s.s_id " + 
-					 "INNER JOIN tbstructure st ON st.id=s.s_id " + 
+					 "FROM news.tbsite_detail sd INNER JOIN news.tbsite s ON sd.site_id=s.s_id " + 
+					 "INNER JOIN news.tbstructure st ON st.id=s.s_id " + 
 					 "WHERE sd.status=true AND site_id=?";
 		
 		return jdbcTemplate.query(sql, new Object[]{site_id}, new RowMapper<StructureDTO>() {

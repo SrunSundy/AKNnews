@@ -21,24 +21,24 @@ public class StructureDAOImpl implements StructureDAO{
 	
 	@Override
 	public int addStructure(StructureDTO structure) {
-		return jdbcTemplate.update("INSERT INTO tbStructure(id, rows_selector, image_selector, link_selector, title_selector, content_selector) VALUES(?,?,?,?,?,?)",
+		return jdbcTemplate.update("INSERT INTO news.tbStructure(id, rows_selector, image_selector, link_selector, title_selector, content_selector) VALUES(?,?,?,?,?,?)",
 				structure.getSiteId(),structure.getRowsSelector(), structure.getImageSelector(), structure.getLinkSelector(), structure.getTitleSelector(), structure.getContentSelector());
 	}
 
 	@Override
 	public int deleteStructure(int id) {
-		return jdbcTemplate.update("DELETE FROM tbStructure WHERE id=?",id);
+		return jdbcTemplate.update("DELETE FROM news.tbStructure WHERE id=?",id);
 	}
 
 	@Override
 	public int updateStructure(StructureDTO structure) {
-		return jdbcTemplate.update("UPDATE tbStructure SET rows_selector=?, image_selector=?, link_selector=?, title_selector=?, content_selector=? WHERE id=?", 
+		return jdbcTemplate.update("UPDATE news.tbStructure SET rows_selector=?, image_selector=?, link_selector=?, title_selector=?, content_selector=? WHERE id=?", 
 				structure.getRowsSelector(), structure.getImageSelector(), structure.getLinkSelector(), structure.getTitleSelector(),structure.getContentSelector(), structure.getId());
 	}
 
 	@Override
 	public List<StructureDTO> getStructures() {
-		return jdbcTemplate.query("SELECT id, rows_selector, image_selector, link_selector, title_selector, content_selector FROM tbStructure", new RowMapper<StructureDTO>() {
+		return jdbcTemplate.query("SELECT id, rows_selector, image_selector, link_selector, title_selector, content_selector FROM news.tbStructure", new RowMapper<StructureDTO>() {
 
 			@Override
 			public StructureDTO mapRow(ResultSet rs, int rowNumber) throws SQLException {
@@ -57,7 +57,7 @@ public class StructureDAOImpl implements StructureDAO{
 	@Override
 	public StructureDTO getStructure(int id) {
 		try {
-			return jdbcTemplate.queryForObject("SELECT id, rows_selector, image_selector, link_selector, title_selector, content_selector FROM tbStructure WHERE id=?", 
+			return jdbcTemplate.queryForObject("SELECT id, rows_selector, image_selector, link_selector, title_selector, content_selector FROM news.tbStructure WHERE id=?", 
 					new Object[]{id}, new RowMapper<StructureDTO>() {
 
 				@Override
