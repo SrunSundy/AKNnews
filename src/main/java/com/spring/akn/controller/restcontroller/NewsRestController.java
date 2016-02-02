@@ -525,9 +525,10 @@ public class NewsRestController {
 	}
 	
 	
-	@RequestMapping(value="/savelist/{userid}/{row}/{page}", method=RequestMethod.GET)
-	public ResponseEntity<Map<String,Object>> listSavedNews(@PathVariable("userid") int userid,@PathVariable("row") int row,@PathVariable("page") int page){
-		List<NewsDTO> news = newsservice.listSavedNews(userid,row,page);
+	@RequestMapping(value="/savelist/{userid}/{row}/{page}/{day}", method=RequestMethod.GET)
+	public ResponseEntity<Map<String,Object>> listSavedNews(@PathVariable("userid") int userid,
+			@PathVariable("row") int row,@PathVariable("page") int page,@PathVariable("day") int day){
+		List<NewsDTO> news = newsservice.listSavedNews(userid,row,page,day);
 		Map<String, Object> map = new HashMap<String,Object>();
 		if(news.isEmpty()){
 			map.put("STATUS", HttpStatus.OK.value());
