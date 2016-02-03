@@ -29,6 +29,8 @@ import com.spring.akn.entities.SearchNewsDTO;
 import com.spring.akn.entities.frmApiDoc.FrmSaveListAdd;
 import com.spring.akn.services.NewsService;
 import com.spring.akn.services.ScrapService;
+import com.spring.akn.services.SiteServices;
+import com.spring.akn.services.UserServices;
 
 @RestController
 @RequestMapping("api/article")
@@ -39,6 +41,12 @@ public class NewsRestController {
 	
 	@Autowired
 	ScrapService scrapservice;
+	
+	@Autowired
+	private SiteServices siteServices;
+	
+	@Autowired
+	UserServices userServices;
 	
 	@RequestMapping(value="/{page}/{row}/{categoryid}/{sourceid}/{userid}/", method=RequestMethod.GET)
 	public ResponseEntity<Map<String,Object>> listNews(@PathVariable("page") int page,@PathVariable("row") int row,@PathVariable("categoryid") int cid
@@ -139,8 +147,31 @@ public class NewsRestController {
 										(map,HttpStatus.OK);	
 		
 	}
-	
-	
+	@ApiIgnore
+	@RequestMapping(value="/dashboard", method=RequestMethod.GET)
+	public ResponseEntity<Map<String,Object>> getAdminDashboard(){
+		Map<String, Object> map = new HashMap<String,Object>();
+		
+		map.put("STATUS", HttpStatus.OK.value());
+		map.put("MESSAGE", "NEWS HAS BEEN FOUND");
+		map.put("NUM_SITE", siteServices.countSiteRecord());
+		map.put("POP_NEWS", newsservice.getPopularNews(0, 30, 4));
+		map.put("AKNLIST_NEWS",newsservice.listNewsDatas(1, 4, 0, 6, -1));
+		map.put("TOTAL_NEWS",newsservice.getNewsTotalRecords("",0 ,0,-1));
+		map.put("AKN_NEWS",newsservice.getNewsTotalRecords("",0 ,6,-1));
+		map.put("SABAY_NEWS",newsservice.getNewsTotalRecords("",0 ,1,-1));
+		map.put("BNEWS_NEWS",newsservice.getNewsTotalRecords("",0 ,5,-1));
+		map.put("MUL_NEWS",newsservice.getNewsTotalRecords("",0 ,12,-1));
+		
+		map.put("TOTALRECORD", userServices.getUserTotalRecords("*"));
+		map.put("LISTUSER", userServices.listNewUser());
+		map.put("LISTADMIN", userServices.listNewAdmin());
+		
+		map.put("STATUS", HttpStatus.FOUND.value());
+		map.put("MESSAGE", "USER FOUND");
+		return new ResponseEntity<Map<String,Object>>
+									(map,HttpStatus.OK);	
+	}
 	@ApiIgnore
 	@RequestMapping(value="/", method= RequestMethod.POST )
 	public ResponseEntity<Map<String,Object>> insertNews(@RequestParam("json") String data, @RequestParam("file") MultipartFile file, HttpServletRequest request){
