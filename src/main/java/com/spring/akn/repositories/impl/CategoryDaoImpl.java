@@ -153,7 +153,7 @@ public class CategoryDaoImpl implements CategoryDAO{
 	
 	@Override
 	public CategoryDTO checkExistCategory(int id) {
-		String sql = "SELECT DISTINCT tbsite_detail.category_id as c_id FROM tbsite_detail WHERE category_id = ?";
+		String sql = "SELECT DISTINCT news.tbsite_detail.category_id as c_id FROM news.tbsite_detail WHERE category_id = ?";
 		return getJdbcTemplate().query(sql , new Object[]{id} , new CategoryResultSetExtractorExist());
 	}
 
