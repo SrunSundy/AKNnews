@@ -28,6 +28,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.spring.akn.encryption.Encryption;
 import com.spring.akn.entities.frmApiDoc.FrmLogin;
+import com.spring.akn.entities.frmApiDoc.FrmUser;
 import com.spring.akn.entities.frmApiDoc.FrmUserAdd;
 import com.spring.akn.entities.frmApiDoc.FrmUserChangePwd;
 import com.spring.akn.entities.frmApiDoc.FrmUserLogin;
@@ -57,16 +58,29 @@ public class UserRespositoriesImpl implements UserRespositories {
 	}
 	
 	public int userRegister(FrmUserAdd user) {
-		try {
-			String sql = "INSERT INTO tbuser(user_name, user_email, user_password) VALUES(?,?,?)";
-			Object[] obj = { user.getUsername(), user.getEmail(), user.getPassword()};
-			return jdbcTemplate.update(sql, obj);
-		} catch (DuplicateKeyException ex) {
+	       try {		
+				RestTemplate restTemplate = new RestTemplate();
+				restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+				restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
+		        
+				HttpEntity<Object> request = new HttpEntity<Object>(user, headers);
+				/*ResponseEntity<Map> response = restTemplate.exchange("http://192.168.178.6:8080/KAAPI/api/authentication/weblogin",
+						HttpMethod.POST, request, Map.class);*/
+				ResponseEntity<Map> response = restTemplate.exchange("http://api.khmeracademy.org/api/user/mobileuserregister",
+				HttpMethod.POST, request, Map.class);
+				
+				Map<String, Object> map = (HashMap<String, Object>) response.getBody();
+		        
+				if((boolean)map.get("STATUS")==true)
+					return 1;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			return 0;
-		}
 	}
 
-	public User userLogin(FrmUserLogin user) {
+	public FrmUser userLogin(FrmUserLogin user) {
+		
 		try {
 
 			
@@ -84,12 +98,13 @@ public class UserRespositoriesImpl implements UserRespositories {
 	        
 			
 			if (map.get("EMAIL") != null) {
-				User u = new User();
+				FrmUser u=new FrmUser();
 				u.setId(new Encryption().decode((String)map.get("USERID")));
 				u.setUsername((String)map.get("USERNAME"));
 				u.setEmail((String)map.get("EMAIL"));
 				u.setImage((String)map.get("PROFILE_IMG_URL"));
-				u.setEnabled((boolean)map.get("STATUS"));
+				u.setCover_image((String)map.get("COVER_IMG_URL"));
+				u.setStatus((boolean)map.get("STATUS"));
 				return u;
 			}
 		} catch (Exception e) {
@@ -127,8 +142,29 @@ public class UserRespositoriesImpl implements UserRespositories {
 	}
 
 	public int changePassword(FrmUserChangePwd user) {
-		String sql = "UPDATE tbuser SET user_password=? WHERE user_id=? AND user_password=?";
-		return jdbcTemplate.update(sql, new Object[] { user.getNewpass(), user.getId(), user.getOldpass() });
+		 try {		
+				RestTemplate restTemplate = new RestTemplate();
+				restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+				restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
+				
+		        //for decode user id 
+				user.setUserId(new Encryption().encode(user.getUserId()));
+		        
+		        
+				HttpEntity<Object> request = new HttpEntity<Object>(user, headers);
+				/*ResponseEntity<Map> response = restTemplate.exchange("http://192.168.178.6:8080/KAAPI/api/authentication/weblogin",
+						HttpMethod.POST, request, Map.class);*/
+				ResponseEntity<Map> response = restTemplate.exchange("http://api.khmeracademy.org/api/user/changepassword",
+				HttpMethod.POST, request, Map.class);
+				
+				Map<String, Object> map = (HashMap<String, Object>) response.getBody();
+		        
+				if((boolean)map.get("STATUS")==true)
+					return 1;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return 0;
 	}
 
 	@Override
