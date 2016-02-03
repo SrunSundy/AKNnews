@@ -54,15 +54,10 @@ public class ScrapDAOImpl implements ScrapDAO {
 	
 	private int[] scrapNewsToDatabase(final ArrayList<NewsDTO> news){
 		
-		/*String sql = "INSERT INTO tbnews(news_title, news_description, news_img, news_url, category_id, source_id) "+
-			  "SELECT ?, ?, (SELECT DISTINCT s_basepath || ? FROM tbsite INNER JOIN tbnews ON tbsite.s_id=tbnews.source_id WHERE source_id=?), (SELECT DISTINCT s_prefix_link || ? FROM tbsite INNER JOIN tbnews ON tbsite.s_id=tbnews.source_id WHERE source_id=?), ?, ? " +
-			  "WHERE NOT EXISTS(SELECT news_url FROM tbnews WHERE news_url=?)";*/
-		
-		
 		String sql = "INSERT INTO news.tbnews(news_title, news_description, news_img, news_url, category_id, source_id) " +
-				     "SELECT ?, ?, (SELECT DISTINCT s_basepath || ? FROM news.tbsite INNER JOIN news.tbnews ON news.tbsite.s_id=news.tbnews.source_id WHERE source_id=?), " + 
-				     "(SELECT DISTINCT s_prefix_link || ? FROM news.tbsite INNER JOIN news.tbnews ON news.tbsite.s_id=news.tbnews.source_id WHERE source_id=?), ?, ? " +
-				     "WHERE NOT EXISTS(SELECT news_url FROM news.tbnews WHERE news_url=(SELECT DISTINCT s_prefix_link || ? FROM news.tbsite INNER JOIN news.tbnews ON news.tbsite.s_id=news.tbnews.source_id WHERE source_id=?))";
+				     "SELECT ?, ?, (SELECT DISTINCT s_basepath || ? FROM news.tbsite LEFT JOIN news.tbnews ON news.tbsite.s_id=news.tbnews.source_id WHERE s_id=?), " + 
+				     "(SELECT DISTINCT s_prefix_link || ? FROM news.tbsite LEFT JOIN news.tbnews ON news.tbsite.s_id=news.tbnews.source_id WHERE s_id=?), ?, ? " +
+				     "WHERE NOT EXISTS(SELECT news_url FROM news.tbnews WHERE news_url=(SELECT DISTINCT s_prefix_link || ? FROM news.tbsite LEFT JOIN news.tbnews ON news.tbsite.s_id=news.tbnews.source_id WHERE s_id=?))";
 		
 		return jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
 			
@@ -127,11 +122,15 @@ public class ScrapDAOImpl implements ScrapDAO {
 			System.err.println("ROW : " +selector.getRowsSelector());
 			for(Element e:elements){
 				
+				String link = e.select(selector.getLinkSelector()).attr("href");
+				
+				if(link=="" || link==null)
+					continue;
+
 				String title = e.select(selector.getTitleSelector()).text();
 				
 				String image = e.select(selector.getImageSelector()).attr(selector.getPrefixImg()+"src");
 				
-				String link = e.select(selector.getLinkSelector()).attr("href");
 				
 				NewsDTO n = new NewsDTO();
 				n.setUrl(link);
@@ -348,11 +347,15 @@ public class ScrapDAOImpl implements ScrapDAO {
 			Elements elements = doc.select(selector.getRowsSelector());
 			for(Element e:elements){
 				
+				String link = e.select(selector.getLinkSelector()).attr("href");
+				
+				if(link=="" || link==null)
+					continue;
+
 				String title = e.select(selector.getTitleSelector()).text();
 				
 				String image = e.select(selector.getImageSelector()).attr(selector.getPrefixImg()+"src");
 				
-				String link = e.select(selector.getLinkSelector()).attr("href");
 				
 				System.out.println(title+" "+ image + " " + link);
 				
