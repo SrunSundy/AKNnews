@@ -104,7 +104,6 @@ public class ScrapDAOImpl implements ScrapDAO {
 				selectors.setTitleSelector(rs.getString("title_selector"));
 				selectors.setImageSelector(rs.getString("image_selector"));
 				selectors.setPrefixImg(rs.getString("s_prefix_img"));
-				System.err.println("Prefix IMAGE : " + selectors.getPrefixImg());
 				return selectors;
 			}
 		});
@@ -119,7 +118,6 @@ public class ScrapDAOImpl implements ScrapDAO {
 			Document doc = Jsoup.connect(selector.getUrl()).timeout(30000).userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.120 Safari/535.2").get();
 			
 			Elements elements = doc.select(selector.getRowsSelector());
-			System.err.println("ROW : " +selector.getRowsSelector());
 			for(Element e:elements){
 				
 				String link = e.select(selector.getLinkSelector()).attr("href");
