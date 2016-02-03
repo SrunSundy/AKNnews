@@ -33,6 +33,10 @@ public class SecurityAPIDoc extends WebSecurityConfigurerAdapter {
 		
 		auth.userDetailsService(userDetailsService)
 		.passwordEncoder(passwordEncoder());
+	/*	auth.inMemoryAuthentication()
+		.withUser("api")
+		.password("12345")
+		.roles("APIDOC");*/
 	}
 
 	@Override
