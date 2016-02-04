@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.spring.akn.entities.frmApiDoc.FrmUser;
 import com.spring.akn.entities.frmApiDoc.FrmUserAdd;
 import com.spring.akn.entities.frmApiDoc.FrmUserChangePwd;
 import com.spring.akn.entities.frmApiDoc.FrmUserLogin;
@@ -24,31 +25,32 @@ public class UserServicesImpl implements UserServices{
 	}
 
 
-	public User userLogin(FrmUserLogin user) {
+	public FrmUser userLogin(FrmUserLogin user) {
 		return userRespositories.userLogin(user);
 	}
 
-
+/*
 	public int enableUser(int id) {
 		return userRespositories.enableUser(id);
 	}
 
+   */	
 	
 	public int updateUser(FrmUserUpdate user) {
 		return userRespositories.updateUser(user);
 	}
 
-	
+	/*
 	public User getUser(int id) {
 		return userRespositories.getUser(id);
-	}
+	}*/
 
 	
 	public int changePassword(FrmUserChangePwd user) {
 		return userRespositories.changePassword(user);
 	}
 
-
+/*
 	@Override
 	public List<User> listUser(String key, int page,int row) {
 		return userRespositories.listUser(key, page,row);
@@ -64,7 +66,7 @@ public class UserServicesImpl implements UserServices{
 	@Override
 	public int updateUserImage(String imagename, int id) {
 		return userRespositories.updateUserImage(imagename, id);
-	}
+	}*/
 
 
 	@Override
@@ -73,7 +75,10 @@ public class UserServicesImpl implements UserServices{
 	}
 
 
-	@Override
+
+
+
+	/*@Override
 	public int getUserTotalPage(String key, int row) {
 		
 		return userRespositories.getUserTotalPage(key, row);
@@ -96,5 +101,5 @@ public class UserServicesImpl implements UserServices{
 	@Override
 	public List<User> listNewAdmin() {
 		return userRespositories.listNewAdmin();
-	}
+	}*/
 }
