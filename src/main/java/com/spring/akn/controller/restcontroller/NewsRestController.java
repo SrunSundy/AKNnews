@@ -155,8 +155,8 @@ public class NewsRestController {
 		map.put("STATUS", HttpStatus.OK.value());
 		map.put("MESSAGE", "NEWS HAS BEEN FOUND");
 		map.put("NUM_SITE", siteServices.countSiteRecord());
-		map.put("POP_NEWS", newsservice.getPopularNews(0, 30, 4));
-		map.put("AKNLIST_NEWS",newsservice.listNewsDatas(1, 4, 0, 6, -1));
+		map.put("POP_NEWS", newsservice.getPopularNews(0, 30, 6));
+		map.put("AKNLIST_NEWS",newsservice.listNewsDatas(1, 6, 0, 6, -1));
 		map.put("TOTAL_NEWS",newsservice.getNewsTotalRecords("",0 ,0,-1));
 		map.put("AKN_NEWS",newsservice.getNewsTotalRecords("",0 ,6,-1));
 		map.put("SABAY_NEWS",newsservice.getNewsTotalRecords("",0 ,1,-1));
