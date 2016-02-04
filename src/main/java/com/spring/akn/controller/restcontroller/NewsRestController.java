@@ -27,6 +27,7 @@ import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.spring.akn.entities.NewsDTO;
 import com.spring.akn.entities.SearchNewsDTO;
 import com.spring.akn.entities.frmApiDoc.FrmSaveListAdd;
+import com.spring.akn.services.CategoryServices;
 import com.spring.akn.services.NewsService;
 import com.spring.akn.services.ScrapService;
 import com.spring.akn.services.SiteServices;
@@ -47,6 +48,9 @@ public class NewsRestController {
 	
 	@Autowired
 	UserServices userServices;
+	
+	@Autowired
+	CategoryServices cateservice;
 	
 	@RequestMapping(value="/{page}/{row}/{categoryid}/{sourceid}/{userid}/", method=RequestMethod.GET)
 	public ResponseEntity<Map<String,Object>> listNews(@PathVariable("page") int page,@PathVariable("row") int row,@PathVariable("categoryid") int cid
@@ -163,9 +167,7 @@ public class NewsRestController {
 		map.put("BNEWS_NEWS",newsservice.getNewsTotalRecords("",0 ,5,-1));
 		map.put("MUL_NEWS",newsservice.getNewsTotalRecords("",0 ,12,-1));
 		
-		map.put("TOTALRECORD", userServices.getUserTotalRecords("*"));
-		map.put("LISTUSER", userServices.listNewUser());
-		map.put("LISTADMIN", userServices.listNewAdmin());
+		map.put("NUM_CATE", cateservice.countCategoryRecord());
 		
 		map.put("STATUS", HttpStatus.FOUND.value());
 		map.put("MESSAGE", "USER FOUND");
