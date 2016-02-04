@@ -81,7 +81,7 @@ public class UserRestController {
 
 	// User Status process
 
-	@RequestMapping(value = "toggle/{id}", method = RequestMethod.PATCH)
+	/*@RequestMapping(value = "toggle/{id}", method = RequestMethod.PATCH)
 	public ResponseEntity<Map<String, Object>> toggleStatus(@PathVariable("id") int id) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (userServices.enableUser(id) == 0) {
@@ -93,7 +93,7 @@ public class UserRestController {
 		map.put("STATUS", HttpStatus.FOUND.value());
 		map.put("MESSAGE", "SUCCESS TO UPDTE USERT STATUS");
 		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
-	}
+	}*/
 
 	// change password process
 	@RequestMapping(value = "/changepwd", method = RequestMethod.PUT)
@@ -135,9 +135,9 @@ public class UserRestController {
 		map.put("MESSAGE", "SUCCESS TO UPDTE USERT INFORMATION");
 		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 	}
-
+  
 	// list user
-	@RequestMapping(value = "/{page}/{row}/{key}", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/{page}/{row}/{key}", method = RequestMethod.GET)
 	public ResponseEntity<Map<String, Object>> listUser(@PathVariable("page") int page,@PathVariable("row") int row,
 			@PathVariable("key") String key) {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -152,7 +152,7 @@ public class UserRestController {
 		map.put("STATUS", HttpStatus.FOUND.value());
 		map.put("MESSAGE", "USER FOUND");
 		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
-	}
+	}*/
     
 /*	// list new user
 	@RequestMapping(value = "/listnewuser", method = RequestMethod.GET)
@@ -184,7 +184,7 @@ public class UserRestController {
 		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 	}*/
 	//count user
-		@RequestMapping(value="/adminuserinfo",method=RequestMethod.GET)
+	/*	@RequestMapping(value="/adminuserinfo",method=RequestMethod.GET)
 		public ResponseEntity<Map<String, Object>> countUser() {
 			Map<String, Object> map = new HashMap<String, Object>();
 			if (userServices.getUserTotalRecords("*")==0 && userServices.listNewAdmin() == null && userServices.listNewUser() == null) {
@@ -199,7 +199,7 @@ public class UserRestController {
 			map.put("MESSAGE", "USER FOUND");
 			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 		}
-		
+		*/
      
 /*		//get user infor for update session
 				@RequestMapping(value="/getuser/{id}",method=RequestMethod.GET)
@@ -254,7 +254,7 @@ public class UserRestController {
 	 * null; }
 	 */
 	// upload change image
-	@RequestMapping(value = "/editupload", method = RequestMethod.POST)
+	/*@RequestMapping(value = "/editupload", method = RequestMethod.POST)
 	public ResponseEntity<Map<String, Object>> editUploadImage(@RequestParam("file") MultipartFile file,
 			@RequestParam("id") int id, HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -308,10 +308,10 @@ public class UserRestController {
 			System.err.println("File not found");
 		}
 		return null;
-	}
+	}*/
 	
 	// web user login 
-	@RequestMapping(value = "/weblogin", method = RequestMethod.POST)
+	/*@RequestMapping(value = "/weblogin", method = RequestMethod.POST)
 	public ResponseEntity<Map<String, Object>> webLogin(@RequestBody FrmLogin frmLogin) {
 		
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -325,7 +325,7 @@ public class UserRestController {
 		map.put("MESSAGE", "USER FOUND");
 		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 	}
-	
+	*/
 	
 	
    

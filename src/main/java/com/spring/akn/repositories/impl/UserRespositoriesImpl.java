@@ -42,12 +42,12 @@ public class UserRespositoriesImpl implements UserRespositories {
 
 	@Autowired
 	DataSource dataSource;
-	private JdbcTemplate jdbcTemplate;
+/*	private JdbcTemplate jdbcTemplate;
 
 	@Autowired
 	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
-	}
+	}*/
 	
 	HttpHeaders headers = new HttpHeaders();
 	
@@ -113,17 +113,34 @@ public class UserRespositoriesImpl implements UserRespositories {
 		return null;
 	}
 
-	public int enableUser(int id) {
+	/*public int enableUser(int id) {
 		String sql = "UPDATE tbuser SET enabled=(SELECT CASE WHEN enabled =false THEN true ELSE false END FROM tbuser WHERE user_id=?) WHERE user_id=?";
 		return jdbcTemplate.update(sql, id, id);
-	}
+	}*/
 
 	public int updateUser(FrmUserUpdate user) {
-		String sql = "UPDATE tbuser SET user_name=? WHERE user_id=?";
-		return jdbcTemplate.update(sql, new Object[] { user.getUsername(), user.getId() });
+		try {		
+			RestTemplate restTemplate = new RestTemplate();
+			restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+			restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
+	        
+			HttpEntity<Object> request = new HttpEntity<Object>(user, headers);
+			/*ResponseEntity<Map> response = restTemplate.exchange("http://192.168.178.6:8080/KAAPI/api/authentication/weblogin",
+					HttpMethod.POST, request, Map.class);*/
+			ResponseEntity<Map> response = restTemplate.exchange("http://api.khmeracademy.org/api/user",
+			HttpMethod.PUT, request, Map.class);
+			
+			Map<String, Object> map = (HashMap<String, Object>) response.getBody();
+	        
+			if((boolean)map.get("STATUS")==true)
+				return 1;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
 	}
 
-	public User getUser(int id) {
+	/*public User getUser(int id) {
 		String sql = "SELECT user_id, user_name, user_email, user_image FROM tbuser WHERE user_id=? ";
 		try {
 			return jdbcTemplate.queryForObject(sql, new Object[] { id }, new RowMapper<User>() {
@@ -139,7 +156,7 @@ public class UserRespositoriesImpl implements UserRespositories {
 		} catch (IncorrectResultSizeDataAccessException ex) {
 			return null;
 		}
-	}
+	}*/
 
 	public int changePassword(FrmUserChangePwd user) {
 		 try {		
@@ -166,7 +183,7 @@ public class UserRespositoriesImpl implements UserRespositories {
 			}
 			return 0;
 	}
-
+/*
 	@Override
 	public List<User> listUser(String key, int page,int row) {
 		if(row<=15){row=15;}
@@ -175,7 +192,7 @@ public class UserRespositoriesImpl implements UserRespositories {
 		return jdbcTemplate.query("SELECT tbuser.user_id, tbuser.user_name, tbuser.user_email, tbuser.user_image, tbuser.enabled,tbuser.register_date FROM tbuser"
 				+ " INNER JOIN tbuser_role ON tbuser_role.user_id=tbuser.user_id WHERE tbuser_role.role_id <> 2 AND tbuser_role.role_id <> 1  AND UPPER(user_name) LIKE UPPER(?) ORDER BY user_id DESC LIMIT ? OFFSET ?;",
 				new Object[] { "%" + key + "%",row,offset }, new UserMapper());
-	}
+	}*/
 
 	// cLass user for wrapper user information
 	private static final class UserMapper implements RowMapper<User> {
@@ -190,7 +207,7 @@ public class UserRespositoriesImpl implements UserRespositories {
 			return user;
 		}
 	}
-
+/*
 	@Override
 	public String getCurrentImage(int id) {
 		String sql = "SELECT user_image FROM tbuser WHERE user_id=? ";
@@ -200,12 +217,12 @@ public class UserRespositoriesImpl implements UserRespositories {
 			return null;
 
 		}
-	}
+	}*/
 
-	public int updateUserImage(String imagename, int id) {
+	/*public int updateUserImage(String imagename, int id) {
 		String sql = "UPDATE tbuser SET user_image=? WHERE user_id=?";
 		return jdbcTemplate.update(sql, new Object[] { imagename, id });
-	};
+	};*/
 
 	@Override
 	public User findUserByUserName(String username) {
@@ -253,7 +270,7 @@ public class UserRespositoriesImpl implements UserRespositories {
 		return roles;
 	}
 
-	@Override
+	/*@Override
 	public int getUserTotalPage(String key, int row) {
 		if(row <=0 ) row=10;
 		if (key.equals("*")){key = "%";}
@@ -282,5 +299,5 @@ public class UserRespositoriesImpl implements UserRespositories {
 	@Override
 	public List<User> listNewAdmin() {
 		return jdbcTemplate.query("SELECT tbuser.user_id, tbuser.user_name, tbuser.user_email, tbuser.user_image, tbuser.enabled, tbuser.register_date FROM tbuser INNER JOIN tbuser_role  ON tbuser_role.user_id = tbuser.user_id WHERE tbuser_role.role_id = 2 ORDER BY register_date DESC LIMIT 8", new UserMapper());
-	}
+	}*/
 }
