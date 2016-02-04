@@ -1,6 +1,18 @@
 package com.spring.akn.entities.frmApiDoc;
 
 public class FrmUserAdd {
+	private String username;
+	private String email;
+	private String password;
+	private String gender;
+
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+    
 	public String getUsername() {
 		return username;
 	}
@@ -19,8 +31,4 @@ public class FrmUserAdd {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
-	private String username;
-	private String email;
-	private String password;
 }

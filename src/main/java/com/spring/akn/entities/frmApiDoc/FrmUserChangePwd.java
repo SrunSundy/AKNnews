@@ -1,26 +1,27 @@
 package com.spring.akn.entities.frmApiDoc;
 
 public class FrmUserChangePwd {
-	private int id;
-	public int getId() {
-		return id;
+	private String  userId;
+	private String newPassword;
+	private String oldPassword;
+	
+	public String getUserId() {
+		return userId;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
-	public String getNewpass() {
-		return newpass;
+	public String getNewPassword() {
+		return newPassword;
 	}
-	public void setNewpass(String newpass) {
-		this.newpass = newpass;
+	public void setNewPassword(String newPassword) {
+		this.newPassword = newPassword;
 	}
-	public String getOldpass() {
-		return oldpass;
+	public String getOldPassword() {
+		return oldPassword;
 	}
-	public void setOldpass(String oldpass) {
-		this.oldpass = oldpass;
+	public void setOldPassword(String oldPassword) {
+		this.oldPassword = oldPassword;
 	}
-	private String newpass;
-	private String oldpass;
 
 }

@@ -3,6 +3,7 @@ package com.spring.akn.entities.frmApiDoc;
 public class FrmUser {
 	private int id;
 	private String username;
+	private String email;
 	private String image;
 	private String cover_image;
 	private boolean status;
@@ -37,6 +38,11 @@ public class FrmUser {
 	public void setStatus(boolean status) {
 		this.status = status;
 	}
-
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 }

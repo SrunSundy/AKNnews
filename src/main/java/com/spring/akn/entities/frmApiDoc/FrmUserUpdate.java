@@ -76,4 +76,11 @@ public class FrmUserUpdate {
 	public void setDepartmentId(String departmentId) {
 		this.departmentId = departmentId;
 	}
+	
+	@Override
+	public String toString() {
+		return "FrmUserUpdate [userId=" + userId + ", username=" + username + ", gender=" + gender + ", dateOfBirth="
+				+ dateOfBirth + ", phoneNumber=" + phoneNumber + ", userImageUrl=" + userImageUrl + ", universityId="
+				+ universityId + ", departmentId=" + departmentId + "]";
+	}
 }
