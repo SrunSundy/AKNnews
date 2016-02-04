@@ -124,7 +124,12 @@ public class UserRespositoriesImpl implements UserRespositories {
 			restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
 			restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
 	        
-			HttpEntity<Object> request = new HttpEntity<Object>(user, headers);
+			user.setUniversityId("MzY=");
+	        user.setDepartmentId("MTI=");
+	        
+	        System.out.println(user.toString());
+			
+	        HttpEntity<Object> request = new HttpEntity<Object>(user, headers);
 			/*ResponseEntity<Map> response = restTemplate.exchange("http://192.168.178.6:8080/KAAPI/api/authentication/weblogin",
 					HttpMethod.POST, request, Map.class);*/
 			ResponseEntity<Map> response = restTemplate.exchange("http://api.khmeracademy.org/api/user",
