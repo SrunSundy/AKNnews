@@ -40,6 +40,7 @@ public interface NewsService {
 	public int updateNewsDescription(NewsDTO news);
 	
 	/*public int updateNewsThumbnail(NewsDTO news);*/
+	public int getNewsRecordByMonth(int month);
 	
 	public int updateNewsContent(NewsDTO news);
 	

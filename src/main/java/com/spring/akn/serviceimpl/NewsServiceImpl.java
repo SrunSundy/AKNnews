@@ -166,6 +166,12 @@ public class NewsServiceImpl implements NewsService{
 		return newsrepository.listNewsStatistic(categoryid, siteid, day, row);
 	}
 
+	@Override
+	public int getNewsRecordByMonth(int month) {
+		// TODO Auto-generated method stub
+		return newsrepository.getNewsRecordByMonth(month);
+	}
+
 
 	
 

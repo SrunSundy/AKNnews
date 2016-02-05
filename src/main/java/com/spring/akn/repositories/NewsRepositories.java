@@ -44,6 +44,8 @@ public interface NewsRepositories {
 	
 /*	public int updateNewsThumbnail(NewsDTO news);
 */	
+	public int getNewsRecordByMonth(int month);
+	
 	public int updateNewsContent(NewsDTO news);
 	
 	public int getNewsTotalPage(String key,int row,int categoryid,int siteid,int userid); 

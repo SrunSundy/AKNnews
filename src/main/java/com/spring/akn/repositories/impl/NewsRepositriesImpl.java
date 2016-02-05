@@ -844,6 +844,13 @@ public class NewsRepositriesImpl implements NewsRepositories {
 		return jdbcTemplate.update(sql,news.getContent(),news.getId());
 	}
 
+	@Override
+	public int getNewsRecordByMonth(int month) {
+		// TODO Auto-generated method stub
+		String sql="SELECT COUNT(*) FROM news.tbnews WHERE EXTRACT(MONTH FROM news_date) = ? AND EXTRACT(YEAR FROM news_date) = EXTRACT(YEAR FROM NOW())";
+		return jdbcTemplate.queryForObject(sql,new Object[]{month},Integer.class);
+	}
+
 
 
 	
