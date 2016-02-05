@@ -77,10 +77,6 @@ public class SiteSeviceImpl implements SiteServices{
 		return siteDAO.checkExistSite(id);
 	}
 
-	@Override
-	public int getSiteSequence() {
-		return siteDAO.getSiteSequence();
-	}
 	
 	
 

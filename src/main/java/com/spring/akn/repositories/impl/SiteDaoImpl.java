@@ -227,11 +227,6 @@ public class SiteDaoImpl implements SiteDAO {
 		String sql = "SELECT DISTINCT news.tbnews.source_id as s_id FROM news.tbnews WHERE source_id = ?";
 		return getJdbcTemplate().query(sql , new Object[]{id} , new SiteResultSetExtractorExist());
 	}
-	@Override
-	public int getSiteSequence() {
-		String sql = "select currval('news.tbsite_s_id_seq')";
-		return getJdbcTemplate().queryForObject(sql , Integer.class);
-	}
 
 
 

@@ -22,8 +22,15 @@ import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.spring.akn.entities.SiteDTO;
 import com.spring.akn.services.SiteServices;
 
+/**
+ * @ApiIgnore // can not show on swaggle api
+ * rest controller for source
+ * @author PC1
+ *
+ */
+
 @RestController
-@RequestMapping(value="/api/article/site")
+@RequestMapping(value="/api/article/site")// base url request after project name
 public class SiteRestController {
 	@Autowired
 	private SiteServices siteServices;

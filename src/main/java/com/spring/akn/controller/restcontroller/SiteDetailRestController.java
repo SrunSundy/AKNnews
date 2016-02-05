@@ -20,9 +20,16 @@ import static java.lang.Math.toIntExact;
 import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.spring.akn.entities.SiteDetailDTO;
 import com.spring.akn.services.SiteDetailServices;
-  
+
+/**
+ * @ApiIgnore // can not show on swaggle api
+ * Rest controller for scrap url
+ * @author PC1
+ *
+ */
+
 @RestController
-@RequestMapping(value = "/api/article/scrapurl")//sitedetail
+@RequestMapping(value = "/api/article/scrapurl")
 @ApiIgnore
 public class SiteDetailRestController {
 	@Autowired

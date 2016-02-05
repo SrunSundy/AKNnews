@@ -19,6 +19,13 @@ import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.spring.akn.entities.CategoryDTO;
 import com.spring.akn.services.CategoryServices;
 
+
+/**
+ * @ApiIgnore  can not show on swaggle api
+ * rest controller for category
+ * @author PC1
+ *
+ */
 @RestController
 @RequestMapping(value="/api/article/category")
 public class CategoryRestController {
@@ -134,7 +141,7 @@ public class CategoryRestController {
 	 * @param categoryDTO
 	 * @return
 	 */
-	@ApiIgnore
+	@ApiIgnore // can not show on swaggle api
 	@RequestMapping(value="/", method = RequestMethod.PUT)
 	public ResponseEntity<Map<String, Object>> updateCategory(@RequestBody CategoryDTO categoryDTO){
 		Map<String, Object> map = new HashMap<String,Object>();
