@@ -126,8 +126,7 @@ public class UserRespositoriesImpl implements UserRespositories {
 	        
 			user.setUniversityId("MzY=");
 	        user.setDepartmentId("MTI=");
-	        
-	        System.out.println(user.toString());
+	        user.setUserId(new Encryption().encode(user.getUserId()));
 			
 	        HttpEntity<Object> request = new HttpEntity<Object>(user, headers);
 			/*ResponseEntity<Map> response = restTemplate.exchange("http://192.168.178.6:8080/KAAPI/api/authentication/weblogin",
@@ -171,6 +170,8 @@ public class UserRespositoriesImpl implements UserRespositories {
 				
 		        //for decode user id 
 				user.setUserId(new Encryption().encode(user.getUserId()));
+				
+				System.out.println(user.getUserId()+" "+user.getNewPassword()+" "+user.getOldPassword());
 		        
 		        
 				HttpEntity<Object> request = new HttpEntity<Object>(user, headers);
