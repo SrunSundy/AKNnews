@@ -174,6 +174,28 @@ public class NewsRestController {
 		return new ResponseEntity<Map<String,Object>>
 									(map,HttpStatus.OK);	
 	}
+	@RequestMapping(value="/staticrecord/", method=RequestMethod.GET)
+	public  ResponseEntity<Map<String,Object>>  getAdminDashboardStatistic(){
+		Map<String, Object> map = new HashMap<String,Object>();
+	
+		map.put("STATUS", HttpStatus.OK.value());
+		map.put("MESSAGE", "NEWS HAS BEEN FOUND");
+		map.put("TOTAL_RECORDS_JAN", newsservice.getNewsRecordByMonth(1));
+		map.put("TOTAL_RECORDS_FEB", newsservice.getNewsRecordByMonth(2));
+		map.put("TOTAL_RECORDS_MAR", newsservice.getNewsRecordByMonth(3));
+		map.put("TOTAL_RECORDS_APR", newsservice.getNewsRecordByMonth(4));
+		map.put("TOTAL_RECORDS_MAY", newsservice.getNewsRecordByMonth(5));
+		map.put("TOTAL_RECORDS_JUN", newsservice.getNewsRecordByMonth(6));
+		map.put("TOTAL_RECORDS_JUL", newsservice.getNewsRecordByMonth(7));
+		map.put("TOTAL_RECORDS_AUG", newsservice.getNewsRecordByMonth(8));
+		map.put("TOTAL_RECORDS_SEP", newsservice.getNewsRecordByMonth(9));
+		map.put("TOTAL_RECORDS_OCT", newsservice.getNewsRecordByMonth(10));
+		map.put("TOTAL_RECORDS_NOV", newsservice.getNewsRecordByMonth(11));
+		map.put("TOTAL_RECORDS_DEC", newsservice.getNewsRecordByMonth(12));
+
+		return new ResponseEntity<Map<String,Object>>
+									(map,HttpStatus.OK);	
+	}
 	@ApiIgnore
 	@RequestMapping(value="/", method= RequestMethod.POST )
 	public ResponseEntity<Map<String,Object>> insertNews(@RequestParam("json") String data, @RequestParam("file") MultipartFile file, HttpServletRequest request){
