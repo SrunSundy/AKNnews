@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.spring.akn.encryption.Encryption;
 import com.spring.akn.entities.frmApiDoc.FrmLogin;
 import com.spring.akn.entities.frmApiDoc.FrmUserAdd;
 import com.spring.akn.entities.frmApiDoc.FrmUserChangePwd;
@@ -96,7 +97,7 @@ public class UserRestController {
 	}*/
 
 	// change password process
-	@RequestMapping(value = "/changepwd", method = RequestMethod.PUT)
+	@RequestMapping(value = "/changepwd", method = RequestMethod.POST)
 	public ResponseEntity<Map<String, Object>> changePassword(@RequestBody FrmUserChangePwd user)
 			throws ParseException {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -109,7 +110,6 @@ public class UserRestController {
 		 * (String) jsonObject.get("newpass"); String uid=(String)
 		 * jsonObject.get("id"); int id=Integer.parseInt(uid);
 		 */
-
 		if (userServices.changePassword(user) == 0) {
 			map.put("STATUS", HttpStatus.NOT_FOUND.value());
 			map.put("MESSAGE", "FAILD TO CHANGE PASSWORD");
@@ -125,6 +125,7 @@ public class UserRestController {
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
 	public ResponseEntity<Map<String, Object>> updateUser(@RequestBody FrmUserUpdate user) {
 		Map<String, Object> map = new HashMap<String, Object>();
+	
 		if (userServices.updateUser(user) == 0) {
 			map.put("STATUS", HttpStatus.NOT_FOUND.value());
 			map.put("MESSAGE", "FAILD TO UPDTE USERT INFORMATION");
