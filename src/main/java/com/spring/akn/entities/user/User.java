@@ -19,6 +19,7 @@ public class User implements UserDetails {
 	private String email;
 	private String password;
 	private String image;
+	private String gender;
 	private boolean enabled;
 	private Date register_date;
 	
@@ -98,5 +99,12 @@ public class User implements UserDetails {
 	}
 	public void setRegister_date(Date register_date) {
 		this.register_date = register_date;
+	}
+	
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 }
